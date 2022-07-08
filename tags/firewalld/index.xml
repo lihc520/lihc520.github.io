@@ -1,0 +1,15 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>firewalld - 标签 - LHCの博客</title>
+        <link>https://lihc520.github.io/tags/firewalld/</link>
+        <description>firewalld - 标签 - LHCの博客</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>807216431@qq.com (LHC)</managingEditor>
+            <webMaster>807216431@qq.com (LHC)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Fri, 08 Jul 2022 12:33:24 &#43;0800</lastBuildDate><atom:link href="https://lihc520.github.io/tags/firewalld/" rel="self" type="application/rss+xml" /><item>
+    <title>Firewalld</title>
+    <link>https://lihc520.github.io/firewalld/</link>
+    <pubDate>Fri, 08 Jul 2022 12:33:24 &#43;0800</pubDate><author>
+        <name>LHC</name>
+    </author><guid>https://lihc520.github.io/firewalld/</guid>
+    <description><![CDATA[开启防火墙systemctl start firewalld.service 防火墙开机启动systemctl enable firewalld.service 关闭防火墙systemctl stop firewalld.service 查看防火墙状态firewall-cmd --state]]></description>
+</item></channel>
+</rss>

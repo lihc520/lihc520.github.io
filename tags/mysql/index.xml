@@ -4,7 +4,14 @@
         <link>https://lihc520.github.io/tags/mysql/</link>
         <description>mysql - 标签 - LHCの博客</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>807216431@qq.com (LHC)</managingEditor>
-            <webMaster>807216431@qq.com (LHC)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Tue, 02 Nov 2021 17:00:24 &#43;0000</lastBuildDate><atom:link href="https://lihc520.github.io/tags/mysql/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>807216431@qq.com (LHC)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Fri, 08 Jul 2022 12:27:03 &#43;0800</lastBuildDate><atom:link href="https://lihc520.github.io/tags/mysql/" rel="self" type="application/rss+xml" /><item>
+    <title>Mysql备份</title>
+    <link>https://lihc520.github.io/mysql%E5%A4%87%E4%BB%BD/</link>
+    <pubDate>Fri, 08 Jul 2022 12:27:03 &#43;0800</pubDate><author>
+        <name>LHC</name>
+    </author><guid>https://lihc520.github.io/mysql%E5%A4%87%E4%BB%BD/</guid>
+    <description><![CDATA[[MySql数据库备份的几种方式]mysqldump工具备份备份整个数据库 1 2 $&gt; mysqldump -u root -h host -p dbname &gt; backdb.sql 备份数据库中的某个表 1 2 $&gt; mysqldump -u root -h host -p dbname tbname1,]]></description>
+</item><item>
     <title>MySql:master:slave:slave</title>
     <link>https://lihc520.github.io/mysql-master-slave-slave/</link>
     <pubDate>Tue, 02 Nov 2021 17:00:24 &#43;0000</pubDate><author>

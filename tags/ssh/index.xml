@@ -1,0 +1,15 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>ssh - 标签 - LHCの博客</title>
+        <link>https://lihc520.github.io/tags/ssh/</link>
+        <description>ssh - 标签 - LHCの博客</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>807216431@qq.com (LHC)</managingEditor>
+            <webMaster>807216431@qq.com (LHC)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Fri, 08 Jul 2022 12:30:20 &#43;0800</lastBuildDate><atom:link href="https://lihc520.github.io/tags/ssh/" rel="self" type="application/rss+xml" /><item>
+    <title>ssh转发端口</title>
+    <link>https://lihc520.github.io/ssh%E8%BD%AC%E5%8F%91%E7%AB%AF%E5%8F%A3/</link>
+    <pubDate>Fri, 08 Jul 2022 12:30:20 &#43;0800</pubDate><author>
+        <name>LHC</name>
+    </author><guid>https://lihc520.github.io/ssh%E8%BD%AC%E5%8F%91%E7%AB%AF%E5%8F%A3/</guid>
+    <description><![CDATA[本地端口转发命令： ssh -L &lt;local port&gt;:&lt;remote host&gt;:&lt;remote port&gt; &lt;SSH hostname&gt; 例如，需要把本地8080端口转发到172.18.247.180这台机器上的8888端口，只需要执行下面的命]]></description>
+</item></channel>
+</rss>

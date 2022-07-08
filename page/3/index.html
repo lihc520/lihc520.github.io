@@ -112,56 +112,34 @@
         alt="/images/1.jpg"
         title="/images/1.jpg" height="6rem" width="6rem"></a></div><h2 class="home-subtitle"><div id="id-1" class="typeit"></div></h2><div class="links"><a href="https://github.com/lihc520" title="GitHub" target="_blank" rel="noopener noreffer me"><i class="fab fa-github-alt fa-fw"></i></a></div></div>
 <article class="single summary" itemscope itemtype="http://schema.org/Article"><h1 class="single-title" itemprop="name headline">
-        <a href="/mysql-master-slave-slave/">MySql:master:slave:slave</a>
+        <a href="/kubernetes%E4%BD%BF%E7%94%A8hlem%E5%AE%89%E8%A3%85nfs%E4%B8%BA%E9%BB%98%E8%AE%A4%E5%AD%98%E5%82%A8/">Kubenetes使用Hlem安装nfs为默认存储</a>
     </h1><div class="post-meta">
         <span class="post-author"><i class="author fas fa-user-circle fa-fw"></i><a href="/" title="Author" rel=" author" class="author">LHC</a>
-        </span>&nbsp;<span class="post-publish">发布于 <time datetime="2021-11-02">2021-11-02</time></span>&nbsp;<span class="post-category">收录于 </span>&nbsp;<span class="post-category">类别 <a href="/categories/linux/"><i class="far fa-folder fa-fw"></i>linux</a></span></div><div class="content">Hosts CPU MEM HD OS 192.168.1.102 db01 8 16G 100G Ubuntu20.04 192.168.1.105 db02 8 16G 100G Ubuntu20.04 192.168.1.108 db03 8 16G 100G Ubuntu20.04 安装前修改两台服务器的hosts 1 2 3 4 5 # 三臺台服务器都要操作 sudo vim /etc/hosts 192.168.1.102 db01 192.168.1.105 db02 192.168.1.108 db03 創建MySQ</div><div class="post-footer">
-        <a href="/mysql-master-slave-slave/">阅读全文</a><div class="post-tags">
-                <i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/mysql/">mysql</a></div></div>
-</article><article class="single summary" itemscope itemtype="http://schema.org/Article"><h1 class="single-title" itemprop="name headline">
-        <a href="/logstash-filebeat-redis/">logstash&#43;filebeat&#43;redis</a>
-    </h1><div class="post-meta">
-        <span class="post-author"><i class="author fas fa-user-circle fa-fw"></i><a href="/" title="Author" rel=" author" class="author">LHC</a>
-        </span>&nbsp;<span class="post-publish">发布于 <time datetime="2021-07-01">2021-07-01</time></span>&nbsp;<span class="post-category">收录于 </span>&nbsp;<span class="post-category">类别 <a href="/categories/linux/"><i class="far fa-folder fa-fw"></i>linux</a></span></div><div class="content">ELK客户端部署目前的架构是elasticsearch+logstash+filebeat+kibana+redis 通过filebeat收集</div><div class="post-footer">
-        <a href="/logstash-filebeat-redis/">阅读全文</a><div class="post-tags">
-                <i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/elk/">elk</a></div></div>
-</article><article class="single summary" itemscope itemtype="http://schema.org/Article"><h1 class="single-title" itemprop="name headline">
-        <a href="/centos7%E6%90%AD%E5%BB%BAvsftpd/">centos7搭建vsftpd</a>
-    </h1><div class="post-meta">
-        <span class="post-author"><i class="author fas fa-user-circle fa-fw"></i><a href="/" title="Author" rel=" author" class="author">LHC</a>
-        </span>&nbsp;<span class="post-publish">发布于 <time datetime="2021-06-25">2021-06-25</time></span>&nbsp;<span class="post-category">收录于 </span>&nbsp;<span class="post-category">类别 <a href="/categories/linux/"><i class="far fa-folder fa-fw"></i>linux</a></span></div><div class="content">centos7搭建 Vsftpd 服务。安装服务端程序1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 [root@localhost ~]# yum install vsftpd Loaded plugins: langpacks, product-id, subscription-manager ………………省略部分输出信息……………… ================================================================================ Installing:</div><div class="post-footer">
-        <a href="/centos7%E6%90%AD%E5%BB%BAvsftpd/">阅读全文</a><div class="post-tags">
-                <i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/ftp/">ftp</a></div></div>
-</article><article class="single summary" itemscope itemtype="http://schema.org/Article"><h1 class="single-title" itemprop="name headline">
-        <a href="/k8s%E9%83%A8%E7%BD%B2tidb/">k8s部署TIDB</a>
-    </h1><div class="post-meta">
-        <span class="post-author"><i class="author fas fa-user-circle fa-fw"></i><a href="/" title="Author" rel=" author" class="author">LHC</a>
-        </span>&nbsp;<span class="post-publish">发布于 <time datetime="2021-06-04">2021-06-04</time></span>&nbsp;<span class="post-category">收录于 </span>&nbsp;<span class="post-category">类别 <a href="/categories/linux/"><i class="far fa-folder fa-fw"></i>linux</a></span></div><div class="content">k8s部署TIDB服务器建议配置环境 组件 CPU 内存 本地存储 网络 IP Master1 8 核 16 GB 无特殊要求 千兆网卡 10.168.2.153 Master2 8 核 16 GB 无特殊要求 千兆网卡 10.168.3.60 Master3 8 核 16 GB 无特殊要求</div><div class="post-footer">
-        <a href="/k8s%E9%83%A8%E7%BD%B2tidb/">阅读全文</a><div class="post-tags">
+        </span>&nbsp;<span class="post-publish">发布于 <time datetime="2021-06-03">2021-06-03</time></span>&nbsp;<span class="post-category">收录于 </span>&nbsp;<span class="post-category">类别 <a href="/categories/linux/"><i class="far fa-folder fa-fw"></i>linux</a></span></div><div class="content">1、部署 Helm 客户端Helm客户端下载地址：https://github.com/helm/helm/releases 解压移动到/usr/bin</div><div class="post-footer">
+        <a href="/kubernetes%E4%BD%BF%E7%94%A8hlem%E5%AE%89%E8%A3%85nfs%E4%B8%BA%E9%BB%98%E8%AE%A4%E5%AD%98%E5%82%A8/">阅读全文</a><div class="post-tags">
                 <i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/kubernetes/">kubernetes</a></div></div>
 </article><article class="single summary" itemscope itemtype="http://schema.org/Article"><h1 class="single-title" itemprop="name headline">
-        <a href="/ntp%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8E%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%90%8C%E6%AD%A5/">NTP服务器与客户端时间同步</a>
+        <a href="/%E7%AE%A1%E9%81%93%E7%AC%A6%E9%87%8D%E5%AE%9A%E5%90%91%E4%B8%8E%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/">管道符、重定向与环境变量</a>
     </h1><div class="post-meta">
         <span class="post-author"><i class="author fas fa-user-circle fa-fw"></i><a href="/" title="Author" rel=" author" class="author">LHC</a>
-        </span>&nbsp;<span class="post-publish">发布于 <time datetime="2021-06-03">2021-06-03</time></span>&nbsp;<span class="post-category">收录于 </span>&nbsp;<span class="post-category">类别 <a href="/categories/linux/"><i class="far fa-folder fa-fw"></i>linux</a></span></div><div class="content">操作场景ntpd（Network Time Protocol daemon）是 Linux 操作系统的一个守护进程，用于校正本地系统与时钟源服务器之前的时间，完整的实现了 NTP 协议。</div><div class="post-footer">
-        <a href="/ntp%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8E%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%90%8C%E6%AD%A5/">阅读全文</a><div class="post-tags">
-                <i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/ntp/">ntp</a></div></div>
+        </span>&nbsp;<span class="post-publish">发布于 <time datetime="2021-05-19">2021-05-19</time></span></div><div class="content">3.1 输入输出重定向既然已经在上一章学完了几乎所有基础且常用的Linux命令，那么接下来的任务就是把多个Linux命令适当地组合到一起，使其协同</div><div class="post-footer">
+        <a href="/%E7%AE%A1%E9%81%93%E7%AC%A6%E9%87%8D%E5%AE%9A%E5%90%91%E4%B8%8E%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/">阅读全文</a></div>
 </article><article class="single summary" itemscope itemtype="http://schema.org/Article"><h1 class="single-title" itemprop="name headline">
-        <a href="/k8s%E9%83%A8%E7%BD%B2nextcloud/">K8s部署Nextcloud</a>
+        <a href="/vim/">vim</a>
     </h1><div class="post-meta">
         <span class="post-author"><i class="author fas fa-user-circle fa-fw"></i><a href="/" title="Author" rel=" author" class="author">LHC</a>
-        </span>&nbsp;<span class="post-publish">发布于 <time datetime="2021-06-03">2021-06-03</time></span>&nbsp;<span class="post-category">收录于 </span>&nbsp;<span class="post-category">类别 <a href="/categories/linux/"><i class="far fa-folder fa-fw"></i>linux</a></span></div><div class="content">部署 NFS 服务在NFS服务器上安装 NFS 与 rpcbind 服务1 2 3 4 5 6 7 8 9 10 # 创建 NFS 存储目录 mkdir -p /data/NFS # 安装nfs服务 yum -y install nfs-utils rpcbind # 修改配置文件 echo &#34;/data/NFS *(rw,sync,no_root_squash,no_subtree_check)&#34; &gt; /etc/exports # 启动服</div><div class="post-footer">
-        <a href="/k8s%E9%83%A8%E7%BD%B2nextcloud/">阅读全文</a><div class="post-tags">
-                <i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/kubernetes/">kubernetes</a></div></div>
+        </span>&nbsp;<span class="post-publish">发布于 <time datetime="2021-05-19">2021-05-19</time></span>&nbsp;<span class="post-category">收录于 </span>&nbsp;<span class="post-category">类别 <a href="/categories/linux/"><i class="far fa-folder fa-fw"></i>linux</a></span></div><div class="content">4.1 Vim文本编辑器Vim的发布最早可以追溯到1991年，英文全称为：“Vi IMproved”，也就是对vi编辑器的提升版本，其中最大的改进当</div><div class="post-footer">
+        <a href="/vim/">阅读全文</a><div class="post-tags">
+                <i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/vim/">vim</a></div></div>
 </article><ul class="pagination"><li class="page-item ">
                     <span class="page-link">
                         <a href="/">1</a>
                     </span>
-                </li><li class="page-item active">
+                </li><li class="page-item ">
                     <span class="page-link">
                         <a href="/page/2/">2</a>
                     </span>
-                </li><li class="page-item ">
+                </li><li class="page-item active">
                     <span class="page-link">
                         <a href="/page/3/">3</a>
                     </span>
