@@ -57,10 +57,10 @@
     <description><![CDATA[部署 NFS 服务在NFS服务器上安装 NFS 与 rpcbind 服务1 2 3 4 5 6 7 8 9 10 # 创建 NFS 存储目录 mkdir -p /data/NFS # 安装nfs服务 yum -y install nfs-utils rpcbind # 修改配置文件 echo &#34;/data/NFS *(rw,sync,no_root_squash,no_subtree_check)&#34; &gt; /etc/exports # 启动服]]></description>
 </item><item>
     <title>Kubenetes使用Hlem安装nfs为默认存储</title>
-    <link>https://lihc520.github.io/kubenetes%E4%BD%BF%E7%94%A8hlem%E5%AE%89%E8%A3%85nfs%E4%B8%BA%E9%BB%98%E8%AE%A4%E5%AD%98%E5%82%A8/</link>
+    <link>https://lihc520.github.io/kubernetes%E4%BD%BF%E7%94%A8hlem%E5%AE%89%E8%A3%85nfs%E4%B8%BA%E9%BB%98%E8%AE%A4%E5%AD%98%E5%82%A8/</link>
     <pubDate>Thu, 03 Jun 2021 08:42:16 &#43;0000</pubDate><author>
         <name>LHC</name>
-    </author><guid>https://lihc520.github.io/kubenetes%E4%BD%BF%E7%94%A8hlem%E5%AE%89%E8%A3%85nfs%E4%B8%BA%E9%BB%98%E8%AE%A4%E5%AD%98%E5%82%A8/</guid>
+    </author><guid>https://lihc520.github.io/kubernetes%E4%BD%BF%E7%94%A8hlem%E5%AE%89%E8%A3%85nfs%E4%B8%BA%E9%BB%98%E8%AE%A4%E5%AD%98%E5%82%A8/</guid>
     <description><![CDATA[1、部署 Helm 客户端Helm客户端下载地址：https://github.com/helm/helm/releases 解压移动到/usr/bin]]></description>
 </item><item>
     <title>管道符、重定向与环境变量</title>

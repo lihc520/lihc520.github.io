@@ -50,7 +50,7 @@
             <a href="/" title="LHCの博客"><span class="header-title-pre"><i class='fas fa-fw fa-fan fa-spin'></i></span><span id="desktop-header-typeit" class="typeit"></span></a>
         </div>
         <div class="menu">
-            <div class="menu-inner"><a class="menu-item" href="/posts/"> 所有文章 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/categories/documentation/"> 文档 </a><a class="menu-item" href="/about/"> 关于 </a><a class="menu-item" href="https://github.com/ITmxs" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i> Github </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> 所有文章 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/about/"> 关于 </a><a class="menu-item" href="https://github.com/ITmxs" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i> Github </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
                         <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
                         <a href="#" onclick="return false;" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
                             <i class="fas fa-search fa-fw"></i>
@@ -92,7 +92,7 @@
                     <a href="#" onclick="return false;" class="search-cancel" id="search-cancel-mobile">
                         取消
                     </a>
-                </div><a class="menu-item" href="/posts/" title="">所有文章</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/categories/documentation/" title="">文档</a><a class="menu-item" href="/about/" title="">关于</a><a class="menu-item" href="https://github.com/ITmxs" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i>Github</a><a href="#" onclick="return false;" class="menu-item theme-switch" title="切换主题">
+                </div><a class="menu-item" href="/posts/" title="">所有文章</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/about/" title="">关于</a><a class="menu-item" href="https://github.com/ITmxs" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i>Github</a><a href="#" onclick="return false;" class="menu-item theme-switch" title="切换主题">
                 <i class="fas fa-adjust fa-fw"></i>
             </a></div>
     </div>
@@ -115,14 +115,16 @@
         <a href="/k8s%E9%83%A8%E7%BD%B2nextcloud/">K8s部署Nextcloud</a>
     </h1><div class="post-meta">
         <span class="post-author"><i class="author fas fa-user-circle fa-fw"></i><a href="/" title="Author" rel=" author" class="author">LHC</a>
-        </span>&nbsp;<span class="post-publish">发布于 <time datetime="2021-06-03">2021-06-03</time></span></div><div class="content">部署 NFS 服务在NFS服务器上安装 NFS 与 rpcbind 服务1 2 3 4 5 6 7 8 9 10 # 创建 NFS 存储目录 mkdir -p /data/NFS # 安装nfs服务 yum -y install nfs-utils rpcbind # 修改配置文件 echo &#34;/data/NFS *(rw,sync,no_root_squash,no_subtree_check)&#34; &gt; /etc/exports # 启动服</div><div class="post-footer">
-        <a href="/k8s%E9%83%A8%E7%BD%B2nextcloud/">阅读全文</a></div>
+        </span>&nbsp;<span class="post-publish">发布于 <time datetime="2021-06-03">2021-06-03</time></span>&nbsp;<span class="post-category">收录于 </span>&nbsp;<span class="post-category">类别 <a href="/categories/linux/"><i class="far fa-folder fa-fw"></i>linux</a></span></div><div class="content">部署 NFS 服务在NFS服务器上安装 NFS 与 rpcbind 服务1 2 3 4 5 6 7 8 9 10 # 创建 NFS 存储目录 mkdir -p /data/NFS # 安装nfs服务 yum -y install nfs-utils rpcbind # 修改配置文件 echo &#34;/data/NFS *(rw,sync,no_root_squash,no_subtree_check)&#34; &gt; /etc/exports # 启动服</div><div class="post-footer">
+        <a href="/k8s%E9%83%A8%E7%BD%B2nextcloud/">阅读全文</a><div class="post-tags">
+                <i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/kubernetes/">kubernetes</a></div></div>
 </article><article class="single summary" itemscope itemtype="http://schema.org/Article"><h1 class="single-title" itemprop="name headline">
-        <a href="/kubenetes%E4%BD%BF%E7%94%A8hlem%E5%AE%89%E8%A3%85nfs%E4%B8%BA%E9%BB%98%E8%AE%A4%E5%AD%98%E5%82%A8/">Kubenetes使用Hlem安装nfs为默认存储</a>
+        <a href="/kubernetes%E4%BD%BF%E7%94%A8hlem%E5%AE%89%E8%A3%85nfs%E4%B8%BA%E9%BB%98%E8%AE%A4%E5%AD%98%E5%82%A8/">Kubenetes使用Hlem安装nfs为默认存储</a>
     </h1><div class="post-meta">
         <span class="post-author"><i class="author fas fa-user-circle fa-fw"></i><a href="/" title="Author" rel=" author" class="author">LHC</a>
-        </span>&nbsp;<span class="post-publish">发布于 <time datetime="2021-06-03">2021-06-03</time></span></div><div class="content">1、部署 Helm 客户端Helm客户端下载地址：https://github.com/helm/helm/releases 解压移动到/usr/bin</div><div class="post-footer">
-        <a href="/kubenetes%E4%BD%BF%E7%94%A8hlem%E5%AE%89%E8%A3%85nfs%E4%B8%BA%E9%BB%98%E8%AE%A4%E5%AD%98%E5%82%A8/">阅读全文</a></div>
+        </span>&nbsp;<span class="post-publish">发布于 <time datetime="2021-06-03">2021-06-03</time></span>&nbsp;<span class="post-category">收录于 </span>&nbsp;<span class="post-category">类别 <a href="/categories/linux/"><i class="far fa-folder fa-fw"></i>linux</a></span></div><div class="content">1、部署 Helm 客户端Helm客户端下载地址：https://github.com/helm/helm/releases 解压移动到/usr/bin</div><div class="post-footer">
+        <a href="/kubernetes%E4%BD%BF%E7%94%A8hlem%E5%AE%89%E8%A3%85nfs%E4%B8%BA%E9%BB%98%E8%AE%A4%E5%AD%98%E5%82%A8/">阅读全文</a><div class="post-tags">
+                <i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/kubernetes/">kubernetes</a></div></div>
 </article><article class="single summary" itemscope itemtype="http://schema.org/Article"><h1 class="single-title" itemprop="name headline">
         <a href="/%E7%AE%A1%E9%81%93%E7%AC%A6%E9%87%8D%E5%AE%9A%E5%90%91%E4%B8%8E%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/">管道符、重定向与环境变量</a>
     </h1><div class="post-meta">
@@ -133,14 +135,9 @@
         <a href="/vim/">vim</a>
     </h1><div class="post-meta">
         <span class="post-author"><i class="author fas fa-user-circle fa-fw"></i><a href="/" title="Author" rel=" author" class="author">LHC</a>
-        </span>&nbsp;<span class="post-publish">发布于 <time datetime="2021-05-19">2021-05-19</time></span></div><div class="content">4.1 Vim文本编辑器Vim的发布最早可以追溯到1991年，英文全称为：“Vi IMproved”，也就是对vi编辑器的提升版本，其中最大的改进当</div><div class="post-footer">
-        <a href="/vim/">阅读全文</a></div>
-</article><article class="single summary" itemscope itemtype="http://schema.org/Article"><h1 class="single-title" itemprop="name headline">
-        <a href="/my-first-blog/">友链</a>
-    </h1><div class="post-meta">
-        <span class="post-author"><i class="author fas fa-user-circle fa-fw"></i><a href="/" title="Author" rel=" author" class="author">LHC</a>
-        </span>&nbsp;<span class="post-publish">发布于 <time datetime="2021-05-19">2021-05-19</time></span></div><div class="content">Dillon</div><div class="post-footer">
-        <a href="/my-first-blog/">阅读全文</a></div>
+        </span>&nbsp;<span class="post-publish">发布于 <time datetime="2021-05-19">2021-05-19</time></span>&nbsp;<span class="post-category">收录于 </span>&nbsp;<span class="post-category">类别 <a href="/categories/linux/"><i class="far fa-folder fa-fw"></i>linux</a></span></div><div class="content">4.1 Vim文本编辑器Vim的发布最早可以追溯到1991年，英文全称为：“Vi IMproved”，也就是对vi编辑器的提升版本，其中最大的改进当</div><div class="post-footer">
+        <a href="/vim/">阅读全文</a><div class="post-tags">
+                <i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/vim/">vim</a></div></div>
 </article><ul class="pagination"><li class="page-item ">
                     <span class="page-link">
                         <a href="/">1</a>

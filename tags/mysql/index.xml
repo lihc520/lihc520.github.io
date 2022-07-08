@@ -1,0 +1,15 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>mysql - 标签 - LHCの博客</title>
+        <link>https://lihc520.github.io/tags/mysql/</link>
+        <description>mysql - 标签 - LHCの博客</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>807216431@qq.com (LHC)</managingEditor>
+            <webMaster>807216431@qq.com (LHC)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Tue, 02 Nov 2021 17:00:24 &#43;0000</lastBuildDate><atom:link href="https://lihc520.github.io/tags/mysql/" rel="self" type="application/rss+xml" /><item>
+    <title>MySql:master:slave:slave</title>
+    <link>https://lihc520.github.io/mysql-master-slave-slave/</link>
+    <pubDate>Tue, 02 Nov 2021 17:00:24 &#43;0000</pubDate><author>
+        <name>LHC</name>
+    </author><guid>https://lihc520.github.io/mysql-master-slave-slave/</guid>
+    <description><![CDATA[Hosts CPU MEM HD OS 192.168.1.102 db01 8 16G 100G Ubuntu20.04 192.168.1.105 db02 8 16G 100G Ubuntu20.04 192.168.1.108 db03 8 16G 100G Ubuntu20.04 安装前修改两台服务器的hosts 1 2 3 4 5 # 三臺台服务器都要操作 sudo vim /etc/hosts 192.168.1.102 db01 192.168.1.105 db02 192.168.1.108 db03 創建MySQ]]></description>
+</item></channel>
+</rss>
