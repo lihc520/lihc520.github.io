@@ -1,15 +1,15 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
         <title>ftp - 标签 - LHCの博客</title>
-        <link>https://lihc520.github.io/tags/ftp/</link>
+        <link>https://starli.co/tags/ftp/</link>
         <description>ftp - 标签 - LHCの博客</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>807216431@qq.com (LHC)</managingEditor>
-            <webMaster>807216431@qq.com (LHC)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Fri, 25 Jun 2021 15:14:49 &#43;0000</lastBuildDate><atom:link href="https://lihc520.github.io/tags/ftp/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>807216431@qq.com (LHC)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Fri, 25 Jun 2021 15:14:49 &#43;0000</lastBuildDate><atom:link href="https://starli.co/tags/ftp/" rel="self" type="application/rss+xml" /><item>
     <title>centos7搭建vsftpd</title>
-    <link>https://lihc520.github.io/centos7%E6%90%AD%E5%BB%BAvsftpd/</link>
+    <link>https://starli.co/centos7%E6%90%AD%E5%BB%BAvsftpd/</link>
     <pubDate>Fri, 25 Jun 2021 15:14:49 &#43;0000</pubDate><author>
         <name>LHC</name>
-    </author><guid>https://lihc520.github.io/centos7%E6%90%AD%E5%BB%BAvsftpd/</guid>
+    </author><guid>https://starli.co/centos7%E6%90%AD%E5%BB%BAvsftpd/</guid>
     <description><![CDATA[centos7搭建 Vsftpd 服务。安装服务端程序1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 [root@localhost ~]# yum install vsftpd Loaded plugins: langpacks, product-id, subscription-manager ………………省略部分输出信息……………… ================================================================================ Installing:]]></description>
 </item></channel>
 </rss>

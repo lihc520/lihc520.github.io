@@ -1,22 +1,22 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
         <title>mysql - 标签 - LHCの博客</title>
-        <link>https://lihc520.github.io/tags/mysql/</link>
+        <link>https://starli.co/tags/mysql/</link>
         <description>mysql - 标签 - LHCの博客</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>807216431@qq.com (LHC)</managingEditor>
-            <webMaster>807216431@qq.com (LHC)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Fri, 08 Jul 2022 12:27:03 &#43;0800</lastBuildDate><atom:link href="https://lihc520.github.io/tags/mysql/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>807216431@qq.com (LHC)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Fri, 08 Jul 2022 12:27:03 &#43;0800</lastBuildDate><atom:link href="https://starli.co/tags/mysql/" rel="self" type="application/rss+xml" /><item>
     <title>Mysql备份</title>
-    <link>https://lihc520.github.io/mysql%E5%A4%87%E4%BB%BD/</link>
+    <link>https://starli.co/mysql%E5%A4%87%E4%BB%BD/</link>
     <pubDate>Fri, 08 Jul 2022 12:27:03 &#43;0800</pubDate><author>
         <name>LHC</name>
-    </author><guid>https://lihc520.github.io/mysql%E5%A4%87%E4%BB%BD/</guid>
+    </author><guid>https://starli.co/mysql%E5%A4%87%E4%BB%BD/</guid>
     <description><![CDATA[[MySql数据库备份的几种方式]mysqldump工具备份备份整个数据库 1 2 $&gt; mysqldump -u root -h host -p dbname &gt; backdb.sql 备份数据库中的某个表 1 2 $&gt; mysqldump -u root -h host -p dbname tbname1,]]></description>
 </item><item>
     <title>MySql:master:slave:slave</title>
-    <link>https://lihc520.github.io/mysql-master-slave-slave/</link>
+    <link>https://starli.co/mysql-master-slave-slave/</link>
     <pubDate>Tue, 02 Nov 2021 17:00:24 &#43;0000</pubDate><author>
         <name>LHC</name>
-    </author><guid>https://lihc520.github.io/mysql-master-slave-slave/</guid>
+    </author><guid>https://starli.co/mysql-master-slave-slave/</guid>
     <description><![CDATA[Hosts CPU MEM HD OS 192.168.1.102 db01 8 16G 100G Ubuntu20.04 192.168.1.105 db02 8 16G 100G Ubuntu20.04 192.168.1.108 db03 8 16G 100G Ubuntu20.04 安装前修改两台服务器的hosts 1 2 3 4 5 # 三臺台服务器都要操作 sudo vim /etc/hosts 192.168.1.102 db01 192.168.1.105 db02 192.168.1.108 db03 創建MySQ]]></description>
 </item></channel>
 </rss>

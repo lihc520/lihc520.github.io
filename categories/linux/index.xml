@@ -1,78 +1,78 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
         <title>linux - 分类 - LHCの博客</title>
-        <link>https://lihc520.github.io/categories/linux/</link>
+        <link>https://starli.co/categories/linux/</link>
         <description>linux - 分类 - LHCの博客</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>807216431@qq.com (LHC)</managingEditor>
-            <webMaster>807216431@qq.com (LHC)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Fri, 08 Jul 2022 12:38:34 &#43;0800</lastBuildDate><atom:link href="https://lihc520.github.io/categories/linux/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>807216431@qq.com (LHC)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Fri, 08 Jul 2022 12:38:34 &#43;0800</lastBuildDate><atom:link href="https://starli.co/categories/linux/" rel="self" type="application/rss+xml" /><item>
     <title>Rsync</title>
-    <link>https://lihc520.github.io/rsync/</link>
+    <link>https://starli.co/rsync/</link>
     <pubDate>Fri, 08 Jul 2022 12:38:34 &#43;0800</pubDate><author>
         <name>LHC</name>
-    </author><guid>https://lihc520.github.io/rsync/</guid>
+    </author><guid>https://starli.co/rsync/</guid>
     <description><![CDATA[1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 # 拷贝本地文件。当SRC和DES路径信息都不包含有单个冒号”:”分隔符时就启动这种工作模式。如：rsync]]></description>
 </item><item>
     <title>Nginx匹配规则</title>
-    <link>https://lihc520.github.io/nginx%E5%8C%B9%E9%85%8D%E8%A7%84%E5%88%99/</link>
+    <link>https://starli.co/nginx%E5%8C%B9%E9%85%8D%E8%A7%84%E5%88%99/</link>
     <pubDate>Fri, 08 Jul 2022 12:28:07 &#43;0800</pubDate><author>
         <name>LHC</name>
-    </author><guid>https://lihc520.github.io/nginx%E5%8C%B9%E9%85%8D%E8%A7%84%E5%88%99/</guid>
+    </author><guid>https://starli.co/nginx%E5%8C%B9%E9%85%8D%E8%A7%84%E5%88%99/</guid>
     <description><![CDATA[location匹配命令 1 2 3 4 5 6 7 8 9 ~ #波浪线表示执行一个正则匹配，区分大小写 ~* #表示执行一个正则匹配，不区分大小写 ^~ #^~表示普通字]]></description>
 </item><item>
     <title>Mysql备份</title>
-    <link>https://lihc520.github.io/mysql%E5%A4%87%E4%BB%BD/</link>
+    <link>https://starli.co/mysql%E5%A4%87%E4%BB%BD/</link>
     <pubDate>Fri, 08 Jul 2022 12:27:03 &#43;0800</pubDate><author>
         <name>LHC</name>
-    </author><guid>https://lihc520.github.io/mysql%E5%A4%87%E4%BB%BD/</guid>
+    </author><guid>https://starli.co/mysql%E5%A4%87%E4%BB%BD/</guid>
     <description><![CDATA[[MySql数据库备份的几种方式]mysqldump工具备份备份整个数据库 1 2 $&gt; mysqldump -u root -h host -p dbname &gt; backdb.sql 备份数据库中的某个表 1 2 $&gt; mysqldump -u root -h host -p dbname tbname1,]]></description>
 </item><item>
     <title>Nginx访问中文乱码</title>
-    <link>https://lihc520.github.io/nginx%E8%AE%BF%E9%97%AE%E4%B8%AD%E6%96%87%E4%B9%B1%E7%A0%81/</link>
+    <link>https://starli.co/nginx%E8%AE%BF%E9%97%AE%E4%B8%AD%E6%96%87%E4%B9%B1%E7%A0%81/</link>
     <pubDate>Fri, 08 Jul 2022 11:14:44 &#43;0800</pubDate><author>
         <name>LHC</name>
-    </author><guid>https://lihc520.github.io/nginx%E8%AE%BF%E9%97%AE%E4%B8%AD%E6%96%87%E4%B9%B1%E7%A0%81/</guid>
+    </author><guid>https://starli.co/nginx%E8%AE%BF%E9%97%AE%E4%B8%AD%E6%96%87%E4%B9%B1%E7%A0%81/</guid>
     <description><![CDATA[1 2 3 4 5 6 7 8 9 10 11 12 13 upstream you.domainName.com { server 127.0.0.1:8080; } server { listen 80; server_name you.domainName.com; charset utf-8; ##添加这段 location /examples { return 403; } } 修改后，重启Nginx服务。]]></description>
 </item><item>
     <title>MySql:master:slave:slave</title>
-    <link>https://lihc520.github.io/mysql-master-slave-slave/</link>
+    <link>https://starli.co/mysql-master-slave-slave/</link>
     <pubDate>Tue, 02 Nov 2021 17:00:24 &#43;0000</pubDate><author>
         <name>LHC</name>
-    </author><guid>https://lihc520.github.io/mysql-master-slave-slave/</guid>
+    </author><guid>https://starli.co/mysql-master-slave-slave/</guid>
     <description><![CDATA[Hosts CPU MEM HD OS 192.168.1.102 db01 8 16G 100G Ubuntu20.04 192.168.1.105 db02 8 16G 100G Ubuntu20.04 192.168.1.108 db03 8 16G 100G Ubuntu20.04 安装前修改两台服务器的hosts 1 2 3 4 5 # 三臺台服务器都要操作 sudo vim /etc/hosts 192.168.1.102 db01 192.168.1.105 db02 192.168.1.108 db03 創建MySQ]]></description>
 </item><item>
     <title>logstash&#43;filebeat&#43;redis</title>
-    <link>https://lihc520.github.io/logstash-filebeat-redis/</link>
+    <link>https://starli.co/logstash-filebeat-redis/</link>
     <pubDate>Thu, 01 Jul 2021 11:39:28 &#43;0000</pubDate><author>
         <name>LHC</name>
-    </author><guid>https://lihc520.github.io/logstash-filebeat-redis/</guid>
+    </author><guid>https://starli.co/logstash-filebeat-redis/</guid>
     <description><![CDATA[ELK客户端部署目前的架构是elasticsearch+logstash+filebeat+kibana+redis 通过filebeat收集]]></description>
 </item><item>
     <title>centos7搭建vsftpd</title>
-    <link>https://lihc520.github.io/centos7%E6%90%AD%E5%BB%BAvsftpd/</link>
+    <link>https://starli.co/centos7%E6%90%AD%E5%BB%BAvsftpd/</link>
     <pubDate>Fri, 25 Jun 2021 15:14:49 &#43;0000</pubDate><author>
         <name>LHC</name>
-    </author><guid>https://lihc520.github.io/centos7%E6%90%AD%E5%BB%BAvsftpd/</guid>
+    </author><guid>https://starli.co/centos7%E6%90%AD%E5%BB%BAvsftpd/</guid>
     <description><![CDATA[centos7搭建 Vsftpd 服务。安装服务端程序1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 [root@localhost ~]# yum install vsftpd Loaded plugins: langpacks, product-id, subscription-manager ………………省略部分输出信息……………… ================================================================================ Installing:]]></description>
 </item><item>
     <title>k8s部署TIDB</title>
-    <link>https://lihc520.github.io/k8s%E9%83%A8%E7%BD%B2tidb/</link>
+    <link>https://starli.co/k8s%E9%83%A8%E7%BD%B2tidb/</link>
     <pubDate>Fri, 04 Jun 2021 14:26:02 &#43;0000</pubDate><author>
         <name>LHC</name>
-    </author><guid>https://lihc520.github.io/k8s%E9%83%A8%E7%BD%B2tidb/</guid>
+    </author><guid>https://starli.co/k8s%E9%83%A8%E7%BD%B2tidb/</guid>
     <description><![CDATA[k8s部署TIDB服务器建议配置环境 组件 CPU 内存 本地存储 网络 IP Master1 8 核 16 GB 无特殊要求 千兆网卡 10.168.2.153 Master2 8 核 16 GB 无特殊要求 千兆网卡 10.168.3.60 Master3 8 核 16 GB 无特殊要求]]></description>
 </item><item>
     <title>NTP服务器与客户端时间同步</title>
-    <link>https://lihc520.github.io/ntp%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8E%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%90%8C%E6%AD%A5/</link>
+    <link>https://starli.co/ntp%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8E%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%90%8C%E6%AD%A5/</link>
     <pubDate>Thu, 03 Jun 2021 10:22:17 &#43;0000</pubDate><author>
         <name>LHC</name>
-    </author><guid>https://lihc520.github.io/ntp%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8E%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%90%8C%E6%AD%A5/</guid>
+    </author><guid>https://starli.co/ntp%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8E%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%90%8C%E6%AD%A5/</guid>
     <description><![CDATA[操作场景ntpd（Network Time Protocol daemon）是 Linux 操作系统的一个守护进程，用于校正本地系统与时钟源服务器之前的时间，完整的实现了 NTP 协议。]]></description>
 </item><item>
     <title>K8s部署Nextcloud</title>
-    <link>https://lihc520.github.io/k8s%E9%83%A8%E7%BD%B2nextcloud/</link>
+    <link>https://starli.co/k8s%E9%83%A8%E7%BD%B2nextcloud/</link>
     <pubDate>Thu, 03 Jun 2021 10:09:04 &#43;0000</pubDate><author>
         <name>LHC</name>
-    </author><guid>https://lihc520.github.io/k8s%E9%83%A8%E7%BD%B2nextcloud/</guid>
+    </author><guid>https://starli.co/k8s%E9%83%A8%E7%BD%B2nextcloud/</guid>
     <description><![CDATA[部署 NFS 服务在NFS服务器上安装 NFS 与 rpcbind 服务1 2 3 4 5 6 7 8 9 10 # 创建 NFS 存储目录 mkdir -p /data/NFS # 安装nfs服务 yum -y install nfs-utils rpcbind # 修改配置文件 echo &#34;/data/NFS *(rw,sync,no_root_squash,no_subtree_check)&#34; &gt; /etc/exports # 启动服]]></description>
 </item></channel>
 </rss>

@@ -1,15 +1,15 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
         <title>vim - 标签 - LHCの博客</title>
-        <link>https://lihc520.github.io/tags/vim/</link>
+        <link>https://starli.co/tags/vim/</link>
         <description>vim - 标签 - LHCの博客</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>807216431@qq.com (LHC)</managingEditor>
-            <webMaster>807216431@qq.com (LHC)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Wed, 19 May 2021 18:34:28 &#43;0000</lastBuildDate><atom:link href="https://lihc520.github.io/tags/vim/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>807216431@qq.com (LHC)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Wed, 19 May 2021 18:34:28 &#43;0000</lastBuildDate><atom:link href="https://starli.co/tags/vim/" rel="self" type="application/rss+xml" /><item>
     <title>vim</title>
-    <link>https://lihc520.github.io/vim/</link>
+    <link>https://starli.co/vim/</link>
     <pubDate>Wed, 19 May 2021 18:34:28 &#43;0000</pubDate><author>
         <name>LHC</name>
-    </author><guid>https://lihc520.github.io/vim/</guid>
+    </author><guid>https://starli.co/vim/</guid>
     <description><![CDATA[4.1 Vim文本编辑器Vim的发布最早可以追溯到1991年，英文全称为：“Vi IMproved”，也就是对vi编辑器的提升版本，其中最大的改进当]]></description>
 </item></channel>
 </rss>

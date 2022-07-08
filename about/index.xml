@@ -2,20 +2,20 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Abouts on LHCの博客</title>
-    <link>https://lihc520.github.io/about/</link>
+    <link>https://starli.co/about/</link>
     <description>Recent content in Abouts on LHCの博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <managingEditor>807216431@qq.com (LHC)</managingEditor>
     <webMaster>807216431@qq.com (LHC)</webMaster>
     <copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright>
-    <lastBuildDate>Fri, 08 Jul 2022 09:58:07 +0800</lastBuildDate><atom:link href="https://lihc520.github.io/about/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 08 Jul 2022 09:58:07 +0800</lastBuildDate><atom:link href="https://starli.co/about/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>About</title>
-      <link>https://lihc520.github.io/about/about/</link>
+      <link>https://starli.co/about/about/</link>
       <pubDate>Fri, 08 Jul 2022 09:58:07 +0800</pubDate>
       <author>807216431@qq.com (LHC)</author>
-      <guid>https://lihc520.github.io/about/about/</guid>
+      <guid>https://starli.co/about/about/</guid>
       <description></description>
     </item>
     

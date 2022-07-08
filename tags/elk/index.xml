@@ -1,15 +1,15 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
         <title>elk - 标签 - LHCの博客</title>
-        <link>https://lihc520.github.io/tags/elk/</link>
+        <link>https://starli.co/tags/elk/</link>
         <description>elk - 标签 - LHCの博客</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>807216431@qq.com (LHC)</managingEditor>
-            <webMaster>807216431@qq.com (LHC)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Thu, 01 Jul 2021 11:39:28 &#43;0000</lastBuildDate><atom:link href="https://lihc520.github.io/tags/elk/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>807216431@qq.com (LHC)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Thu, 01 Jul 2021 11:39:28 &#43;0000</lastBuildDate><atom:link href="https://starli.co/tags/elk/" rel="self" type="application/rss+xml" /><item>
     <title>logstash&#43;filebeat&#43;redis</title>
-    <link>https://lihc520.github.io/logstash-filebeat-redis/</link>
+    <link>https://starli.co/logstash-filebeat-redis/</link>
     <pubDate>Thu, 01 Jul 2021 11:39:28 &#43;0000</pubDate><author>
         <name>LHC</name>
-    </author><guid>https://lihc520.github.io/logstash-filebeat-redis/</guid>
+    </author><guid>https://starli.co/logstash-filebeat-redis/</guid>
     <description><![CDATA[ELK客户端部署目前的架构是elasticsearch+logstash+filebeat+kibana+redis 通过filebeat收集]]></description>
 </item></channel>
 </rss>
