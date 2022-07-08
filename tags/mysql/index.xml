@@ -4,7 +4,14 @@
         <link>https://starli.co/tags/mysql/</link>
         <description>mysql - 标签 - LHCの博客</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>807216431@qq.com (LHC)</managingEditor>
-            <webMaster>807216431@qq.com (LHC)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Fri, 08 Jul 2022 12:27:03 &#43;0800</lastBuildDate><atom:link href="https://starli.co/tags/mysql/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>807216431@qq.com (LHC)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Fri, 08 Jul 2022 17:00:49 &#43;0800</lastBuildDate><atom:link href="https://starli.co/tags/mysql/" rel="self" type="application/rss+xml" /><item>
+    <title>Mysql查看数据库空间</title>
+    <link>https://starli.co/mysql%E6%9F%A5%E7%9C%8B%E6%95%B0%E6%8D%AE%E5%BA%93%E7%A9%BA%E9%97%B4/</link>
+    <pubDate>Fri, 08 Jul 2022 17:00:49 &#43;0800</pubDate><author>
+        <name>LHC</name>
+    </author><guid>https://starli.co/mysql%E6%9F%A5%E7%9C%8B%E6%95%B0%E6%8D%AE%E5%BA%93%E7%A9%BA%E9%97%B4/</guid>
+    <description><![CDATA[1 2 3 # 查看总大小 mysql&gt; use information_schema; mysql&gt; select concat(round(sum(DATA_LENGTH/1024/1024),2),&#39;MB&#39;) as data from TABLES; 1 2 3 4 # 查看每个库的大小 SELECT table_schema,SUM(AVG_ROW_LENGTH*TABLE_ROWS+INDEX_LENGTH)/1024/1024 AS total_mb FROM information_schema.TABLES group by table_schema; 1 2 # 选库查看 select concat(round(sum(DATA_LENGTH/1024/1024),2),&#39;MB&#39;) as data from TABLES where table_schema=&#39;tdm_uat&#39;; 1 2 3 4 5 6 7 8 9 # 查看所有]]></description>
+</item><item>
     <title>Mysql备份</title>
     <link>https://starli.co/mysql%E5%A4%87%E4%BB%BD/</link>
     <pubDate>Fri, 08 Jul 2022 12:27:03 &#43;0800</pubDate><author>

@@ -112,6 +112,13 @@
         alt="/images/1.jpg"
         title="/images/1.jpg" height="6rem" width="6rem"></a></div><h2 class="home-subtitle"><div id="id-1" class="typeit"></div></h2><div class="links"><a href="https://github.com/lihc520" title="GitHub" target="_blank" rel="noopener noreffer me"><i class="fab fa-github-alt fa-fw"></i></a></div></div>
 <article class="single summary" itemscope itemtype="http://schema.org/Article"><h1 class="single-title" itemprop="name headline">
+        <a href="/mysql%E6%9F%A5%E7%9C%8B%E6%95%B0%E6%8D%AE%E5%BA%93%E7%A9%BA%E9%97%B4/">Mysql查看数据库空间</a>
+    </h1><div class="post-meta">
+        <span class="post-author"><i class="author fas fa-user-circle fa-fw"></i><a href="/" title="Author" rel=" author" class="author">LHC</a>
+        </span>&nbsp;<span class="post-publish">发布于 <time datetime="2022-07-08">2022-07-08</time></span></div><div class="content">1 2 3 # 查看总大小 mysql&gt; use information_schema; mysql&gt; select concat(round(sum(DATA_LENGTH/1024/1024),2),&#39;MB&#39;) as data from TABLES; 1 2 3 4 # 查看每个库的大小 SELECT table_schema,SUM(AVG_ROW_LENGTH*TABLE_ROWS+INDEX_LENGTH)/1024/1024 AS total_mb FROM information_schema.TABLES group by table_schema; 1 2 # 选库查看 select concat(round(sum(DATA_LENGTH/1024/1024),2),&#39;MB&#39;) as data from TABLES where table_schema=&#39;tdm_uat&#39;; 1 2 3 4 5 6 7 8 9 # 查看所有</div><div class="post-footer">
+        <a href="/mysql%E6%9F%A5%E7%9C%8B%E6%95%B0%E6%8D%AE%E5%BA%93%E7%A9%BA%E9%97%B4/">阅读全文</a><div class="post-tags">
+                <i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/mysql/">mysql</a></div></div>
+</article><article class="single summary" itemscope itemtype="http://schema.org/Article"><h1 class="single-title" itemprop="name headline">
         <a href="/nginx%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/">Nginx日志分析</a>
     </h1><div class="post-meta">
         <span class="post-author"><i class="author fas fa-user-circle fa-fw"></i><a href="/" title="Author" rel=" author" class="author">LHC</a>
@@ -146,13 +153,6 @@
         </span>&nbsp;<span class="post-publish">发布于 <time datetime="2022-07-08">2022-07-08</time></span>&nbsp;<span class="post-category">收录于 </span>&nbsp;<span class="post-category">类别 <a href="/categories/linux/"><i class="far fa-folder fa-fw"></i>linux</a></span></div><div class="content">location匹配命令 1 2 3 4 5 6 7 8 9 ~ #波浪线表示执行一个正则匹配，区分大小写 ~* #表示执行一个正则匹配，不区分大小写 ^~ #^~表示普通字</div><div class="post-footer">
         <a href="/nginx%E5%8C%B9%E9%85%8D%E8%A7%84%E5%88%99/">阅读全文</a><div class="post-tags">
                 <i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/nginx/">nginx</a></div></div>
-</article><article class="single summary" itemscope itemtype="http://schema.org/Article"><h1 class="single-title" itemprop="name headline">
-        <a href="/mysql%E5%A4%87%E4%BB%BD/">Mysql备份</a>
-    </h1><div class="post-meta">
-        <span class="post-author"><i class="author fas fa-user-circle fa-fw"></i><a href="/" title="Author" rel=" author" class="author">LHC</a>
-        </span>&nbsp;<span class="post-publish">发布于 <time datetime="2022-07-08">2022-07-08</time></span>&nbsp;<span class="post-category">收录于 </span>&nbsp;<span class="post-category">类别 <a href="/categories/linux/"><i class="far fa-folder fa-fw"></i>linux</a></span></div><div class="content">[MySql数据库备份的几种方式]mysqldump工具备份备份整个数据库 1 2 $&gt; mysqldump -u root -h host -p dbname &gt; backdb.sql 备份数据库中的某个表 1 2 $&gt; mysqldump -u root -h host -p dbname tbname1,</div><div class="post-footer">
-        <a href="/mysql%E5%A4%87%E4%BB%BD/">阅读全文</a><div class="post-tags">
-                <i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/mysql/">mysql</a></div></div>
 </article><ul class="pagination"><li class="page-item active">
                     <span class="page-link">
                         <a href="/">1</a>
