@@ -4,7 +4,14 @@
         <link>https://lihc520.github.io/posts/</link>
         <description>所有文章 | LHCの博客</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>807216431@qq.com (LHC)</managingEditor>
-            <webMaster>807216431@qq.com (LHC)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Fri, 08 Jul 2022 12:38:34 &#43;0800</lastBuildDate><atom:link href="https://lihc520.github.io/posts/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>807216431@qq.com (LHC)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Fri, 08 Jul 2022 12:42:07 &#43;0800</lastBuildDate><atom:link href="https://lihc520.github.io/posts/" rel="self" type="application/rss+xml" /><item>
+    <title>Nginx日志分析</title>
+    <link>https://lihc520.github.io/nginx%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/</link>
+    <pubDate>Fri, 08 Jul 2022 12:42:07 &#43;0800</pubDate><author>
+        <name>LHC</name>
+    </author><guid>https://lihc520.github.io/nginx%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/</guid>
+    <description><![CDATA[统计PV,UV数 统计所有的PV数 cat access.log | wc -l 统计当天的PV数 cat access.log | sed -n /date &ldquo;+%d/%b/%Y&rdquo;/p | wc -l 统计指定某一天的PV数 cat access.log | sed -n '/20\/Aug\/2019/p' | wc -l 根据访问IP统计UV awk]]></description>
+</item><item>
     <title>Rsync</title>
     <link>https://lihc520.github.io/rsync/</link>
     <pubDate>Fri, 08 Jul 2022 12:38:34 &#43;0800</pubDate><author>
@@ -67,12 +74,5 @@
         <name>LHC</name>
     </author><guid>https://lihc520.github.io/centos7%E6%90%AD%E5%BB%BAvsftpd/</guid>
     <description><![CDATA[centos7搭建 Vsftpd 服务。安装服务端程序1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 [root@localhost ~]# yum install vsftpd Loaded plugins: langpacks, product-id, subscription-manager ………………省略部分输出信息……………… ================================================================================ Installing:]]></description>
-</item><item>
-    <title>k8s部署TIDB</title>
-    <link>https://lihc520.github.io/k8s%E9%83%A8%E7%BD%B2tidb/</link>
-    <pubDate>Fri, 04 Jun 2021 14:26:02 &#43;0000</pubDate><author>
-        <name>LHC</name>
-    </author><guid>https://lihc520.github.io/k8s%E9%83%A8%E7%BD%B2tidb/</guid>
-    <description><![CDATA[k8s部署TIDB服务器建议配置环境 组件 CPU 内存 本地存储 网络 IP Master1 8 核 16 GB 无特殊要求 千兆网卡 10.168.2.153 Master2 8 核 16 GB 无特殊要求 千兆网卡 10.168.3.60 Master3 8 核 16 GB 无特殊要求]]></description>
 </item></channel>
 </rss>
