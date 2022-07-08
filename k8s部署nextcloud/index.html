@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noodp" />
+    <title class="pjax-title">K8s部署Nextcloud - LHCの博客</title><meta name="Description" content="LHC记录生活"><meta property="og:title" content="K8s部署Nextcloud" />
+<meta property="og:description" content="部署 NFS 服务在NFS服务器上安装 NFS 与 rpcbind 服务1 2 3 4 5 6 7 8 9 10 # 创建 NFS 存储目录 mkdir -p /data/NFS # 安装nfs服务 yum -y install nfs-utils rpcbind # 修改配置文件 echo &#34;/data/NFS *(rw,sync,no_root_squash,no_subtree_check)&#34; &gt; /etc/exports # 启动服" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://lihc520.github.io/k8s%E9%83%A8%E7%BD%B2nextcloud/" /><meta property="og:image" content="https://lihc520.github.io/logo.png"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-06-03T10:09:04+00:00" />
+<meta property="article:modified_time" content="2021-06-03T10:09:04+00:00" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://lihc520.github.io/logo.png"/>
+
+<meta name="twitter:title" content="K8s部署Nextcloud"/>
+<meta name="twitter:description" content="部署 NFS 服务在NFS服务器上安装 NFS 与 rpcbind 服务1 2 3 4 5 6 7 8 9 10 # 创建 NFS 存储目录 mkdir -p /data/NFS # 安装nfs服务 yum -y install nfs-utils rpcbind # 修改配置文件 echo &#34;/data/NFS *(rw,sync,no_root_squash,no_subtree_check)&#34; &gt; /etc/exports # 启动服"/>
+<meta name="application-name" content="DoIt">
+<meta name="apple-mobile-web-app-title" content="DoIt">
+
+<meta name="theme-color" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" href="https://lihc520.github.io/k8s%E9%83%A8%E7%BD%B2nextcloud/" /><link rel="prev" href="https://lihc520.github.io/kubenetes%E4%BD%BF%E7%94%A8hlem%E5%AE%89%E8%A3%85nfs%E4%B8%BA%E9%BB%98%E8%AE%A4%E5%AD%98%E5%82%A8/" /><link rel="next" href="https://lihc520.github.io/ntp%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8E%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%90%8C%E6%AD%A5/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/fontawesome-free/all.min.css">
+        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/animate/animate.min.css">
+        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "K8s部署Nextcloud",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/lihc520.github.io\/k8s%E9%83%A8%E7%BD%B2nextcloud\/"
+        },"genre": "posts","wordcount":  1054 ,
+        "url": "https:\/\/lihc520.github.io\/k8s%E9%83%A8%E7%BD%B2nextcloud\/","datePublished": "2021-06-03T10:09:04+00:00","dateModified": "2021-06-03T10:09:04+00:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "LHC"
+            },"description": ""
+    }
+    </script></head>
+
+<body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">
+        function setTheme(theme) {document.body.setAttribute('theme', theme); document.documentElement.style.setProperty('color-scheme', theme === 'light' ? 'light' : 'dark');}
+        function saveTheme(theme) {window.localStorage && localStorage.setItem('theme', theme);}
+        function getMeta(metaName) {const metas = document.getElementsByTagName('meta'); for (let i = 0; i < metas.length; i++) if (metas[i].getAttribute('name') === metaName) return metas[i]; return '';}
+        if (window.localStorage && localStorage.getItem('theme')) {let theme = localStorage.getItem('theme');theme === 'light' || theme === 'dark' || theme === 'black' ? setTheme(theme) : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? setTheme('dark') : setTheme('light')); } else { if ('auto' === 'light' || 'auto' === 'dark' || 'auto' === 'black') setTheme('auto'), saveTheme('auto'); else saveTheme('auto'), window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? setTheme('dark') : setTheme('light');}
+        let metaColors = {'light': '#f8f8f8','dark': '#252627','black': '#000000'}
+        getMeta('theme-color').content = metaColors[document.body.getAttribute('theme')];
+    </script>
+    <div id="back-to-top"></div>
+    <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="LHCの博客"><span class="header-title-pre"><i class='fas fa-fw fa-fan fa-spin'></i></span><span id="desktop-header-typeit" class="typeit"></span></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> 所有文章 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/categories/documentation/"> 文档 </a><a class="menu-item" href="/about/"> 关于 </a><a class="menu-item" href="/friends/"> 友链 </a><a class="menu-item" href="https://github.com/ITmxs" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i> Github </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="#" onclick="return false;" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="#" onclick="return false;" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="#" onclick="return false;" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="LHCの博客"><span class="header-title-pre"><i class='fas fa-fw fa-fan fa-spin'></i></span><span id="mobile-header-typeit" class="typeit"></span></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="#" onclick="return false;" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="#" onclick="return false;" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="#" onclick="return false;" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">所有文章</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/categories/documentation/" title="">文档</a><a class="menu-item" href="/about/" title="">关于</a><a class="menu-item" href="/friends/" title="">友链</a><a class="menu-item" href="https://github.com/ITmxs" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i>Github</a><a href="#" onclick="return false;" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+            <div class="container"><script>document.getElementsByTagName("main")[0].setAttribute("pageStyle", "normal")</script><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC", "false")</script><article class="page single"><h1 class="single-title animate__animated animate__flipInX">K8s部署Nextcloud</h1><div class="post-meta">
+            <div class="post-meta-line">
+                <span class="post-author"><i class="author fas fa-user-circle fa-fw"></i><a href="/" title="Author" rel=" author" class="author">LHC</a>
+                </span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-06-03">2021-06-03</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime="2021-06-03">2021-06-03</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1054 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 3 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="true">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#部署-nfs-服务">部署 NFS 服务</a>
+          <ul>
+            <li><a href="#在nfs服务器上安装-nfs-与-rpcbind-服务">在NFS服务器上安装 NFS 与 rpcbind 服务</a></li>
+            <li><a href="#集群节点安装-nfs">集群节点安装 nfs</a></li>
+          </ul>
+        </li>
+        <li><a href="#在master上操作创建静态pvpvc">在master上操作创建静态pv、pvc</a>
+          <ul>
+            <li><a href="#创建nextcloud命名空间">创建nextcloud命名空间</a></li>
+            <li><a href="#创建pv">创建pv</a></li>
+            <li><a href="#创建pvc">创建pvc</a></li>
+            <li><a href="#部署nextcloud的web端">部署nextcloud的web端</a></li>
+            <li><a href="#创建mysql用户密码在nextcloud空间">创建mysql用户密码在nextcloud空间</a></li>
+            <li><a href="#部署mysql">部署MySQL</a></li>
+            <li><a href="#查看部署情况">查看部署情况</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><div class="details admonition warning open">
+                <div class="details-summary admonition-title">
+                    <i class="icon fas fa-exclamation-triangle fa-fwwarning"></i>警告<i class="details-icon fas fa-angle-right fa-fw"></i>
+                </div>
+                <div class="details-content">
+                    <div class="admonition-content">
+                        本文最后更新于 <span class="timeago" datetime="2021-06-03T10:09:04" title="June 3, 2021">2021-06-03</span>，文中内容可能已过时。</div>
+                </div>
+            </div><h3 id="部署-nfs-服务" class="headerLink">
+    <a href="#%e9%83%a8%e7%bd%b2-nfs-%e6%9c%8d%e5%8a%a1" class="header-mark"></a>部署 NFS 服务</h3><h4 id="在nfs服务器上安装-nfs-与-rpcbind-服务" class="headerLink">
+    <a href="#%e5%9c%a8nfs%e6%9c%8d%e5%8a%a1%e5%99%a8%e4%b8%8a%e5%ae%89%e8%a3%85-nfs-%e4%b8%8e-rpcbind-%e6%9c%8d%e5%8a%a1" class="header-mark"></a>在NFS服务器上安装 NFS 与 rpcbind 服务</h4><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="c1">#   创建 NFS 存储目录</span>
+mkdir -p /data/NFS
+<span class="c1">#   安装nfs服务</span>
+yum -y install nfs-utils rpcbind
+<span class="c1">#   修改配置文件</span>
+<span class="nb">echo</span> <span class="s2">&#34;/data/NFS *(rw,sync,no_root_squash,no_subtree_check)&#34;</span> &gt; /etc/exports
+<span class="c1">#   启动服务</span>
+systemctl start nfs <span class="o">&amp;&amp;</span> systemctl start rpcbind
+<span class="c1">#   设置开机启动</span>
+systemctl <span class="nb">enable</span> nfs-server <span class="o">&amp;&amp;</span> systemctl <span class="nb">enable</span> rpcbindCOPY
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="集群节点安装-nfs" class="headerLink">
+    <a href="#%e9%9b%86%e7%be%a4%e8%8a%82%e7%82%b9%e5%ae%89%e8%a3%85-nfs" class="header-mark"></a>集群节点安装 nfs</h4><p>重点全部节点都需要安装 nfs-utils 安装了即可不需要配置，否则节点无法挂载 pv</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">#   安装nfs服务
+yum -y install nfs-utils
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="在master上操作创建静态pvpvc" class="headerLink">
+    <a href="#%e5%9c%a8master%e4%b8%8a%e6%93%8d%e4%bd%9c%e5%88%9b%e5%bb%ba%e9%9d%99%e6%80%81pvpvc" class="header-mark"></a>在master上操作创建静态pv、pvc</h3><h4 id="创建nextcloud命名空间" class="headerLink">
+    <a href="#%e5%88%9b%e5%bb%banextcloud%e5%91%bd%e5%90%8d%e7%a9%ba%e9%97%b4" class="header-mark"></a>创建nextcloud命名空间</h4><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">kubectl create ns nextcloud
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="创建pv" class="headerLink">
+    <a href="#%e5%88%9b%e5%bb%bapv" class="header-mark"></a>创建pv</h4><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">## 创建mysql的pv文件
+cat &gt; nfs-mysql.yaml &lt;&lt; EOF
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs-mysql
+  labels:
+    pv: nfs-mysql
+spec:
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Recycle
+  storageClassName: nfs-nextcloud
+  nfs:
+    path: /data/NFS/mysql
+    server: 10.168.3.158
+EOF
+## 应用文件
+kubectl apply -f nfs-mysql.yaml -n nextcloud
+
+## 创建nextcloud的pv文件
+cat &gt; nfs-nextcloud.yaml &lt;&lt; EOF
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs-nextcloud
+  labels:
+    pv: nfs-nextcloud
+spec:
+  capacity:
+    storage: 100Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Recycle
+  storageClassName: nfs
+  nfs:
+    path: /data/NFS/nextcloud
+    server: 10.168.3.158
+EOF
+## 应用文件
+kubectl apply -f nfs-nextcloud.yaml -n nextcloud
+
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="创建pvc" class="headerLink">
+    <a href="#%e5%88%9b%e5%bb%bapvc" class="header-mark"></a>创建pvc</h4><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">## 创建mysql的pvc文件
+cat &gt; nfs-mysql-pvc.yaml &lt;&lt; EOF	
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nfs-mysql
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: nfs-nextcloud
+  selector:
+    matchLabels:
+      pv: nfs-mysqld
+EOF
+## 应用文件
+kubectl apply -f nfs-mysql-pvc.yaml -n nextcloud
+
+
+## 创建nextcloud的pvc文件
+cat &gt; nfs-cloud-pvc.yaml &lt;&lt; EOF
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nfs-cloud
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 100Gi
+  storageClassName: nfs-nextcloud
+  selector:
+    matchLabels:
+      pv: nfs-nextcloud
+EOF	
+## 应用文件
+kubectl apply -f nfs-cloud-pvc.yaml -n nextcloud
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="部署nextcloud的web端" class="headerLink">
+    <a href="#%e9%83%a8%e7%bd%b2nextcloud%e7%9a%84web%e7%ab%af" class="header-mark"></a>部署nextcloud的web端</h4><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">## 创建yaml文件
+cat &gt; nextcloud-server.yaml &lt;&lt; EOF
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nextcloud-server
+  labels:
+    app: nextcloud
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      pod-label: nextcloud-server-pod
+  template:
+    metadata:
+      labels:
+        pod-label: nextcloud-server-pod
+    spec:
+      containers:
+      - name: nextcloud
+        image: nextcloud:21.0.0-apache
+        volumeMounts:
+        - name: nfs-cloud
+          mountPath: /var/www/html
+          subPath: server-data
+      volumes:
+      - name: nfs-cloud
+        persistentVolumeClaim:
+          claimName: nfs-cloud
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nextcloud-server
+  labels:
+    app: nextcloud
+spec:
+  selector:
+    pod-label: nextcloud-server-pod
+  ports:
+  - protocol: TCP
+    port: 80
+EOF
+
+## 应用文件
+kubectl apply -f nextcloud-server.yaml -n nextcloud
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="创建mysql用户密码在nextcloud空间" class="headerLink">
+    <a href="#%e5%88%9b%e5%bb%bamysql%e7%94%a8%e6%88%b7%e5%af%86%e7%a0%81%e5%9c%a8nextcloud%e7%a9%ba%e9%97%b4" class="header-mark"></a>创建mysql用户密码在nextcloud空间</h4><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">kubectl create secret generic nextcloud-db-secret <span class="se">\
+</span><span class="se"></span>    --from-literal<span class="o">=</span><span class="nv">MYSQL_ROOT_PASSWORD</span><span class="o">=</span>password <span class="se">\
+</span><span class="se"></span>    --from-literal<span class="o">=</span><span class="nv">MYSQL_USER</span><span class="o">=</span>nextcloud <span class="se">\
+</span><span class="se"></span>    --from-literal<span class="o">=</span><span class="nv">MYSQL_PASSWORD</span><span class="o">=</span>password -n nextcloud
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="部署mysql" class="headerLink">
+    <a href="#%e9%83%a8%e7%bd%b2mysql" class="header-mark"></a>部署MySQL</h4><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="c1">## 创建mysql的yaml文件</span>
+cat &gt; nextcloud-db.yaml <span class="s">&lt;&lt; EOF
+</span><span class="s">apiVersion: apps/v1
+</span><span class="s">kind: Deployment
+</span><span class="s">metadata:
+</span><span class="s">  name: nextcloud-db
+</span><span class="s">  labels:
+</span><span class="s">    app: nextcloud
+</span><span class="s">spec:
+</span><span class="s">  replicas: 1
+</span><span class="s">  selector:
+</span><span class="s">    matchLabels:
+</span><span class="s">      pod-label: nextcloud-db-pod
+</span><span class="s">  template:
+</span><span class="s">    metadata:
+</span><span class="s">      labels:
+</span><span class="s">        pod-label: nextcloud-db-pod
+</span><span class="s">    spec:
+</span><span class="s">      containers:
+</span><span class="s">      - name: mysql
+</span><span class="s">        image: mysql:8.0
+</span><span class="s">        env:
+</span><span class="s">        - name: MYSQL_DATABASE
+</span><span class="s">          value: nextcloud
+</span><span class="s">        envFrom:
+</span><span class="s">        - secretRef:
+</span><span class="s">            name: nextcloud-db-secret
+</span><span class="s">        volumeMounts:
+</span><span class="s">        - name: nfs-mysql
+</span><span class="s">          mountPath: /var/lib/mysql
+</span><span class="s">          subPath: mysql-data
+</span><span class="s">      volumes:
+</span><span class="s">      - name: nfs-mysql
+</span><span class="s">        persistentVolumeClaim:
+</span><span class="s">          claimName: nfs-mysql
+</span><span class="s">---
+</span><span class="s">apiVersion: v1
+</span><span class="s">kind: Service
+</span><span class="s">metadata:
+</span><span class="s">  name: nextcloud-db
+</span><span class="s">  labels:
+</span><span class="s">    app: nextcloud
+</span><span class="s">spec:
+</span><span class="s">  selector:
+</span><span class="s">    pod-label: nextcloud-db-pod
+</span><span class="s">  ports:
+</span><span class="s">  - protocol: TCP
+</span><span class="s">    port: 3306
+</span><span class="s">EOF</span>
+<span class="c1">## 应用文件</span>
+kubectl apply -f nextcloud-db.yaml -n nextcloud
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="查看部署情况" class="headerLink">
+    <a href="#%e6%9f%a5%e7%9c%8b%e9%83%a8%e7%bd%b2%e6%83%85%e5%86%b5" class="header-mark"></a>查看部署情况</h4><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="o">[</span>root@master3 nextcloud<span class="o">]</span><span class="c1"># kubectl get pvc -n nextcloud</span>
+NAME        STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS    AGE
+nfs-cloud   Bound    pvc-0d2e93d7-ed93-487e-88b1-10f7a0fe37a8   90Gi       RWX            nfs-nextcloud   3d19h
+nfs-mysql   Bound    nfs-mysql                                  10Gi       RWX            nfs-nextcloud   3d2h
+
+<span class="o">[</span>root@master3 nextcloud<span class="o">]</span><span class="c1"># kubectl get pod -n nextcloud</span>
+NAME                                READY   STATUS    RESTARTS   AGE
+nextcloud-db-5cb8b84dc9-ctnts       1/1     Running   <span class="m">0</span>          2d2h
+nextcloud-server-648bb47b66-rmch5   1/1     Running   <span class="m">0</span>          2d2h
+
+<span class="o">[</span>root@master3 nextcloud<span class="o">]</span><span class="c1"># kubectl get svc -n nextcloud</span>
+NAME               TYPE        CLUSTER-IP       EXTERNAL-IP   PORT<span class="o">(</span>S<span class="o">)</span>        AGE
+nextcloud-db       ClusterIP   10.111.175.129   &lt;none&gt;        3306/TCP       3d2h
+nextcloud-server   NodePort    10.99.17.67      &lt;none&gt;        80:31800/TCP   3d19h
+</code></pre></td></tr></table>
+</div>
+</div><p>都正常后到浏览器输入随便一个node节点的ip:31800进入nextcloud页面；</p>
+<p>数据库帐号密码填刚刚创建的，数据库地址填nextcloud-db的ClusterIP加3306端口即可。</p>
+</div>
+
+        <div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2021-06-03</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span><a class="link-to-mardown" href=/k8s%E9%83%A8%E7%BD%B2nextcloud/index.md target="_blank" rel="noopener noreferrer">阅读原始文档</a>
+                    </span></div>
+            <div class="post-info-share">
+                <span><a href="#" onclick="return false;" title="分享到 Twitter" data-sharer="twitter" data-url="https://lihc520.github.io/k8s%E9%83%A8%E7%BD%B2nextcloud/" data-title="K8s部署Nextcloud"><i class="fab fa-twitter fa-fw"></i></a><a href="#" onclick="return false;" title="分享到 Facebook" data-sharer="facebook" data-url="https://lihc520.github.io/k8s%E9%83%A8%E7%BD%B2nextcloud/"><i class="fab fa-facebook-square fa-fw"></i></a><a href="#" onclick="return false;" title="分享到 WhatsApp" data-sharer="whatsapp" data-url="https://lihc520.github.io/k8s%E9%83%A8%E7%BD%B2nextcloud/" data-title="K8s部署Nextcloud" data-web><i class="fab fa-whatsapp fa-fw"></i></a><a href="#" onclick="return false;" title="分享到 Line" data-sharer="line" data-url="https://lihc520.github.io/k8s%E9%83%A8%E7%BD%B2nextcloud/" data-title="K8s部署Nextcloud"><i data-svg-src="/lib/simple-icons/icons/line.min.svg"></i></a><a href="#" onclick="return false;" title="分享到 微博" data-sharer="weibo" data-url="https://lihc520.github.io/k8s%E9%83%A8%E7%BD%B2nextcloud/" data-title="K8s部署Nextcloud"><i class="fab fa-weibo fa-fw"></i></a><a href="#" onclick="return false;" title="分享到 Myspace" data-sharer="myspace" data-url="https://lihc520.github.io/k8s%E9%83%A8%E7%BD%B2nextcloud/" data-title="K8s部署Nextcloud" data-description=""><i data-svg-src="/lib/simple-icons/icons/myspace.min.svg"></i></a><a href="#" onclick="return false;" title="分享到 Blogger" data-sharer="blogger" data-url="https://lihc520.github.io/k8s%E9%83%A8%E7%BD%B2nextcloud/" data-title="K8s部署Nextcloud" data-description=""><i class="fab fa-blogger fa-fw"></i></a><a href="#" onclick="return false;" title="分享到 Evernote" data-sharer="evernote" data-url="https://lihc520.github.io/k8s%E9%83%A8%E7%BD%B2nextcloud/" data-title="K8s部署Nextcloud"><i class="fab fa-evernote fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/kubenetes%E4%BD%BF%E7%94%A8hlem%E5%AE%89%E8%A3%85nfs%E4%B8%BA%E9%BB%98%E8%AE%A4%E5%AD%98%E5%82%A8/" class="prev" rel="prev" title="Kubenetes使用Hlem安装nfs为默认存储"><i class="fas fa-angle-left fa-fw"></i>Kubenetes使用Hlem安装nfs为默认存储</a>
+            <a href="/ntp%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8E%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%90%8C%E6%AD%A5/" class="next" rel="next" title="NTP服务器与客户端时间同步">NTP服务器与客户端时间同步<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id="comments"><div id="gitalk" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://github.com/gitalk/gitalk"></a>Gitalk</a>.
+            </noscript></div></article></div>
+        </main><footer class="footer">
+        <div class="footer-container">
+          <div class="footer-line">
+            <span id="run-time"></span>
+          </div><div class="footer-line">
+                    由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.85.0">Hugo</a> 强力驱动&nbsp;|&nbsp;主题 - <a href="https://github.com/HEIGE-PCloud/DoIt" target="_blank" rel="noopener noreffer" title="DoIt 0.2.13"><i class="far fa-edit fa-fw"></i> DoIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2021 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank" rel="noopener noreferrer">LHC</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+            <div class="footer-line"></div>
+            <div class="footer-line">
+            </div>
+        </div></footer></div>
+
+    <div id="fixed-buttons"><a href="#back-to-top" id="back-to-top-button" class="fixed-button" title="回到顶部">
+            <i class="fas fa-arrow-up fa-fw"></i>
+        </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+            <i class="fas fa-comment fa-fw"></i>
+        </a>
+    </div><div id="cookieconsent-container"></div><div class="assets"><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/tablesort/tablesort.min.js"></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script type="text/javascript" src="/lib/topbar/topbar.min.js"></script><script type="text/javascript" src="/lib/pjax/pjax.min.js"></script><script type="text/javascript" src="/js/theme.min.js" defer></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery@2.1.3/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery-backstretch@2.1.18/jquery.backstretch.min.js"></script>
+
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery@2.1.3/dist/jquery.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/gh/ITJoker233/ITJoker233.github.io@latest/CDN/js/love.min.js"></script>
+
+    <script type="text/javascript" src="https://demo.hellozwh.com/source/canvas-nest.min.js"></script><script type="text/javascript" src="/js/custom.js"></script></div>
+
+<div class="pjax-assets"><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{"gitalk":{"admin":["lihc520"],"clientID":"89eb90d06a3ab923d55d","clientSecret":"4c0ce81194f76e5edc5acae840badd5a0e6d6053","id":"2021-06-03T10:09:04Z","owner":"lihc520","repo":"Gridea-blog-comment","title":"K8s部署Nextcloud"}},"cookieconsent":{"content":{"dismiss":"同意","link":"了解更多","message":"本网站使用 Cookies 来改善您的浏览体验."},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"data":{"desktop-header-typeit":"LHC","mobile-header-typeit":"LHC"},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"PASDMWALPK","algoliaIndex":"index.zh-cn","algoliaSearchKey":"b42948e51daaa93df92381c8e2ac0f93","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"},"sharerjs":true,"table":{"sort":true},"typeit":{"cursorChar":"|","cursorSpeed":1000,"data":{"desktop-header-typeit":["desktop-header-typeit"],"mobile-header-typeit":["mobile-header-typeit"]},"duration":-1,"speed":100}};</script><script type="text/javascript" src="/lib/gitalk/gitalk.min.js"></script><script type="text/javascript" src="/js/gitalk.min.js" defer></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/typeit/typeit.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js" defer></script><script type="text/javascript" src="/lib/katex/auto-render.min.js" defer></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js" defer></script><script type="text/javascript" src="/lib/katex/mhchem.min.js" defer></script><script type="text/javascript" src="/js/katex.min.js" defer></script><script type="text/javascript" src="/js/cookieconsent.min.js" defer></script><link rel="stylesheet" href="/lib/gitalk/gitalk.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/katex/copy-tex.min.css">
+        <noscript><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"></noscript></div>
+</body>
+
+</html>

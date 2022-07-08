@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noodp" />
+    <title class="pjax-title">logstash&#43;filebeat&#43;redis - LHCの博客</title><meta name="Description" content="LHC记录生活"><meta property="og:title" content="logstash&#43;filebeat&#43;redis" />
+<meta property="og:description" content="ELK客户端部署目前的架构是elasticsearch&#43;logstash&#43;filebeat&#43;kibana&#43;redis 通过filebeat收集" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://lihc520.github.io/logstash-filebeat-redis/" /><meta property="og:image" content="https://lihc520.github.io/logo.png"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-07-01T11:39:28+00:00" />
+<meta property="article:modified_time" content="2021-07-01T11:39:28+00:00" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://lihc520.github.io/logo.png"/>
+
+<meta name="twitter:title" content="logstash&#43;filebeat&#43;redis"/>
+<meta name="twitter:description" content="ELK客户端部署目前的架构是elasticsearch&#43;logstash&#43;filebeat&#43;kibana&#43;redis 通过filebeat收集"/>
+<meta name="application-name" content="DoIt">
+<meta name="apple-mobile-web-app-title" content="DoIt">
+
+<meta name="theme-color" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" href="https://lihc520.github.io/logstash-filebeat-redis/" /><link rel="prev" href="https://lihc520.github.io/centos7%E6%90%AD%E5%BB%BAvsftpd/" /><link rel="next" href="https://lihc520.github.io/mysql-master-slave-slave/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/fontawesome-free/all.min.css">
+        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/animate/animate.min.css">
+        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "logstash+filebeat+redis",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/lihc520.github.io\/logstash-filebeat-redis\/"
+        },"genre": "posts","wordcount":  650 ,
+        "url": "https:\/\/lihc520.github.io\/logstash-filebeat-redis\/","datePublished": "2021-07-01T11:39:28+00:00","dateModified": "2021-07-01T11:39:28+00:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "LHC"
+            },"description": ""
+    }
+    </script></head>
+
+<body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">
+        function setTheme(theme) {document.body.setAttribute('theme', theme); document.documentElement.style.setProperty('color-scheme', theme === 'light' ? 'light' : 'dark');}
+        function saveTheme(theme) {window.localStorage && localStorage.setItem('theme', theme);}
+        function getMeta(metaName) {const metas = document.getElementsByTagName('meta'); for (let i = 0; i < metas.length; i++) if (metas[i].getAttribute('name') === metaName) return metas[i]; return '';}
+        if (window.localStorage && localStorage.getItem('theme')) {let theme = localStorage.getItem('theme');theme === 'light' || theme === 'dark' || theme === 'black' ? setTheme(theme) : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? setTheme('dark') : setTheme('light')); } else { if ('auto' === 'light' || 'auto' === 'dark' || 'auto' === 'black') setTheme('auto'), saveTheme('auto'); else saveTheme('auto'), window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? setTheme('dark') : setTheme('light');}
+        let metaColors = {'light': '#f8f8f8','dark': '#252627','black': '#000000'}
+        getMeta('theme-color').content = metaColors[document.body.getAttribute('theme')];
+    </script>
+    <div id="back-to-top"></div>
+    <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="LHCの博客"><span class="header-title-pre"><i class='fas fa-fw fa-fan fa-spin'></i></span><span id="desktop-header-typeit" class="typeit"></span></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> 所有文章 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/categories/documentation/"> 文档 </a><a class="menu-item" href="/about/"> 关于 </a><a class="menu-item" href="/friends/"> 友链 </a><a class="menu-item" href="https://github.com/ITmxs" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i> Github </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="#" onclick="return false;" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="#" onclick="return false;" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="#" onclick="return false;" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="LHCの博客"><span class="header-title-pre"><i class='fas fa-fw fa-fan fa-spin'></i></span><span id="mobile-header-typeit" class="typeit"></span></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="#" onclick="return false;" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="#" onclick="return false;" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="#" onclick="return false;" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">所有文章</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/categories/documentation/" title="">文档</a><a class="menu-item" href="/about/" title="">关于</a><a class="menu-item" href="/friends/" title="">友链</a><a class="menu-item" href="https://github.com/ITmxs" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i>Github</a><a href="#" onclick="return false;" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+            <div class="container"><script>document.getElementsByTagName("main")[0].setAttribute("pageStyle", "normal")</script><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC", "false")</script><article class="page single"><h1 class="single-title animate__animated animate__flipInX">logstash&#43;filebeat&#43;redis</h1><div class="post-meta">
+            <div class="post-meta-line">
+                <span class="post-author"><i class="author fas fa-user-circle fa-fw"></i><a href="/" title="Author" rel=" author" class="author">LHC</a>
+                </span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-07-01">2021-07-01</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime="2021-07-01">2021-07-01</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 650 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 2 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="true">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#客户端部署">客户端部署</a>
+          <ul>
+            <li><a href="#安装logstash">安装logstash</a></li>
+            <li><a href="#安装filebeat">安装filebeat</a></li>
+            <li><a href="#启动">启动</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><div class="details admonition warning open">
+                <div class="details-summary admonition-title">
+                    <i class="icon fas fa-exclamation-triangle fa-fwwarning"></i>警告<i class="details-icon fas fa-angle-right fa-fw"></i>
+                </div>
+                <div class="details-content">
+                    <div class="admonition-content">
+                        本文最后更新于 <span class="timeago" datetime="2021-07-01T11:39:28" title="July 1, 2021">2021-07-01</span>，文中内容可能已过时。</div>
+                </div>
+            </div><h1 id="elk" class="headerLink">
+    <a href="#elk" class="header-mark"></a>ELK</h1><h3 id="客户端部署" class="headerLink">
+    <a href="#%e5%ae%a2%e6%88%b7%e7%ab%af%e9%83%a8%e7%bd%b2" class="header-mark"></a>客户端部署</h3><p>目前的架构是elasticsearch+logstash+filebeat+kibana+redis</p>
+<p>通过filebeat收集数据发送到redis，然后logstash从redis中取数据发送到elasticsearch，最后通过kibana展示。</p>
+<p>本文章讲述如何收集客户端日志。</p>
+<p>es：10.168.2.44 	端口9200</p>
+<p>redis:	10.168.2.205	端口30379</p>
+<h4 id="安装logstash" class="headerLink">
+    <a href="#%e5%ae%89%e8%a3%85logstash" class="header-mark"></a>安装logstash</h4><p>下载安装包： wget <a href="https://artifacts.elastic.co/downloads/logstash/logstash-7.13.2-linux-x86_64.tar.gz">https://artifacts.elastic.co/downloads/logstash/logstash-7.13.2-linux-x86_64.tar.gz</a></p>
+<p>解压：tar zxvf logstash-7.13.2-linux-x86_64.tar.gz  &amp;&amp; mv logstash-7.13.2 /usr/local/logstash</p>
+<p><strong>创建logstash.conf文件，添加以下内容</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">input <span class="o">{</span>
+   redis <span class="o">{</span>
+     <span class="nv">host</span> <span class="o">=</span>&gt; <span class="s2">&#34;10.168.2.205&#34;</span>
+     <span class="nv">port</span> <span class="o">=</span>&gt; <span class="s2">&#34;30379&#34;</span>
+     <span class="nv">db</span> <span class="o">=</span>&gt; <span class="s2">&#34;2&#34;</span>
+     <span class="nv">password</span> <span class="o">=</span>&gt; <span class="s2">&#34;password&#34;</span>
+     <span class="nv">data_type</span> <span class="o">=</span>&gt; <span class="s2">&#34;list&#34;</span>
+     <span class="nv">key</span> <span class="o">=</span>&gt; <span class="s2">&#34;vpn_log&#34;</span>
+   <span class="o">}</span>
+<span class="o">}</span>
+output <span class="o">{</span>
+    <span class="k">if</span> <span class="o">[</span>fields<span class="o">][</span>app<span class="o">]</span> <span class="o">==</span> <span class="s2">&#34;system&#34;</span> <span class="o">{</span>
+        elasticsearch <span class="o">{</span>
+            <span class="nv">hosts</span> <span class="o">=</span>&gt; <span class="o">[</span><span class="s2">&#34;10.168.2.44:9200&#34;</span><span class="o">]</span>
+            <span class="nv">user</span> <span class="o">=</span>&gt; <span class="s2">&#34;elastic&#34;</span>
+            <span class="nv">password</span> <span class="o">=</span>&gt; <span class="s2">&#34;password&#34;</span>
+            <span class="nv">index</span> <span class="o">=</span>&gt; <span class="s2">&#34;vpn_syslog-%{+YYYY.MM.dd}&#34;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="k">if</span> <span class="o">[</span>fields<span class="o">][</span>app<span class="o">]</span> <span class="o">==</span> <span class="s2">&#34;vpn&#34;</span> <span class="o">{</span>
+        elasticsearch <span class="o">{</span>
+            <span class="nv">hosts</span> <span class="o">=</span>&gt; <span class="o">[</span><span class="s2">&#34;10.168.2.44:9200&#34;</span><span class="o">]</span>
+            <span class="nv">user</span> <span class="o">=</span>&gt; <span class="s2">&#34;elastic&#34;</span>
+            <span class="nv">password</span> <span class="o">=</span>&gt; <span class="s2">&#34;password&#34;</span>
+            <span class="nv">index</span> <span class="o">=</span>&gt; <span class="s2">&#34;vpn_server-%{+YYYY.MM.dd}&#34;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="c1">### 注意logstash与filebeat里的配置文件参数要对应</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="安装filebeat" class="headerLink">
+    <a href="#%e5%ae%89%e8%a3%85filebeat" class="header-mark"></a>安装filebeat</h4><p>下载安装包： wget <a href="https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-7.13.2-linux-x86_64.tar.gz">https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-7.13.2-linux-x86_64.tar.gz</a></p>
+<p>解压：tar zxvf filebeat-7.13.2-linux-x86_64.tar.gz &amp;&amp; mv filebeat-7.13.2-linux-x86_64 /usr/local/filebeat</p>
+<p>修改filebeat.yml配置文件：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">filebeat.inputs:
+- type: log
+  enabled: <span class="nb">true</span>
+  paths:
+    - /var/log/messages  <span class="c1">##位置</span>
+  fields:
+    type: <span class="s2">&#34;vpn_syslog&#34;</span>   <span class="c1">## 类型</span>
+    app: <span class="s2">&#34;syslog&#34;</span>				<span class="c1">##类型</span>
+- type: log
+  enabled: <span class="nb">true</span>
+  paths:
+    - /root/vpnserver/server_log/*.log
+  fields:
+    type: <span class="s2">&#34;vpn_server&#34;</span>
+    app: <span class="s2">&#34;vpn&#34;</span>
+output.redis:
+  enabled: <span class="nb">true</span>
+  hosts: <span class="o">[</span><span class="s2">&#34;10.168.2.205:30379&#34;</span><span class="o">]</span>
+  password: <span class="s2">&#34;password&#34;</span>
+  key: <span class="s2">&#34;vpn_log&#34;</span>	
+  db: <span class="m">2</span>
+  timeout: <span class="m">10</span>
+  
+  <span class="c1">## 注意参数和上面的logstash一样</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="启动" class="headerLink">
+    <a href="#%e5%90%af%e5%8a%a8" class="header-mark"></a>启动</h4><p>filebeat：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"> <span class="nb">cd</span> /usr/local/filebeat
+ ./filebeat -e -c filebeat.yml &gt;&gt;logs/filebeat.log  <span class="c1">#前台启动，先前台启动一遍看有没有报错，没有的话就关闭进行后台运行</span>
+ nohup ./filebeat -e -c filebeat.yml &gt;&gt;logs/filebeat.log &gt;/dev/null 2&gt;<span class="p">&amp;</span><span class="m">1</span> <span class="p">&amp;</span>  <span class="c1">#后台启动</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>logstash：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">/usr/local/logstash/bin/logstash -f /usr/local/logstash/config/nginx.conf <span class="c1">#前台启动，先前台启动一遍看有没有报错，没有的话就关闭进行后台运行</span>
+<span class="nb">cd</span> /usr/local/logstash/bin <span class="o">&amp;&amp;</span> nohup ./logstash -f /usr/local/logstash/config/nginx.conf &gt;/dev/null 2&gt;<span class="p">&amp;</span><span class="m">1</span> <span class="p">&amp;</span>  <span class="c1">#后台启动</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>查看启动状态</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">ps -ef <span class="p">|</span> grep logstash
+ps -ef <span class="p">|</span> grep filebeat
+</code></pre></td></tr></table>
+</div>
+</div></div>
+
+        <div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2021-07-01</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span><a class="link-to-mardown" href=/logstash-filebeat-redis/index.md target="_blank" rel="noopener noreferrer">阅读原始文档</a>
+                    </span></div>
+            <div class="post-info-share">
+                <span><a href="#" onclick="return false;" title="分享到 Twitter" data-sharer="twitter" data-url="https://lihc520.github.io/logstash-filebeat-redis/" data-title="logstash&#43;filebeat&#43;redis"><i class="fab fa-twitter fa-fw"></i></a><a href="#" onclick="return false;" title="分享到 Facebook" data-sharer="facebook" data-url="https://lihc520.github.io/logstash-filebeat-redis/"><i class="fab fa-facebook-square fa-fw"></i></a><a href="#" onclick="return false;" title="分享到 WhatsApp" data-sharer="whatsapp" data-url="https://lihc520.github.io/logstash-filebeat-redis/" data-title="logstash&#43;filebeat&#43;redis" data-web><i class="fab fa-whatsapp fa-fw"></i></a><a href="#" onclick="return false;" title="分享到 Line" data-sharer="line" data-url="https://lihc520.github.io/logstash-filebeat-redis/" data-title="logstash&#43;filebeat&#43;redis"><i data-svg-src="/lib/simple-icons/icons/line.min.svg"></i></a><a href="#" onclick="return false;" title="分享到 微博" data-sharer="weibo" data-url="https://lihc520.github.io/logstash-filebeat-redis/" data-title="logstash&#43;filebeat&#43;redis"><i class="fab fa-weibo fa-fw"></i></a><a href="#" onclick="return false;" title="分享到 Myspace" data-sharer="myspace" data-url="https://lihc520.github.io/logstash-filebeat-redis/" data-title="logstash&#43;filebeat&#43;redis" data-description=""><i data-svg-src="/lib/simple-icons/icons/myspace.min.svg"></i></a><a href="#" onclick="return false;" title="分享到 Blogger" data-sharer="blogger" data-url="https://lihc520.github.io/logstash-filebeat-redis/" data-title="logstash&#43;filebeat&#43;redis" data-description=""><i class="fab fa-blogger fa-fw"></i></a><a href="#" onclick="return false;" title="分享到 Evernote" data-sharer="evernote" data-url="https://lihc520.github.io/logstash-filebeat-redis/" data-title="logstash&#43;filebeat&#43;redis"><i class="fab fa-evernote fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/centos7%E6%90%AD%E5%BB%BAvsftpd/" class="prev" rel="prev" title="centos7搭建vsftpd"><i class="fas fa-angle-left fa-fw"></i>centos7搭建vsftpd</a>
+            <a href="/mysql-master-slave-slave/" class="next" rel="next" title="MySql:master:slave:slave">MySql:master:slave:slave<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id="comments"><div id="gitalk" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://github.com/gitalk/gitalk"></a>Gitalk</a>.
+            </noscript></div></article></div>
+        </main><footer class="footer">
+        <div class="footer-container">
+          <div class="footer-line">
+            <span id="run-time"></span>
+          </div><div class="footer-line">
+                    由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.85.0">Hugo</a> 强力驱动&nbsp;|&nbsp;主题 - <a href="https://github.com/HEIGE-PCloud/DoIt" target="_blank" rel="noopener noreffer" title="DoIt 0.2.13"><i class="far fa-edit fa-fw"></i> DoIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2021 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank" rel="noopener noreferrer">LHC</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+            <div class="footer-line"></div>
+            <div class="footer-line">
+            </div>
+        </div></footer></div>
+
+    <div id="fixed-buttons"><a href="#back-to-top" id="back-to-top-button" class="fixed-button" title="回到顶部">
+            <i class="fas fa-arrow-up fa-fw"></i>
+        </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+            <i class="fas fa-comment fa-fw"></i>
+        </a>
+    </div><div id="cookieconsent-container"></div><div class="assets"><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/tablesort/tablesort.min.js"></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script type="text/javascript" src="/lib/topbar/topbar.min.js"></script><script type="text/javascript" src="/lib/pjax/pjax.min.js"></script><script type="text/javascript" src="/js/theme.min.js" defer></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery@2.1.3/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery-backstretch@2.1.18/jquery.backstretch.min.js"></script>
+
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery@2.1.3/dist/jquery.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/gh/ITJoker233/ITJoker233.github.io@latest/CDN/js/love.min.js"></script>
+
+    <script type="text/javascript" src="https://demo.hellozwh.com/source/canvas-nest.min.js"></script><script type="text/javascript" src="/js/custom.js"></script></div>
+
+<div class="pjax-assets"><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{"gitalk":{"admin":["lihc520"],"clientID":"89eb90d06a3ab923d55d","clientSecret":"4c0ce81194f76e5edc5acae840badd5a0e6d6053","id":"2021-07-01T11:39:28Z","owner":"lihc520","repo":"Gridea-blog-comment","title":"logstash+filebeat+redis"}},"cookieconsent":{"content":{"dismiss":"同意","link":"了解更多","message":"本网站使用 Cookies 来改善您的浏览体验."},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"data":{"desktop-header-typeit":"LHC","mobile-header-typeit":"LHC"},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"PASDMWALPK","algoliaIndex":"index.zh-cn","algoliaSearchKey":"b42948e51daaa93df92381c8e2ac0f93","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"},"sharerjs":true,"table":{"sort":true},"typeit":{"cursorChar":"|","cursorSpeed":1000,"data":{"desktop-header-typeit":["desktop-header-typeit"],"mobile-header-typeit":["mobile-header-typeit"]},"duration":-1,"speed":100}};</script><script type="text/javascript" src="/lib/gitalk/gitalk.min.js"></script><script type="text/javascript" src="/js/gitalk.min.js" defer></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/typeit/typeit.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js" defer></script><script type="text/javascript" src="/lib/katex/auto-render.min.js" defer></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js" defer></script><script type="text/javascript" src="/lib/katex/mhchem.min.js" defer></script><script type="text/javascript" src="/js/katex.min.js" defer></script><script type="text/javascript" src="/js/cookieconsent.min.js" defer></script><link rel="stylesheet" href="/lib/gitalk/gitalk.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/katex/copy-tex.min.css">
+        <noscript><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"></noscript></div>
+</body>
+
+</html>

@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noodp" />
+    <title class="pjax-title">centos7搭建vsftpd - LHCの博客</title><meta name="Description" content="LHC记录生活"><meta property="og:title" content="centos7搭建vsftpd" />
+<meta property="og:description" content="centos7搭建 Vsftpd 服务。安装服务端程序1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 [root@localhost ~]# yum install vsftpd Loaded plugins: langpacks, product-id, subscription-manager ………………省略部分输出信息……………… ================================================================================ Installing:" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://lihc520.github.io/centos7%E6%90%AD%E5%BB%BAvsftpd/" /><meta property="og:image" content="https://lihc520.github.io/logo.png"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-06-25T15:14:49+00:00" />
+<meta property="article:modified_time" content="2021-06-25T15:14:49+00:00" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://lihc520.github.io/logo.png"/>
+
+<meta name="twitter:title" content="centos7搭建vsftpd"/>
+<meta name="twitter:description" content="centos7搭建 Vsftpd 服务。安装服务端程序1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 [root@localhost ~]# yum install vsftpd Loaded plugins: langpacks, product-id, subscription-manager ………………省略部分输出信息……………… ================================================================================ Installing:"/>
+<meta name="application-name" content="DoIt">
+<meta name="apple-mobile-web-app-title" content="DoIt">
+
+<meta name="theme-color" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" href="https://lihc520.github.io/centos7%E6%90%AD%E5%BB%BAvsftpd/" /><link rel="prev" href="https://lihc520.github.io/k8s%E9%83%A8%E7%BD%B2tidb/" /><link rel="next" href="https://lihc520.github.io/logstash-filebeat-redis/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/fontawesome-free/all.min.css">
+        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/animate/animate.min.css">
+        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "centos7搭建vsftpd",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/lihc520.github.io\/centos7%E6%90%AD%E5%BB%BAvsftpd\/"
+        },"genre": "posts","wordcount":  3691 ,
+        "url": "https:\/\/lihc520.github.io\/centos7%E6%90%AD%E5%BB%BAvsftpd\/","datePublished": "2021-06-25T15:14:49+00:00","dateModified": "2021-06-25T15:14:49+00:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "LHC"
+            },"description": ""
+    }
+    </script></head>
+
+<body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">
+        function setTheme(theme) {document.body.setAttribute('theme', theme); document.documentElement.style.setProperty('color-scheme', theme === 'light' ? 'light' : 'dark');}
+        function saveTheme(theme) {window.localStorage && localStorage.setItem('theme', theme);}
+        function getMeta(metaName) {const metas = document.getElementsByTagName('meta'); for (let i = 0; i < metas.length; i++) if (metas[i].getAttribute('name') === metaName) return metas[i]; return '';}
+        if (window.localStorage && localStorage.getItem('theme')) {let theme = localStorage.getItem('theme');theme === 'light' || theme === 'dark' || theme === 'black' ? setTheme(theme) : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? setTheme('dark') : setTheme('light')); } else { if ('auto' === 'light' || 'auto' === 'dark' || 'auto' === 'black') setTheme('auto'), saveTheme('auto'); else saveTheme('auto'), window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? setTheme('dark') : setTheme('light');}
+        let metaColors = {'light': '#f8f8f8','dark': '#252627','black': '#000000'}
+        getMeta('theme-color').content = metaColors[document.body.getAttribute('theme')];
+    </script>
+    <div id="back-to-top"></div>
+    <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="LHCの博客"><span class="header-title-pre"><i class='fas fa-fw fa-fan fa-spin'></i></span><span id="desktop-header-typeit" class="typeit"></span></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> 所有文章 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/categories/documentation/"> 文档 </a><a class="menu-item" href="/about/"> 关于 </a><a class="menu-item" href="/friends/"> 友链 </a><a class="menu-item" href="https://github.com/ITmxs" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i> Github </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="#" onclick="return false;" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="#" onclick="return false;" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="#" onclick="return false;" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="LHCの博客"><span class="header-title-pre"><i class='fas fa-fw fa-fan fa-spin'></i></span><span id="mobile-header-typeit" class="typeit"></span></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="#" onclick="return false;" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="#" onclick="return false;" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="#" onclick="return false;" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">所有文章</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/categories/documentation/" title="">文档</a><a class="menu-item" href="/about/" title="">关于</a><a class="menu-item" href="/friends/" title="">友链</a><a class="menu-item" href="https://github.com/ITmxs" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i>Github</a><a href="#" onclick="return false;" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+            <div class="container"><script>document.getElementsByTagName("main")[0].setAttribute("pageStyle", "normal")</script><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC", "false")</script><article class="page single"><h1 class="single-title animate__animated animate__flipInX">centos7搭建vsftpd</h1><div class="post-meta">
+            <div class="post-meta-line">
+                <span class="post-author"><i class="author fas fa-user-circle fa-fw"></i><a href="/" title="Author" rel=" author" class="author">LHC</a>
+                </span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-06-25">2021-06-25</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime="2021-06-25">2021-06-25</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 3691 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 8 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="true">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li>
+              <ul>
+                <li>
+                  <ul>
+                    <li><a href="#安装服务端程序">安装服务端程序</a></li>
+                    <li><a href="#关闭本机防火墙和禁用selinux">关闭本机防火墙和禁用selinux</a></li>
+                    <li><a href="#配置-ftp-服务">配置 FTP 服务</a></li>
+                    <li><a href="#配置文件">配置文件</a></li>
+                    <li><a href="#共享目录">共享目录</a></li>
+                    <li><a href="#通用基础配置">通用基础配置</a></li>
+                    <li><a href="#匿名用户的配置">匿名用户的配置</a></li>
+                    <li><a href="#系统用户的配置">系统用户的配置</a></li>
+                    <li><a href="#日志功能">日志功能</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#vsftpd-认证模式">vsftpd 认证模式</a>
+      <ul>
+        <li><a href="#匿名访问模式">匿名访问模式</a></li>
+        <li><a href="#本地用户模式">本地用户模式</a></li>
+        <li><a href="#虚拟用户模式文本文件">虚拟用户模式(文本文件)</a>
+          <ul>
+            <li><a href="#第一步创建用于进行-ftp-认证的用户数据库文件">第一步：创建用于进行 FTP 认证的用户数据库文件</a></li>
+            <li><a href="#第二步创建-vsftpd-服务程序用于存储文件的根目录以及虚拟用户映射的系统本地用户">第二步：创建 vsftpd 服务程序用于存储文件的根目录以及虚拟用户映射的系统本地用户</a></li>
+            <li><a href="#第三步建立支持虚拟用户的-pam-认证文件">第三步：建立支持虚拟用户的 PAM 认证文件</a></li>
+            <li><a href="#第四步在-vsftpdconf-文件中添加支持配置">第四步：在 vsftpd.conf 文件中添加支持配置</a></li>
+            <li><a href="#第五步为虚拟用户设置不同的权限">第五步：为虚拟用户设置不同的权限</a></li>
+            <li><a href="#第六步使用虚拟-ftp-用户访问测试">第六步：使用虚拟 FTP 用户访问测试</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><div class="details admonition warning open">
+                <div class="details-summary admonition-title">
+                    <i class="icon fas fa-exclamation-triangle fa-fwwarning"></i>警告<i class="details-icon fas fa-angle-right fa-fw"></i>
+                </div>
+                <div class="details-content">
+                    <div class="admonition-content">
+                        本文最后更新于 <span class="timeago" datetime="2021-06-25T15:14:49" title="June 25, 2021">2021-06-25</span>，文中内容可能已过时。</div>
+                </div>
+            </div><h1 id="centos7搭建-vsftpd-服务" class="headerLink">
+    <a href="#centos7%e6%90%ad%e5%bb%ba-vsftpd-%e6%9c%8d%e5%8a%a1" class="header-mark"></a>centos7搭建 Vsftpd 服务。</h1><h6 id="安装服务端程序" class="headerLink">
+    <a href="#%e5%ae%89%e8%a3%85%e6%9c%8d%e5%8a%a1%e7%ab%af%e7%a8%8b%e5%ba%8f" class="header-mark"></a>安装服务端程序</h6><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">[root@localhost ~]# yum install vsftpd
+Loaded plugins: langpacks, product-id, subscription-manager
+………………省略部分输出信息………………
+================================================================================
+Installing:
+vsftpd x86_64 3.0.2-9.el7 rhel 166 k
+Transaction Summary
+================================================================================
+Install 1 Package
+vsftpd.x86_64 0:3.0.2-9.el7
+Complete!
+
+[root@linuxprobe ~]# yum install ftp
+Loaded plugins: langpacks, product-id, subscription-manager
+………………省略部分输出信息………………
+Install 1 Package
+ftp.x86_64 0:0.17-66.el7
+Complete!
+</code></pre></td></tr></table>
+</div>
+</div><h6 id="关闭本机防火墙和禁用selinux" class="headerLink">
+    <a href="#%e5%85%b3%e9%97%ad%e6%9c%ac%e6%9c%ba%e9%98%b2%e7%81%ab%e5%a2%99%e5%92%8c%e7%a6%81%e7%94%a8selinux" class="header-mark"></a>关闭本机防火墙和禁用selinux</h6><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">[root@localhost ~]# systemctl stop firewalld &amp;&amp; systemctl disable firewalld
+[root@localhost ~]# setenforce 0
+[root@localhost ~]# sed -i &#39;s/SELINUX=enforcing/SELINUX=disabled/g&#39; /etc/selinux/config
+</code></pre></td></tr></table>
+</div>
+</div><h6 id="配置-ftp-服务" class="headerLink">
+    <a href="#%e9%85%8d%e7%bd%ae-ftp-%e6%9c%8d%e5%8a%a1" class="header-mark"></a>配置 FTP 服务</h6><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback"># 程序的主配置文件为/etc/vsftpd/vsftpd.conf
+[root@localhost ~]# cat /etc/vsftpd/vsftpd.conf
+anonymous_enable=YES
+local_enable=YES
+write_enable=YES
+local_umask=022
+dirmessage_enable=YES
+xferlog_enable=YES
+connect_from_port_20=YES
+xferlog_std_format=YES
+listen=NO
+listen_ipv6=YES
+pam_service_name=vsftpd
+userlist_enable=YES
+tcp_wrappers=YES
+</code></pre></td></tr></table>
+</div>
+</div><h6 id="配置文件" class="headerLink">
+    <a href="#%e9%85%8d%e7%bd%ae%e6%96%87%e4%bb%b6" class="header-mark"></a>配置文件</h6><p>CentOS7 中的配置文件位置</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">主配置文件：/etc/vsftpd/vsftpd.conf
+配置文件目录：/etc/vsftpd/*.conf
+服务启动脚本：/etc/rc.d/init.d/vsftpd
+用户认证配置文件：/etc/pam.d/vsftpd
+</code></pre></td></tr></table>
+</div>
+</div><h6 id="共享目录" class="headerLink">
+    <a href="#%e5%85%b1%e4%ba%ab%e7%9b%ae%e5%bd%95" class="header-mark"></a>共享目录</h6><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">匿名用户(映射为ftp用户)共享资源位置：/var/ftp
+系统用户通过ftp访问的资源的位置：用户自己的家目录
+虚拟用户通过ftp访问的资源的位置：给虚拟用户指定的映射成为的系统用户的家目录
+</code></pre></td></tr></table>
+</div>
+</div><h6 id="通用基础配置" class="headerLink">
+    <a href="#%e9%80%9a%e7%94%a8%e5%9f%ba%e7%a1%80%e9%85%8d%e7%bd%ae" class="header-mark"></a>通用基础配置</h6><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">listen=[YES|NO]         #是否以独立运行的方式监听服务
+listen_address=IP地址   #设置要监听的 IP 地址
+listen_port=21        #设置 FTP 服务的监听端口
+download_enable＝[YES|NO] #是否允许下载文件
+max_clients=0   #最大客户端连接数，0 为不限制
+max_per_ip=0   #同一 IP 地址的最大连接数，0 为不限制
+chown_uploads=[YES|NO] #是否允许改变上传文件的属主
+chown_username=whoever #改变上传文件的属主为 whoever
+pam_service_name=vsftpd #让 vsftpd 使用 pam 完成用户认证，使用的文件为/etc/pam.d/vsftpd
+</code></pre></td></tr></table>
+</div>
+</div><h6 id="匿名用户的配置" class="headerLink">
+    <a href="#%e5%8c%bf%e5%90%8d%e7%94%a8%e6%88%b7%e7%9a%84%e9%85%8d%e7%bd%ae" class="header-mark"></a>匿名用户的配置</h6><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">anonymous_enable=[YES|NO]      #是否允许匿名用户访问
+anon_upload_enable=[YES|NO]    #是否允许匿名用户上传文件
+anon_mkdir_write_enable=[YES|NO] #是否允许匿名用户创建目录
+anon_other_write_enable=[YES|NO] #是否开放匿名用户的其他写入权限（包括重命名、删除等操作权限）
+anon_umask=022       #匿名用户上传文件的 umask 值
+anon_root=/var/ftp   #匿名用户的 FTP 根目录
+anon_max_rate=0       #匿名用户的最大传输速率（字节/秒），0 为不限制
+</code></pre></td></tr></table>
+</div>
+</div><h6 id="系统用户的配置" class="headerLink">
+    <a href="#%e7%b3%bb%e7%bb%9f%e7%94%a8%e6%88%b7%e7%9a%84%e9%85%8d%e7%bd%ae" class="header-mark"></a>系统用户的配置</h6><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">anonymous_enable=NO    #禁止匿名访问模式
+local_enable=[YES|NO]  #是否允许本地用户登录 FTP
+write_enable=[YES|NO]  #是否开放本地用户的其他写入权限
+local_umask=022        #本地用户上传文件的 umask 值
+local_root=/var/ftp    #本地用户的 FTP 根目录
+local_max_rate=0      #本地用户最大传输速率（字节/秒），0 为不限制
+userlist_enable=[YES|NO] #开启用户作用名单文件功能
+userlist_deny=[YES|NO]   #启用禁止用户名单，名单文件为 ftpusers 和/etc/vsftpd/user_list
+chroot_local_user=[YES|NO] #是否将用户权限禁锢在 FTP 家目录中，以确保安全
+chroot_list_enable=[YES|NO] #禁锢文件中指定的 FTP 本地用户于其家目录中
+chroot_list_file=/etc/vsftpd/chroot_list #指定禁锢文件位置，需要和 chroot_list_enable 一同开启
+</code></pre></td></tr></table>
+</div>
+</div><h6 id="日志功能" class="headerLink">
+    <a href="#%e6%97%a5%e5%bf%97%e5%8a%9f%e8%83%bd" class="header-mark"></a>日志功能</h6><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">xferlog_enable=[YES|NO]    #是否开启 FTP 日志功能
+xferlog_std_format=[YES|NO]    #是否以标准格式保持日志
+xferlog_file=/var/log/xferlog  #指定保存日志的文件名称，需要一同开启
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="vsftpd-认证模式" class="headerLink">
+    <a href="#vsftpd-%e8%ae%a4%e8%af%81%e6%a8%a1%e5%bc%8f" class="header-mark"></a>vsftpd 认证模式</h2><p>vsftpd 作为更加安全的文件传输的服务程序，允许用户以三种认证模式登录到 FTP 服务器上。</p>
+<ul>
+<li>
+<p>匿名开放模式</p>
+</li>
+<li>
+<ul>
+<li>匿名开放模式是一种最不安全的认证模式，任何人都可以无需密码验证而直接登录到FTP服务器。这种模式一般用来访问不重要的公开文件，在生产环境中尽量不要存放重要文件，不建议在生产环境中如此行事。</li>
+</ul>
+</li>
+<li>
+<p>本地用户模式</p>
+</li>
+<li>
+<ul>
+<li>本地用户模式是通过Linux系统本地的账户密码信息进行认证的模式，相较于匿名开放模式更安全，而且配置起来相对简单。但是如果被黑客破解了账户的信息，就可以畅通无阻地登录FTP服务器，从而完全控制整台服务器。</li>
+</ul>
+</li>
+<li>
+<p>虚拟用户模式</p>
+</li>
+<li>
+<ul>
+<li>虚拟用户模式是这三种模式中最安全的一种认证模式，它需要为FTP服务单独建立用户数据库文件，虚拟出用来进行口令验证的账户信息，而这些账户信息在服务器系统中实际上是不存在的，仅供FTP服务程序进行认证使用。这样，即使黑客破解了账户信息也无法登录服务器，从而有效降低了破坏范围和影响。</li>
+</ul>
+</li>
+</ul>
+<h3 id="匿名访问模式" class="headerLink">
+    <a href="#%e5%8c%bf%e5%90%8d%e8%ae%bf%e9%97%ae%e6%a8%a1%e5%bc%8f" class="header-mark"></a>匿名访问模式</h3><p>vsftpd 服务程序默认开启了匿名开放模式，我们需要做的就是开放匿名用户的上传、下载文件的权限，以及让匿名用户创建、删除、更名文件的权限。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback"># 匿名访问模式主配置文件
+[root@localhost ~]# vim /etc/vsftpd/vsftpd.conf
+anonymous_enable=YES
+anon_umask=022
+anon_upload_enable=YES
+anon_mkdir_write_enable=YES
+anon_other_write_enable=YES
+
+local_enable=YES
+write_enable=YES
+local_umask=022
+dirmessage_enable=YES
+xferlog_enable=YES
+connect_from_port_20=YES
+xferlog_std_format=YES
+listen=NO
+listen_ipv6=YES
+pam_service_name=vsftpd
+userlist_enable=YES
+tcp_wrappers=YES
+# 重启服务
+[root@localhost ~]# systemctl restart vsftpd
+
+# 服务程序加入到开机启动项中，以保证服务器在重启后依然能够正常提供传输服务
+[root@localhost ~]# systemctl enable vsftpd
+ln -s &#39;/usr/lib/systemd/system/vsftpd.service&#39; &#39;/etc/systemd/system/multi-user.target.wants/vsftpd.service
+# 在vsftpd服务程序的匿名开放认证模式下，其账户统一为anonymous，密码为空
+# 连接到FTP服务器后，默认访问的是/var/ftp目录，我们可以在其中进行创建、删除等操作
+[root@localhost ~]# ftp 192.168.10.10
+Connected to 192.168.10.10 (192.168.10.10).
+220 (vsFTPd 3.0.2)
+Name (192.168.10.10:root): anonymous
+331 Please specify the password.
+Password:此处敲击回车即可
+230 Login successful.
+Remote system type is UNIX.
+Using binary mode to transfer files.
+ftp&gt; cd pub
+250 Directory successfully changed.
+ftp&gt; mkdir files
+550 Permission denied.
+# 系统显示拒绝创建目录，这是为什么呢？
+# 查看该目录的权限得知，只有root管理员才有写入权限，开放ftp用户权限(该账户在系统中已经存在)
+[root@localhost ~]# ls -ld /var/ftp/pub
+drwxr-xr-x. 3 root root 16 Jul 13 14:38 /var/ftp/pub
+
+[root@localhost ~]# chown -Rf ftp /var/ftp/pub
+[root@localhost ~]# ls -ld /var/ftp/pub
+drwxr-xr-x. 3 ftp root 16 Jul 13 14:38 /var/ftp/pub
+
+[root@linuxprobe ~]# ftp 192.168.10.10
+………………省略部分输出信息………………
+ftp&gt; mkdir files
+257 &#34;/pub/files&#34; created
+ftp&gt; rename files database
+350 Ready for RNTO.
+250 Rename successful.
+ftp&gt; exit
+221 Goodbye.
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="本地用户模式" class="headerLink">
+    <a href="#%e6%9c%ac%e5%9c%b0%e7%94%a8%e6%88%b7%e6%a8%a1%e5%bc%8f" class="header-mark"></a>本地用户模式</h3><p>如果之前用的是匿名开放模式，现在就可以将它关了，然后开启本地用户模式。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback"># 本地用户模式主配置文件
+[root@localhost ~]# vim /etc/vsftpd/vsftpd.conf
+anonymous_enable=NO
+
+local_enable=YES
+write_enable=YES
+local_umask=022
+dirmessage_enable=YES
+connect_from_port_20=YES
+listen=NO
+listen_ipv6=YES
+
+pam_service_name=vsftpd
+userlist_enable=YES
+tcp_wrappers=YES
+xferlog_enable=YES
+xferlog_std_format=YES
+# 同样需要重启服务和开机自启动
+[root@localhost ~]# systemctl restart vsftpd
+
+# 服务程序加入到开机启动项中，以保证服务器在重启后依然能够正常提供传输服务
+[root@localhost ~]# systemctl enable vsftpd
+ln -s &#39;/usr/lib/systemd/system/vsftpd.service&#39; &#39;/etc/systemd/system/multi-user.target.wants/vsftpd.service
+# 现在已经完全可以本地用户的身份登录FTP服务器了，但是使用root无法登陆
+[root@localhost ~]# ftp 192.168.10.10
+Connected to 192.168.10.10 (192.168.10.10).
+220 (vsFTPd 3.0.2)
+Name (192.168.10.10:root): root
+530 Permission denied.
+Login failed.
+ftp&gt;
+
+# 这是因为，为了系统的安全，默认禁止root等用户登录FTP服务被系统拒绝访问
+# 因为vsftpd服务程序所在的目录中，默认存放着两个名为用户名单的文件，ftpusers和user_list
+# 在ftpusers和user_list两个用户文件中将root用户删除就可以登录了
+[root@localhost ~]# cat /etc/vsftpd/user_list
+root
+bin
+daemon
+
+[root@localhost ~]# cat /etc/vsftpd/ftpusers
+root
+bin
+daemon
+# 在采用本地用户模式登录FTP服务器后，默认访问的是该用户的家目录，因此不存在写入权限不足的情况
+# 如果不关闭SELinux，则需要再次开启SELinux域中对FTP服务的允许策略
+[root@localhost ~]# setsebool -P ftpd_full_access=on
+
+# 即可以使用系统用户进行FTP服务的登录了
+[root@localhost ~]# ftp 192.168.10.10
+Connected to 192.168.10.10 (192.168.10.10).
+220 (vsFTPd 3.0.2)
+Name (192.168.10.10:root): escape
+331 Please specify the password.
+Password:此处输入该用户的密码
+230 Login successful.
+Remote system type is UNIX.
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="虚拟用户模式文本文件" class="headerLink">
+    <a href="#%e8%99%9a%e6%8b%9f%e7%94%a8%e6%88%b7%e6%a8%a1%e5%bc%8f%e6%96%87%e6%9c%ac%e6%96%87%e4%bb%b6" class="header-mark"></a>虚拟用户模式(文本文件)</h3><p>认证模式：vsftpd + pam + file</p>
+<ul>
+<li>
+<h4 id="第一步创建用于进行-ftp-认证的用户数据库文件" class="headerLink">
+    <a href="#%e7%ac%ac%e4%b8%80%e6%ad%a5%e5%88%9b%e5%bb%ba%e7%94%a8%e4%ba%8e%e8%bf%9b%e8%a1%8c-ftp-%e8%ae%a4%e8%af%81%e7%9a%84%e7%94%a8%e6%88%b7%e6%95%b0%e6%8d%ae%e5%ba%93%e6%96%87%e4%bb%b6" class="header-mark"></a>第一步：创建用于进行 FTP 认证的用户数据库文件</h4></li>
+<li>
+<ul>
+<li>这里使用文本文件进行用户认证</li>
+<li>数据库文件中奇数行为账户名，偶数行为密码</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback"># 编辑虚拟用户文件
+[root@localhost ~]# cd /etc/vsftpd/
+[root@localhost vsftpd]# vim vuser.list
+aimo1
+aimo@2021
+aimo2
+aimo@2021
+# 明文信息既不安全，也不符合让vsftpd服务程序直接加载的格式
+# 因此需要使用db_load命令用哈希算法将原始的明文信息文件转换成数据库文件
+# 降低数据库文件的权限，然后再把原始的明文信息文件删除
+[root@localhost vsftpd]# db_load -T -t hash -f vuser.list vuser.db
+[root@localhost vsftpd]# file vuser.db
+vuser.db: Berkeley DB (Hash, version 9, native byte-order)
+
+[root@localhost vsftpd]# chmod 600 vuser.db
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>
+<h4 id="第二步创建-vsftpd-服务程序用于存储文件的根目录以及虚拟用户映射的系统本地用户" class="headerLink">
+    <a href="#%e7%ac%ac%e4%ba%8c%e6%ad%a5%e5%88%9b%e5%bb%ba-vsftpd-%e6%9c%8d%e5%8a%a1%e7%a8%8b%e5%ba%8f%e7%94%a8%e4%ba%8e%e5%ad%98%e5%82%a8%e6%96%87%e4%bb%b6%e7%9a%84%e6%a0%b9%e7%9b%ae%e5%bd%95%e4%bb%a5%e5%8f%8a%e8%99%9a%e6%8b%9f%e7%94%a8%e6%88%b7%e6%98%a0%e5%b0%84%e7%9a%84%e7%b3%bb%e7%bb%9f%e6%9c%ac%e5%9c%b0%e7%94%a8%e6%88%b7" class="header-mark"></a>第二步：创建 vsftpd 服务程序用于存储文件的根目录以及虚拟用户映射的系统本地用户</h4></li>
+<li>
+<ul>
+<li>FTP服务用于存储文件的根目录指的是，当虚拟用户登录后所访问的默认位置</li>
+<li>可以把这个系统本地用户的家目录设置为/var目录并设置不允许登录FTP服务器</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">[root@localhost ~]# useradd -d /var/ftproot -s /sbin/nologin virtual
+
+[root@localhost ~]# ls -ld /var/ftproot/
+drwx------. 3 virtual virtual 74 Jul 14 17:50 /var/ftproot/
+
+[root@localhost ~]# chmod -Rf 755 /var/ftproot/
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>
+<h4 id="第三步建立支持虚拟用户的-pam-认证文件" class="headerLink">
+    <a href="#%e7%ac%ac%e4%b8%89%e6%ad%a5%e5%bb%ba%e7%ab%8b%e6%94%af%e6%8c%81%e8%99%9a%e6%8b%9f%e7%94%a8%e6%88%b7%e7%9a%84-pam-%e8%ae%a4%e8%af%81%e6%96%87%e4%bb%b6" class="header-mark"></a>第三步：建立支持虚拟用户的 PAM 认证文件</h4></li>
+<li>
+<ul>
+<li>PAM是一种认证机制，通过一些动态链接库和统一的API把系统提供的服务与认证方式分开</li>
+<li>PAM是可插拔认证模块，使得系统管理员可以根据需求灵活调整服务程序的不同认证方式</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback"># 新建一个用于虚拟用户认证的PAM文件vsftpd.vu
+# PAM文件内的db=参数为使用db_load命令生成的账户密码数据库文件的路径，但不用写数据库文件的后缀
+
+[root@localhost ~]# vim /etc/pam.d/vsftpd.vu
+auth       required     pam_userdb.so    db=/etc/vsftpd/vuser
+account    required     pam_userdb.so    db=/etc/vsftpd/vuser
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>
+<h4 id="第四步在-vsftpdconf-文件中添加支持配置" class="headerLink">
+    <a href="#%e7%ac%ac%e5%9b%9b%e6%ad%a5%e5%9c%a8-vsftpdconf-%e6%96%87%e4%bb%b6%e4%b8%ad%e6%b7%bb%e5%8a%a0%e6%94%af%e6%8c%81%e9%85%8d%e7%bd%ae" class="header-mark"></a>第四步：在 vsftpd.conf 文件中添加支持配置</h4></li>
+<li>
+<ul>
+<li>在vsftpd服务程序的主配置文件中默认就带有参数pam_service_name=vsftpd</li>
+<li>表示登录FTP服务器时是根据/etc/pam.d/vsftpd文件进行安全认证的</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback"># 我们要做的就是把vsftpd主配置文件中原有的PAM认证文件vsftpd修改为新建的vsftpd.vu文件即可
+[root@localhost ~]# vim /etc/vsftpd/vsftpd.conf
+anonymous_enable=NO
+pam_service_name=vsftpd.vu
+user_config_dir=/etc/vsftpd/vusers_dir
+
+local_enable=YES
+guest_enable=YES
+guest_username=virtual
+allow_writeable_chroot=YES
+write_enable=YES
+local_umask=022
+dirmessage_enable=YES
+xferlog_enable=YES
+connect_from_port_20=YES
+xferlog_std_format=YES
+listen=NO
+listen_ipv6=YES
+userlist_enable=YES
+tcp_wrappers=YES
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>
+<h4 id="第五步为虚拟用户设置不同的权限" class="headerLink">
+    <a href="#%e7%ac%ac%e4%ba%94%e6%ad%a5%e4%b8%ba%e8%99%9a%e6%8b%9f%e7%94%a8%e6%88%b7%e8%ae%be%e7%bd%ae%e4%b8%8d%e5%90%8c%e7%9a%84%e6%9d%83%e9%99%90" class="header-mark"></a>第五步：为虚拟用户设置不同的权限</h4></li>
+<li>
+<ul>
+<li>只需新建一个目录，在里面分别创建两个以aimo1和aimo2命名的文件</li>
+<li>在每个文件中，对用户分别进行配置，达到管理不用用户权限的效果</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">[root@localhost ~]# mkdir /etc/vsftpd/vusers_dir/
+[root@localhost ~]# cd /etc/vsftpd/vusers_dir/
+
+[root@localhost vusers_dir]# touch aimo1 aimo2
+
+[root@localhost vusers_dir]# vim aimo1
+local_root=/usr/local/vsftpd/aimo1		#设置虚拟用户目录
+anon_upload_enable=YES
+anon_mkdir_write_enable=YES
+anon_other_write_enable=YES
+
+[root@localhost vusers_dir]# vim aimo2
+local_root=/usr/local/vsftpd/aimo2
+anon_upload_enable=YES
+anon_mkdir_write_enable=YES
+anon_other_write_enable=YES
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>
+<h4 id="第六步使用虚拟-ftp-用户访问测试" class="headerLink">
+    <a href="#%e7%ac%ac%e5%85%ad%e6%ad%a5%e4%bd%bf%e7%94%a8%e8%99%9a%e6%8b%9f-ftp-%e7%94%a8%e6%88%b7%e8%ae%bf%e9%97%ae%e6%b5%8b%e8%af%95" class="header-mark"></a>第六步：使用虚拟 FTP 用户访问测试</h4></li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">[root@localhost ~]# ftp 192.168.10.10
+Connected to 192.168.10.10 (192.168.10.10).
+220 (vsFTPd 3.0.2)
+Name (192.168.10.10:root): lisi
+331 Please specify the password.
+Password:此处输入虚拟用户的密码
+230 Login successful.
+Remote system type is UNIX.
+Using binary mode to transfer files.
+ftp&gt; mkdir files
+550 Permission denied.
+ftp&gt; exit
+221 Goodbye.
+[root@localhost ~]# ftp 192.168.10.10
+Connected to 192.168.10.10 (192.168.10.10).
+220 (vsFTPd 3.0.2)
+Name (192.168.10.10:root): zhangsan
+331 Please specify the password.
+Password:此处输入虚拟用户的密码
+230 Login successful.
+Remote system type is UNIX.
+Using binary mode to transfer files.
+ftp&gt; mkdir files
+257 &#34;/files&#34; created
+ftp&gt; rename files database
+350 Ready for RNTO.
+250 Rename successful.
+ftp&gt; rmdir database
+250 Remove directory operation successful.
+ftp&gt; exit
+221 Goodbye.
+</code></pre></td></tr></table>
+</div>
+</div><p>最后重启vsftpd服务</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">[root@localhost ~]# systemctl restart vsftpd
+</code></pre></td></tr></table>
+</div>
+</div></div>
+
+        <div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2021-06-25</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span><a class="link-to-mardown" href=/centos7%E6%90%AD%E5%BB%BAvsftpd/index.md target="_blank" rel="noopener noreferrer">阅读原始文档</a>
+                    </span></div>
+            <div class="post-info-share">
+                <span><a href="#" onclick="return false;" title="分享到 Twitter" data-sharer="twitter" data-url="https://lihc520.github.io/centos7%E6%90%AD%E5%BB%BAvsftpd/" data-title="centos7搭建vsftpd"><i class="fab fa-twitter fa-fw"></i></a><a href="#" onclick="return false;" title="分享到 Facebook" data-sharer="facebook" data-url="https://lihc520.github.io/centos7%E6%90%AD%E5%BB%BAvsftpd/"><i class="fab fa-facebook-square fa-fw"></i></a><a href="#" onclick="return false;" title="分享到 WhatsApp" data-sharer="whatsapp" data-url="https://lihc520.github.io/centos7%E6%90%AD%E5%BB%BAvsftpd/" data-title="centos7搭建vsftpd" data-web><i class="fab fa-whatsapp fa-fw"></i></a><a href="#" onclick="return false;" title="分享到 Line" data-sharer="line" data-url="https://lihc520.github.io/centos7%E6%90%AD%E5%BB%BAvsftpd/" data-title="centos7搭建vsftpd"><i data-svg-src="/lib/simple-icons/icons/line.min.svg"></i></a><a href="#" onclick="return false;" title="分享到 微博" data-sharer="weibo" data-url="https://lihc520.github.io/centos7%E6%90%AD%E5%BB%BAvsftpd/" data-title="centos7搭建vsftpd"><i class="fab fa-weibo fa-fw"></i></a><a href="#" onclick="return false;" title="分享到 Myspace" data-sharer="myspace" data-url="https://lihc520.github.io/centos7%E6%90%AD%E5%BB%BAvsftpd/" data-title="centos7搭建vsftpd" data-description=""><i data-svg-src="/lib/simple-icons/icons/myspace.min.svg"></i></a><a href="#" onclick="return false;" title="分享到 Blogger" data-sharer="blogger" data-url="https://lihc520.github.io/centos7%E6%90%AD%E5%BB%BAvsftpd/" data-title="centos7搭建vsftpd" data-description=""><i class="fab fa-blogger fa-fw"></i></a><a href="#" onclick="return false;" title="分享到 Evernote" data-sharer="evernote" data-url="https://lihc520.github.io/centos7%E6%90%AD%E5%BB%BAvsftpd/" data-title="centos7搭建vsftpd"><i class="fab fa-evernote fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/k8s%E9%83%A8%E7%BD%B2tidb/" class="prev" rel="prev" title="k8s部署TIDB"><i class="fas fa-angle-left fa-fw"></i>k8s部署TIDB</a>
+            <a href="/logstash-filebeat-redis/" class="next" rel="next" title="logstash&#43;filebeat&#43;redis">logstash&#43;filebeat&#43;redis<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id="comments"><div id="gitalk" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://github.com/gitalk/gitalk"></a>Gitalk</a>.
+            </noscript></div></article></div>
+        </main><footer class="footer">
+        <div class="footer-container">
+          <div class="footer-line">
+            <span id="run-time"></span>
+          </div><div class="footer-line">
+                    由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.85.0">Hugo</a> 强力驱动&nbsp;|&nbsp;主题 - <a href="https://github.com/HEIGE-PCloud/DoIt" target="_blank" rel="noopener noreffer" title="DoIt 0.2.13"><i class="far fa-edit fa-fw"></i> DoIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2021 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank" rel="noopener noreferrer">LHC</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+            <div class="footer-line"></div>
+            <div class="footer-line">
+            </div>
+        </div></footer></div>
+
+    <div id="fixed-buttons"><a href="#back-to-top" id="back-to-top-button" class="fixed-button" title="回到顶部">
+            <i class="fas fa-arrow-up fa-fw"></i>
+        </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+            <i class="fas fa-comment fa-fw"></i>
+        </a>
+    </div><div id="cookieconsent-container"></div><div class="assets"><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/tablesort/tablesort.min.js"></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script type="text/javascript" src="/lib/topbar/topbar.min.js"></script><script type="text/javascript" src="/lib/pjax/pjax.min.js"></script><script type="text/javascript" src="/js/theme.min.js" defer></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery@2.1.3/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery-backstretch@2.1.18/jquery.backstretch.min.js"></script>
+
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery@2.1.3/dist/jquery.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/gh/ITJoker233/ITJoker233.github.io@latest/CDN/js/love.min.js"></script>
+
+    <script type="text/javascript" src="https://demo.hellozwh.com/source/canvas-nest.min.js"></script><script type="text/javascript" src="/js/custom.js"></script></div>
+
+<div class="pjax-assets"><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{"gitalk":{"admin":["lihc520"],"clientID":"89eb90d06a3ab923d55d","clientSecret":"4c0ce81194f76e5edc5acae840badd5a0e6d6053","id":"2021-06-25T15:14:49Z","owner":"lihc520","repo":"Gridea-blog-comment","title":"centos7搭建vsftpd"}},"cookieconsent":{"content":{"dismiss":"同意","link":"了解更多","message":"本网站使用 Cookies 来改善您的浏览体验."},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"data":{"desktop-header-typeit":"LHC","mobile-header-typeit":"LHC"},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"PASDMWALPK","algoliaIndex":"index.zh-cn","algoliaSearchKey":"b42948e51daaa93df92381c8e2ac0f93","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"},"sharerjs":true,"table":{"sort":true},"typeit":{"cursorChar":"|","cursorSpeed":1000,"data":{"desktop-header-typeit":["desktop-header-typeit"],"mobile-header-typeit":["mobile-header-typeit"]},"duration":-1,"speed":100}};</script><script type="text/javascript" src="/lib/gitalk/gitalk.min.js"></script><script type="text/javascript" src="/js/gitalk.min.js" defer></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/typeit/typeit.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js" defer></script><script type="text/javascript" src="/lib/katex/auto-render.min.js" defer></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js" defer></script><script type="text/javascript" src="/lib/katex/mhchem.min.js" defer></script><script type="text/javascript" src="/js/katex.min.js" defer></script><script type="text/javascript" src="/js/cookieconsent.min.js" defer></script><link rel="stylesheet" href="/lib/gitalk/gitalk.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/katex/copy-tex.min.css">
+        <noscript><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"></noscript></div>
+</body>
+
+</html>

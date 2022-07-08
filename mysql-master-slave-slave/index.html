@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noodp" />
+    <title class="pjax-title">MySql:master:slave:slave - LHCの博客</title><meta name="Description" content="LHC记录生活"><meta property="og:title" content="MySql:master:slave:slave" />
+<meta property="og:description" content="Hosts CPU MEM HD OS 192.168.1.102 db01 8 16G 100G Ubuntu20.04 192.168.1.105 db02 8 16G 100G Ubuntu20.04 192.168.1.108 db03 8 16G 100G Ubuntu20.04 安装前修改两台服务器的hosts 1 2 3 4 5 # 三臺台服务器都要操作 sudo vim /etc/hosts 192.168.1.102 db01 192.168.1.105 db02 192.168.1.108 db03 創建MySQ" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://lihc520.github.io/mysql-master-slave-slave/" /><meta property="og:image" content="https://lihc520.github.io/logo.png"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-11-02T17:00:24+00:00" />
+<meta property="article:modified_time" content="2021-11-02T17:00:24+00:00" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://lihc520.github.io/logo.png"/>
+
+<meta name="twitter:title" content="MySql:master:slave:slave"/>
+<meta name="twitter:description" content="Hosts CPU MEM HD OS 192.168.1.102 db01 8 16G 100G Ubuntu20.04 192.168.1.105 db02 8 16G 100G Ubuntu20.04 192.168.1.108 db03 8 16G 100G Ubuntu20.04 安装前修改两台服务器的hosts 1 2 3 4 5 # 三臺台服务器都要操作 sudo vim /etc/hosts 192.168.1.102 db01 192.168.1.105 db02 192.168.1.108 db03 創建MySQ"/>
+<meta name="application-name" content="DoIt">
+<meta name="apple-mobile-web-app-title" content="DoIt">
+
+<meta name="theme-color" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" href="https://lihc520.github.io/mysql-master-slave-slave/" /><link rel="prev" href="https://lihc520.github.io/logstash-filebeat-redis/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/fontawesome-free/all.min.css">
+        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/animate/animate.min.css">
+        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "MySql:master:slave:slave",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/lihc520.github.io\/mysql-master-slave-slave\/"
+        },"genre": "posts","wordcount":  1642 ,
+        "url": "https:\/\/lihc520.github.io\/mysql-master-slave-slave\/","datePublished": "2021-11-02T17:00:24+00:00","dateModified": "2021-11-02T17:00:24+00:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "LHC"
+            },"description": ""
+    }
+    </script></head>
+
+<body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">
+        function setTheme(theme) {document.body.setAttribute('theme', theme); document.documentElement.style.setProperty('color-scheme', theme === 'light' ? 'light' : 'dark');}
+        function saveTheme(theme) {window.localStorage && localStorage.setItem('theme', theme);}
+        function getMeta(metaName) {const metas = document.getElementsByTagName('meta'); for (let i = 0; i < metas.length; i++) if (metas[i].getAttribute('name') === metaName) return metas[i]; return '';}
+        if (window.localStorage && localStorage.getItem('theme')) {let theme = localStorage.getItem('theme');theme === 'light' || theme === 'dark' || theme === 'black' ? setTheme(theme) : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? setTheme('dark') : setTheme('light')); } else { if ('auto' === 'light' || 'auto' === 'dark' || 'auto' === 'black') setTheme('auto'), saveTheme('auto'); else saveTheme('auto'), window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? setTheme('dark') : setTheme('light');}
+        let metaColors = {'light': '#f8f8f8','dark': '#252627','black': '#000000'}
+        getMeta('theme-color').content = metaColors[document.body.getAttribute('theme')];
+    </script>
+    <div id="back-to-top"></div>
+    <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="LHCの博客"><span class="header-title-pre"><i class='fas fa-fw fa-fan fa-spin'></i></span><span id="desktop-header-typeit" class="typeit"></span></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> 所有文章 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/categories/documentation/"> 文档 </a><a class="menu-item" href="/about/"> 关于 </a><a class="menu-item" href="/friends/"> 友链 </a><a class="menu-item" href="https://github.com/ITmxs" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i> Github </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="#" onclick="return false;" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="#" onclick="return false;" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="#" onclick="return false;" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="LHCの博客"><span class="header-title-pre"><i class='fas fa-fw fa-fan fa-spin'></i></span><span id="mobile-header-typeit" class="typeit"></span></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="#" onclick="return false;" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="#" onclick="return false;" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="#" onclick="return false;" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">所有文章</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/categories/documentation/" title="">文档</a><a class="menu-item" href="/about/" title="">关于</a><a class="menu-item" href="/friends/" title="">友链</a><a class="menu-item" href="https://github.com/ITmxs" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i>Github</a><a href="#" onclick="return false;" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+            <div class="container"><script>document.getElementsByTagName("main")[0].setAttribute("pageStyle", "normal")</script><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC", "false")</script><article class="page single"><h1 class="single-title animate__animated animate__flipInX">MySql:master:slave:slave</h1><div class="post-meta">
+            <div class="post-meta-line">
+                <span class="post-author"><i class="author fas fa-user-circle fa-fw"></i><a href="/" title="Author" rel=" author" class="author">LHC</a>
+                </span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-11-02">2021-11-02</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime="2021-11-02">2021-11-02</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1642 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 4 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="true">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#mysql57安装三臺服務器進行同樣操作">MySql5.7安装(三臺服務器進行同樣操作)</a>
+          <ul>
+            <li>
+              <ul>
+                <li><a href="#1安装mysql-common_5734-1ubuntu1804_amd64deb">1、安装<code>mysql-common_5.7.34-1ubuntu18.04_amd64.deb</code></a></li>
+                <li><a href="#2安装mysql-community-client_5734-1ubuntu1804_amd64deb">2、安装<code>mysql-community-client_5.7.34-1ubuntu18.04_amd64.deb</code></a></li>
+                <li><a href="#3安装mysql-client_5734-1ubuntu1804_amd64deb">3、安装<code>mysql-client_5.7.34-1ubuntu18.04_amd64.deb</code></a></li>
+                <li><a href="#4安装-mysql-community-server_5729-1ubuntu1804_amd64deb">4、安装 <code>mysql-community-server_5.7.29-1ubuntu18.04_amd64.deb</code></a></li>
+                <li><a href="#5修改配置文件">5、修改配置文件</a>
+                  <ul>
+                    <li><a href="#以上操作在db2和db3上面重复操作只需修改配置文件中的server-id--2">以上操作在DB2和DB3上面重复操作，只需修改配置文件中的server-id = 2</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li><a href="#mysql主備模式">MySql主備模式</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><div class="details admonition warning open">
+                <div class="details-summary admonition-title">
+                    <i class="icon fas fa-exclamation-triangle fa-fwwarning"></i>警告<i class="details-icon fas fa-angle-right fa-fw"></i>
+                </div>
+                <div class="details-content">
+                    <div class="admonition-content">
+                        本文最后更新于 <span class="timeago" datetime="2021-11-02T17:00:24" title="November 2, 2021">2021-11-02</span>，文中内容可能已过时。</div>
+                </div>
+            </div><table>
+<thead>
+<tr>
+<th>Hosts</th>
+<th>CPU</th>
+<th>MEM</th>
+<th>HD</th>
+<th>OS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>192.168.1.102  db01</td>
+<td>8</td>
+<td>16G</td>
+<td>100G</td>
+<td>Ubuntu20.04</td>
+</tr>
+<tr>
+<td>192.168.1.105  db02</td>
+<td>8</td>
+<td>16G</td>
+<td>100G</td>
+<td>Ubuntu20.04</td>
+</tr>
+<tr>
+<td>192.168.1.108  db03</td>
+<td>8</td>
+<td>16G</td>
+<td>100G</td>
+<td>Ubuntu20.04</td>
+</tr>
+</tbody>
+</table>
+<p>安装前修改两台服务器的hosts</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># 三臺台服务器都要操作</span>
+sudo vim /etc/hosts
+192.168.1.102 db01
+192.168.1.105 db02
+192.168.1.108 db03
+</code></pre></td></tr></table>
+</div>
+</div><p>創建MySQL存儲位置及日誌位置</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">sudo mkdir -p /data/mysql <span class="o">&amp;&amp;</span> sudo mkdir -p /data/logs/mysql
+sudo chmod -R mysql:mysql /data/mysql <span class="o">&amp;&amp;</span> sudo chmod -R mysql:mysql /data/logs/mysql
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="mysql57安装三臺服務器進行同樣操作" class="headerLink">
+    <a href="#mysql57%e5%ae%89%e8%a3%85%e4%b8%89%e8%87%ba%e6%9c%8d%e5%8b%99%e5%99%a8%e9%80%b2%e8%a1%8c%e5%90%8c%e6%a8%a3%e6%93%8d%e4%bd%9c" class="header-mark"></a>MySql5.7安装(三臺服務器進行同樣操作)</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1">##下载所需安装包</span>
+<span class="nb">cd</span> /opt
+sudo wget http://mirrors.ustc.edu.cn/mysql-ftp/Downloads/MySQL-5.7/mysql-server_5.7.34-1ubuntu18.04_amd64.deb-bundle.tar
+sudo tar -xvf mysql-server_5.7.34-1ubuntu18.04_amd64.deb-bundle.tar  <span class="c1">#解压安装包</span>
+
+sudo wget http://archive.ubuntu.com/ubuntu/pool/main/m/mecab/libmecab2_0.996-10build1_amd64.deb <span class="c1">#下载依赖包</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><p>db1上操作</p>
+<p>在安装包所在的目录下执行（安装顺序不可更改）</p>
+<h5 id="1安装mysql-common_5734-1ubuntu1804_amd64deb" class="headerLink">
+    <a href="#1%e5%ae%89%e8%a3%85mysql-common_5734-1ubuntu1804_amd64deb" class="header-mark"></a>1、安装<code>mysql-common_5.7.34-1ubuntu18.04_amd64.deb</code></h5><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-css" data-lang="css"><span class="nt">sudo</span> <span class="nt">apt</span> <span class="nt">install</span> <span class="nt">libtinfo5</span> <span class="nt">-y</span>
+<span class="nt">sudo</span> <span class="nt">dpkg</span> <span class="nt">-i</span> <span class="nt">mysql-common_5</span><span class="p">.</span><span class="nc">7</span><span class="p">.</span><span class="nc">34-1ubuntu18</span><span class="p">.</span><span class="nc">04_amd64</span><span class="p">.</span><span class="nc">deb</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><h5 id="2安装mysql-community-client_5734-1ubuntu1804_amd64deb" class="headerLink">
+    <a href="#2%e5%ae%89%e8%a3%85mysql-community-client_5734-1ubuntu1804_amd64deb" class="header-mark"></a>2、安装<code>mysql-community-client_5.7.34-1ubuntu18.04_amd64.deb</code></h5><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-css" data-lang="css"><span class="nt">sudo</span> <span class="nt">dpkg</span> <span class="nt">-i</span> <span class="nt">mysql-community-client_5</span><span class="p">.</span><span class="nc">7</span><span class="p">.</span><span class="nc">34-1ubuntu18</span><span class="p">.</span><span class="nc">04_amd64</span><span class="p">.</span><span class="nc">deb</span>
+</code></pre></td></tr></table>
+</div>
+</div><h5 id="3安装mysql-client_5734-1ubuntu1804_amd64deb" class="headerLink">
+    <a href="#3%e5%ae%89%e8%a3%85mysql-client_5734-1ubuntu1804_amd64deb" class="header-mark"></a>3、安装<code>mysql-client_5.7.34-1ubuntu18.04_amd64.deb</code></h5><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-css" data-lang="css"><span class="nt">sudo</span> <span class="nt">dpkg</span> <span class="nt">-i</span> <span class="nt">mysql-client_5</span><span class="p">.</span><span class="nc">7</span><span class="p">.</span><span class="nc">34-1ubuntu18</span><span class="p">.</span><span class="nc">04_amd64</span><span class="p">.</span><span class="nc">deb</span>
+</code></pre></td></tr></table>
+</div>
+</div><h5 id="4安装-mysql-community-server_5729-1ubuntu1804_amd64deb" class="headerLink">
+    <a href="#4%e5%ae%89%e8%a3%85-mysql-community-server_5729-1ubuntu1804_amd64deb" class="header-mark"></a>4、安装 <code>mysql-community-server_5.7.29-1ubuntu18.04_amd64.deb</code></h5><p>安装过程中会提示缺少依赖包libmecab2：
+所以这次先安装依赖包<code>libmecab2</code>：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-css" data-lang="css"><span class="nt">sudo</span> <span class="nt">dpkg</span> <span class="nt">-i</span> <span class="nt">libmecab2_0</span><span class="p">.</span><span class="nc">996-10build1_amd64</span><span class="p">.</span><span class="nc">deb</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>然后安装<code>mysql-community-server_5.7.34-1ubuntu18.04_amd64.deb</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-css" data-lang="css"><span class="nt">sudo</span> <span class="nt">dpkg</span> <span class="nt">-i</span> <span class="nt">mysql-community-server_5</span><span class="p">.</span><span class="nc">7</span><span class="p">.</span><span class="nc">34-1ubuntu18</span><span class="p">.</span><span class="nc">04_amd64</span><span class="p">.</span><span class="nc">deb</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>安装过程中会要求在粉色的大页面上输入密码，输入两次即可，至此安装完成。</p>
+<h5 id="5修改配置文件" class="headerLink">
+    <a href="#5%e4%bf%ae%e6%94%b9%e9%85%8d%e7%bd%ae%e6%96%87%e4%bb%b6" class="header-mark"></a>5、修改配置文件</h5><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">sudo vim /etc/mysql/mysql.conf.d/mysqld.cnf
+
+<span class="c1">#将内容修改成如下</span>
+<span class="o">[</span>mysqld<span class="o">]</span>
+pid-file        <span class="o">=</span> /var/run/mysqld/mysqld.pid
+<span class="nv">socket</span>          <span class="o">=</span> /var/run/mysqld/mysqld.sock
+<span class="nv">datadir</span>         <span class="o">=</span> /data/mysql
+log-error       <span class="o">=</span> /data/logs/mysql/error.log
+
+<span class="nv">sql_mode</span> <span class="o">=</span>
+
+<span class="nv">user</span> <span class="o">=</span> mysql
+bind-address <span class="o">=</span> 0.0.0.0
+<span class="nv">port</span> <span class="o">=</span> <span class="m">3307</span> 
+
+log-bin <span class="o">=</span> mysql-bin
+server-id <span class="o">=</span> <span class="m">1</span>
+binlog-ignore-db <span class="o">=</span> mysql,information_schema,performance_schema
+auto-increment-offset <span class="o">=</span> <span class="m">3</span>
+auto-increment-increment <span class="o">=</span> <span class="m">3</span>
+
+<span class="nv">slave_parallel_type</span> <span class="o">=</span> <span class="s1">&#39;logical_clock&#39;</span>
+<span class="nv">slave_parallel_workers</span> <span class="o">=</span> <span class="m">8</span>
+
+<span class="nv">relay_log</span> <span class="o">=</span> relay-bin
+log-slave-updates <span class="o">=</span> ON
+
+init-connect <span class="o">=</span> <span class="s1">&#39;SET NAMES utf8mb4&#39;</span>
+character-set-server <span class="o">=</span> utf8mb4
+
+<span class="c1"># Disabling symbolic-links is recommended to prevent assorted security risks</span>
+symbolic-links<span class="o">=</span><span class="m">0</span>
+
+<span class="nv">default_storage_engine</span> <span class="o">=</span> InnoDB
+<span class="nv">innodb_file_per_table</span> <span class="o">=</span> <span class="m">1</span>
+<span class="nv">innodb_open_files</span> <span class="o">=</span> <span class="m">500</span>
+<span class="nv">innodb_buffer_pool_size</span> <span class="o">=</span> 64M
+<span class="nv">innodb_write_io_threads</span> <span class="o">=</span> <span class="m">4</span>
+<span class="nv">innodb_read_io_threads</span> <span class="o">=</span> <span class="m">4</span>
+<span class="nv">innodb_thread_concurrency</span> <span class="o">=</span> <span class="m">0</span>
+<span class="nv">innodb_purge_threads</span> <span class="o">=</span> <span class="m">1</span>
+<span class="nv">innodb_flush_log_at_trx_commit</span> <span class="o">=</span> <span class="m">2</span>
+<span class="nv">innodb_log_buffer_size</span> <span class="o">=</span> 2M
+<span class="nv">innodb_log_file_size</span> <span class="o">=</span> 32M
+<span class="nv">innodb_log_files_in_group</span> <span class="o">=</span> <span class="m">3</span>
+<span class="nv">innodb_max_dirty_pages_pct</span> <span class="o">=</span> <span class="m">90</span>
+<span class="nv">innodb_lock_wait_timeout</span> <span class="o">=</span> <span class="m">120</span>
+
+<span class="nv">bulk_insert_buffer_size</span> <span class="o">=</span> 8M
+<span class="nv">myisam_sort_buffer_size</span> <span class="o">=</span> 8M
+<span class="nv">myisam_max_sort_file_size</span> <span class="o">=</span> 10G
+<span class="nv">myisam_repair_threads</span> <span class="o">=</span> <span class="m">1</span>
+
+<span class="nv">interactive_timeout</span> <span class="o">=</span> <span class="m">28800</span>
+<span class="nv">wait_timeout</span> <span class="o">=</span> <span class="m">28800</span>
+
+<span class="nv">explicit_defaults_for_timestamp</span> <span class="o">=</span> <span class="nb">true</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>修改MySQL存儲位置後需要修改/etc/apparmor.d/usr.sbin.mysqld</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh">sudo vim /etc/apparmor.d/usr.sbin.mysqld# Allow data dir access  /data/mysql/ r,  /data/mysql/** rwk,  <span class="c1"># Allow log file access  /data/logs/mysql/ r,  /data/logs/mysql/** rwk,  # 重啟apparmorsudo systemctl restart apparmor</span>
+</code></pre></td></tr></table>
+</div>
+</div><h6 id="以上操作在db2和db3上面重复操作只需修改配置文件中的server-id--2" class="headerLink">
+    <a href="#%e4%bb%a5%e4%b8%8a%e6%93%8d%e4%bd%9c%e5%9c%a8db2%e5%92%8cdb3%e4%b8%8a%e9%9d%a2%e9%87%8d%e5%a4%8d%e6%93%8d%e4%bd%9c%e5%8f%aa%e9%9c%80%e4%bf%ae%e6%94%b9%e9%85%8d%e7%bd%ae%e6%96%87%e4%bb%b6%e4%b8%ad%e7%9a%84server-id--2" class="header-mark"></a>以上操作在DB2和DB3上面重复操作，只需修改配置文件中的server-id = 2</h6><p>启动mysql：<code>sudo service mysql start</code>
+停止mysql：<code>sudo service mysql stop</code>
+重启mysql：<code>sudo service mysql restart</code></p>
+<p>加入开机启动：<code>sudo systemctl enable mysql</code></p>
+<h3 id="mysql主備模式" class="headerLink">
+    <a href="#mysql%e4%b8%bb%e5%82%99%e6%a8%a1%e5%bc%8f" class="header-mark"></a>MySql主備模式</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># db01</span>
+<span class="c1">#进入数据库</span>
+sudo mysql -u root -p 
+
+<span class="c1">#创建同步用户</span>
+mysql&gt; grant all on *.* to replication@<span class="s1">&#39;%&#39;</span> identified by <span class="s1">&#39;password&#39;</span><span class="p">;</span>
+mysql&gt; flush privileges<span class="p">;</span>
+
+<span class="c1">#查看记录master status</span>
+mysql&gt; show master status<span class="p">;</span>
++------------------+----------+--------------+---------------------------------------------+-------------------+
+<span class="p">|</span> File             <span class="p">|</span> Position <span class="p">|</span> Binlog_Do_DB <span class="p">|</span> Binlog_Ignore_DB                            <span class="p">|</span> Executed_Gtid_Set <span class="p">|</span>
++------------------+----------+--------------+---------------------------------------------+-------------------+
+<span class="p">|</span> mysql-bin.000003 <span class="p">|</span>     <span class="m">1288</span> <span class="p">|</span>              <span class="p">|</span> mysql,information_schema,performance_schema <span class="p">|</span>                   <span class="p">|</span>
++------------------+----------+--------------+---------------------------------------------+-------------------+
+<span class="m">1</span> row in <span class="nb">set</span> <span class="o">(</span>0.01 sec<span class="o">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1"># db02和db03都進行一下操作</span>
+<span class="c1">#进入数据库</span>
+sudo mysql -u root -p 
+
+<span class="c1">#创建同步用户</span>
+mysql&gt; grant all on *.* to replication@<span class="s1">&#39;%&#39;</span> identified by <span class="s1">&#39;password&#39;</span><span class="p">;</span>
+mysql&gt; flush privileges<span class="p">;</span>
+
+<span class="c1">#查看记录master status</span>
+mysql&gt; show master status<span class="p">;</span>
++------------------+----------+--------------+---------------------------------------------+-------------------+
+<span class="p">|</span> File             <span class="p">|</span> Position <span class="p">|</span> Binlog_Do_DB <span class="p">|</span> Binlog_Ignore_DB                            <span class="p">|</span> Executed_Gtid_Set <span class="p">|</span>
++------------------+----------+--------------+---------------------------------------------+-------------------+
+<span class="p">|</span> mysql-bin.000004 <span class="p">|</span>     <span class="m">1288</span> <span class="p">|</span>              <span class="p">|</span> mysql,information_schema,performance_schema <span class="p">|</span>                   <span class="p">|</span>
++------------------+----------+--------------+---------------------------------------------+-------------------+
+<span class="m">1</span> row in <span class="nb">set</span> <span class="o">(</span>0.00 sec<span class="o">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>进行同步</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1">##db02</span>
+<span class="c1">#设置主服务器的信息</span>
+mysql&gt; change master to <span class="nv">master_host</span><span class="o">=</span><span class="s1">&#39;db01&#39;</span>,master_port<span class="o">=</span>3307,master_user<span class="o">=</span><span class="s1">&#39;replication&#39;</span>, <span class="nv">master_password</span><span class="o">=</span><span class="s1">&#39;password&#39;</span>, <span class="nv">master_log_file</span><span class="o">=</span><span class="s1">&#39;mysql-bin.000004&#39;</span>, <span class="nv">master_log_pos</span><span class="o">=</span>1288<span class="p">;</span>
+
+<span class="c1"># 启动同步</span>
+mysql&gt; start slave<span class="p">;</span> 
+
+<span class="c1">#查看同步状态，要两个yes才成功</span>
+mysql&gt; show slave status<span class="se">\G</span><span class="p">;</span>
+*************************** 1. row ***************************
+               Slave_IO_State: Waiting <span class="k">for</span> master to send event
+                  Master_Host: db1
+                  Master_User: replication
+                  Master_Port: <span class="m">3307</span>
+                Connect_Retry: <span class="m">60</span>
+              Master_Log_File: mysql-bin.000003
+          Read_Master_Log_Pos: <span class="m">1288</span>
+               Relay_Log_File: relay-bin.000002
+                Relay_Log_Pos: <span class="m">484</span>
+        Relay_Master_Log_File: mysql-bin.000003
+             Slave_IO_Running: Yes
+            Slave_SQL_Running: Yes
+              Replicate_Do_DB:
+          Replicate_Ignore_DB:
+           Replicate_Do_Table:
+       Replicate_Ignore_Table:
+      Replicate_Wild_Do_Table:
+  Replicate_Wild_Ignore_Table:
+                   Last_Errno: <span class="m">0</span>
+                   Last_Error:
+                 Skip_Counter: <span class="m">0</span>
+          Exec_Master_Log_Pos: <span class="m">1288</span>
+              Relay_Log_Space: <span class="m">685</span>
+              Until_Condition: None
+               Until_Log_File:
+                Until_Log_Pos: <span class="m">0</span>
+           Master_SSL_Allowed: No
+           Master_SSL_CA_File:
+           Master_SSL_CA_Path:
+              Master_SSL_Cert:
+            Master_SSL_Cipher:
+               Master_SSL_Key:
+        Seconds_Behind_Master: <span class="m">0</span>
+Master_SSL_Verify_Server_Cert: No
+                Last_IO_Errno: <span class="m">0</span>
+                Last_IO_Error:
+               Last_SQL_Errno: <span class="m">0</span>
+               Last_SQL_Error:
+  Replicate_Ignore_Server_Ids:
+             Master_Server_Id: <span class="m">1</span>
+                  Master_UUID: f2770e08-e2fd-11eb-a6f7-005056b9aeb1
+             Master_Info_File: /data/mysql/master.info
+                    SQL_Delay: <span class="m">0</span>
+          SQL_Remaining_Delay: NULL
+      Slave_SQL_Running_State: Slave has <span class="nb">read</span> all relay log<span class="p">;</span> waiting <span class="k">for</span> more updates
+           Master_Retry_Count: <span class="m">86400</span>
+                  Master_Bind:
+      Last_IO_Error_Timestamp:
+     Last_SQL_Error_Timestamp:
+               Master_SSL_Crl:
+           Master_SSL_Crlpath:
+           Retrieved_Gtid_Set:
+            Executed_Gtid_Set:
+                Auto_Position: <span class="m">0</span>
+         Replicate_Rewrite_DB:
+                 Channel_Name:
+           Master_TLS_Version:
+<span class="m">1</span> row in <span class="nb">set</span> <span class="o">(</span>0.00 sec<span class="o">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sh" data-lang="sh"><span class="c1">#db03</span>
+<span class="c1">#设置主服务器的信息</span>
+mysql&gt; change master to <span class="nv">master_host</span><span class="o">=</span><span class="s1">&#39;db03&#39;</span>,master_port<span class="o">=</span>3307,master_user<span class="o">=</span><span class="s1">&#39;replication&#39;</span>, <span class="nv">master_password</span><span class="o">=</span><span class="s1">&#39;password&#39;</span>, <span class="nv">master_log_file</span><span class="o">=</span><span class="s1">&#39;mysql-bin.000004&#39;</span>, <span class="nv">master_log_pos</span><span class="o">=</span>1288<span class="p">;</span>
+
+<span class="c1"># 启动同步</span>
+mysql&gt; start slave<span class="p">;</span> 
+
+<span class="c1">#查看同步状态，要两个yes才成功</span>
+mysql&gt; show slave status<span class="se">\G</span><span class="p">;</span>
+*************************** 1. row ***************************
+               Slave_IO_State: Waiting <span class="k">for</span> master to send event
+                  Master_Host: db1
+                  Master_User: replication
+                  Master_Port: <span class="m">3307</span>
+                Connect_Retry: <span class="m">60</span>
+              Master_Log_File: mysql-bin.000003
+          Read_Master_Log_Pos: <span class="m">1288</span>
+               Relay_Log_File: relay-bin.000002
+                Relay_Log_Pos: <span class="m">484</span>
+        Relay_Master_Log_File: mysql-bin.000003
+             Slave_IO_Running: Yes
+            Slave_SQL_Running: Yes
+              Replicate_Do_DB:
+          Replicate_Ignore_DB:
+           Replicate_Do_Table:
+       Replicate_Ignore_Table:
+      Replicate_Wild_Do_Table:
+  Replicate_Wild_Ignore_Table:
+                   Last_Errno: <span class="m">0</span>
+                   Last_Error:
+                 Skip_Counter: <span class="m">0</span>
+          Exec_Master_Log_Pos: <span class="m">1288</span>
+              Relay_Log_Space: <span class="m">685</span>
+              Until_Condition: None
+               Until_Log_File:
+                Until_Log_Pos: <span class="m">0</span>
+           Master_SSL_Allowed: No
+           Master_SSL_CA_File:
+           Master_SSL_CA_Path:
+              Master_SSL_Cert:
+            Master_SSL_Cipher:
+               Master_SSL_Key:
+        Seconds_Behind_Master: <span class="m">0</span>
+Master_SSL_Verify_Server_Cert: No
+                Last_IO_Errno: <span class="m">0</span>
+                Last_IO_Error:
+               Last_SQL_Errno: <span class="m">0</span>
+               Last_SQL_Error:
+  Replicate_Ignore_Server_Ids:
+             Master_Server_Id: <span class="m">1</span>
+                  Master_UUID: f2770e08-e2fd-11eb-a6f7-005056b9aeb1
+             Master_Info_File: /data/mysql/master.info
+                    SQL_Delay: <span class="m">0</span>
+          SQL_Remaining_Delay: NULL
+      Slave_SQL_Running_State: Slave has <span class="nb">read</span> all relay log<span class="p">;</span> waiting <span class="k">for</span> more updates
+           Master_Retry_Count: <span class="m">86400</span>
+                  Master_Bind:
+      Last_IO_Error_Timestamp:
+     Last_SQL_Error_Timestamp:
+               Master_SSL_Crl:
+           Master_SSL_Crlpath:
+           Retrieved_Gtid_Set:
+            Executed_Gtid_Set:
+                Auto_Position: <span class="m">0</span>
+         Replicate_Rewrite_DB:
+                 Channel_Name:
+           Master_TLS_Version:
+<span class="m">1</span> row in <span class="nb">set</span> <span class="o">(</span>0.00 sec<span class="o">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>mysql主備同步完成；</p>
+</div>
+
+        <div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2021-11-02</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span><a class="link-to-mardown" href=/mysql-master-slave-slave/index.md target="_blank" rel="noopener noreferrer">阅读原始文档</a>
+                    </span></div>
+            <div class="post-info-share">
+                <span><a href="#" onclick="return false;" title="分享到 Twitter" data-sharer="twitter" data-url="https://lihc520.github.io/mysql-master-slave-slave/" data-title="MySql:master:slave:slave"><i class="fab fa-twitter fa-fw"></i></a><a href="#" onclick="return false;" title="分享到 Facebook" data-sharer="facebook" data-url="https://lihc520.github.io/mysql-master-slave-slave/"><i class="fab fa-facebook-square fa-fw"></i></a><a href="#" onclick="return false;" title="分享到 WhatsApp" data-sharer="whatsapp" data-url="https://lihc520.github.io/mysql-master-slave-slave/" data-title="MySql:master:slave:slave" data-web><i class="fab fa-whatsapp fa-fw"></i></a><a href="#" onclick="return false;" title="分享到 Line" data-sharer="line" data-url="https://lihc520.github.io/mysql-master-slave-slave/" data-title="MySql:master:slave:slave"><i data-svg-src="/lib/simple-icons/icons/line.min.svg"></i></a><a href="#" onclick="return false;" title="分享到 微博" data-sharer="weibo" data-url="https://lihc520.github.io/mysql-master-slave-slave/" data-title="MySql:master:slave:slave"><i class="fab fa-weibo fa-fw"></i></a><a href="#" onclick="return false;" title="分享到 Myspace" data-sharer="myspace" data-url="https://lihc520.github.io/mysql-master-slave-slave/" data-title="MySql:master:slave:slave" data-description=""><i data-svg-src="/lib/simple-icons/icons/myspace.min.svg"></i></a><a href="#" onclick="return false;" title="分享到 Blogger" data-sharer="blogger" data-url="https://lihc520.github.io/mysql-master-slave-slave/" data-title="MySql:master:slave:slave" data-description=""><i class="fab fa-blogger fa-fw"></i></a><a href="#" onclick="return false;" title="分享到 Evernote" data-sharer="evernote" data-url="https://lihc520.github.io/mysql-master-slave-slave/" data-title="MySql:master:slave:slave"><i class="fab fa-evernote fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/logstash-filebeat-redis/" class="prev" rel="prev" title="logstash&#43;filebeat&#43;redis"><i class="fas fa-angle-left fa-fw"></i>logstash&#43;filebeat&#43;redis</a></div>
+</div>
+<div id="comments"><div id="gitalk" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://github.com/gitalk/gitalk"></a>Gitalk</a>.
+            </noscript></div></article></div>
+        </main><footer class="footer">
+        <div class="footer-container">
+          <div class="footer-line">
+            <span id="run-time"></span>
+          </div><div class="footer-line">
+                    由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.85.0">Hugo</a> 强力驱动&nbsp;|&nbsp;主题 - <a href="https://github.com/HEIGE-PCloud/DoIt" target="_blank" rel="noopener noreffer" title="DoIt 0.2.13"><i class="far fa-edit fa-fw"></i> DoIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2021 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank" rel="noopener noreferrer">LHC</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+            <div class="footer-line"></div>
+            <div class="footer-line">
+            </div>
+        </div></footer></div>
+
+    <div id="fixed-buttons"><a href="#back-to-top" id="back-to-top-button" class="fixed-button" title="回到顶部">
+            <i class="fas fa-arrow-up fa-fw"></i>
+        </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+            <i class="fas fa-comment fa-fw"></i>
+        </a>
+    </div><div id="cookieconsent-container"></div><div class="assets"><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/tablesort/tablesort.min.js"></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script type="text/javascript" src="/lib/topbar/topbar.min.js"></script><script type="text/javascript" src="/lib/pjax/pjax.min.js"></script><script type="text/javascript" src="/js/theme.min.js" defer></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery@2.1.3/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery-backstretch@2.1.18/jquery.backstretch.min.js"></script>
+
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery@2.1.3/dist/jquery.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/gh/ITJoker233/ITJoker233.github.io@latest/CDN/js/love.min.js"></script>
+
+    <script type="text/javascript" src="https://demo.hellozwh.com/source/canvas-nest.min.js"></script><script type="text/javascript" src="/js/custom.js"></script></div>
+
+<div class="pjax-assets"><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{"gitalk":{"admin":["lihc520"],"clientID":"89eb90d06a3ab923d55d","clientSecret":"4c0ce81194f76e5edc5acae840badd5a0e6d6053","id":"2021-11-02T17:00:24Z","owner":"lihc520","repo":"Gridea-blog-comment","title":"MySql:master:slave:slave"}},"cookieconsent":{"content":{"dismiss":"同意","link":"了解更多","message":"本网站使用 Cookies 来改善您的浏览体验."},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"data":{"desktop-header-typeit":"LHC","mobile-header-typeit":"LHC"},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"PASDMWALPK","algoliaIndex":"index.zh-cn","algoliaSearchKey":"b42948e51daaa93df92381c8e2ac0f93","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"},"sharerjs":true,"table":{"sort":true},"typeit":{"cursorChar":"|","cursorSpeed":1000,"data":{"desktop-header-typeit":["desktop-header-typeit"],"mobile-header-typeit":["mobile-header-typeit"]},"duration":-1,"speed":100}};</script><script type="text/javascript" src="/lib/gitalk/gitalk.min.js"></script><script type="text/javascript" src="/js/gitalk.min.js" defer></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/typeit/typeit.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js" defer></script><script type="text/javascript" src="/lib/katex/auto-render.min.js" defer></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js" defer></script><script type="text/javascript" src="/lib/katex/mhchem.min.js" defer></script><script type="text/javascript" src="/js/katex.min.js" defer></script><script type="text/javascript" src="/js/cookieconsent.min.js" defer></script><link rel="stylesheet" href="/lib/gitalk/gitalk.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/katex/copy-tex.min.css">
+        <noscript><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"></noscript></div>
+</body>
+
+</html>

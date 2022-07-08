@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noodp" />
+    <title class="pjax-title">管道符、重定向与环境变量 - LHCの博客</title><meta name="Description" content="LHC记录生活"><meta property="og:title" content="管道符、重定向与环境变量" />
+<meta property="og:description" content="3.1 输入输出重定向既然已经在上一章学完了几乎所有基础且常用的Linux命令，那么接下来的任务就是把多个Linux命令适当地组合到一起，使其协同" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://lihc520.github.io/%E7%AE%A1%E9%81%93%E7%AC%A6%E9%87%8D%E5%AE%9A%E5%90%91%E4%B8%8E%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/" /><meta property="og:image" content="https://lihc520.github.io/logo.png"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-05-19T20:58:16+00:00" />
+<meta property="article:modified_time" content="2021-05-19T20:58:16+00:00" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://lihc520.github.io/logo.png"/>
+
+<meta name="twitter:title" content="管道符、重定向与环境变量"/>
+<meta name="twitter:description" content="3.1 输入输出重定向既然已经在上一章学完了几乎所有基础且常用的Linux命令，那么接下来的任务就是把多个Linux命令适当地组合到一起，使其协同"/>
+<meta name="application-name" content="DoIt">
+<meta name="apple-mobile-web-app-title" content="DoIt">
+
+<meta name="theme-color" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" href="https://lihc520.github.io/%E7%AE%A1%E9%81%93%E7%AC%A6%E9%87%8D%E5%AE%9A%E5%90%91%E4%B8%8E%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/" /><link rel="prev" href="https://lihc520.github.io/vim/" /><link rel="next" href="https://lihc520.github.io/kubenetes%E4%BD%BF%E7%94%A8hlem%E5%AE%89%E8%A3%85nfs%E4%B8%BA%E9%BB%98%E8%AE%A4%E5%AD%98%E5%82%A8/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/fontawesome-free/all.min.css">
+        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/animate/animate.min.css">
+        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "管道符、重定向与环境变量",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/lihc520.github.io\/%E7%AE%A1%E9%81%93%E7%AC%A6%E9%87%8D%E5%AE%9A%E5%90%91%E4%B8%8E%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F\/"
+        },"genre": "posts","wordcount":  8654 ,
+        "url": "https:\/\/lihc520.github.io\/%E7%AE%A1%E9%81%93%E7%AC%A6%E9%87%8D%E5%AE%9A%E5%90%91%E4%B8%8E%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F\/","datePublished": "2021-05-19T20:58:16+00:00","dateModified": "2021-05-19T20:58:16+00:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "LHC"
+            },"description": ""
+    }
+    </script></head>
+
+<body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">
+        function setTheme(theme) {document.body.setAttribute('theme', theme); document.documentElement.style.setProperty('color-scheme', theme === 'light' ? 'light' : 'dark');}
+        function saveTheme(theme) {window.localStorage && localStorage.setItem('theme', theme);}
+        function getMeta(metaName) {const metas = document.getElementsByTagName('meta'); for (let i = 0; i < metas.length; i++) if (metas[i].getAttribute('name') === metaName) return metas[i]; return '';}
+        if (window.localStorage && localStorage.getItem('theme')) {let theme = localStorage.getItem('theme');theme === 'light' || theme === 'dark' || theme === 'black' ? setTheme(theme) : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? setTheme('dark') : setTheme('light')); } else { if ('auto' === 'light' || 'auto' === 'dark' || 'auto' === 'black') setTheme('auto'), saveTheme('auto'); else saveTheme('auto'), window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? setTheme('dark') : setTheme('light');}
+        let metaColors = {'light': '#f8f8f8','dark': '#252627','black': '#000000'}
+        getMeta('theme-color').content = metaColors[document.body.getAttribute('theme')];
+    </script>
+    <div id="back-to-top"></div>
+    <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="LHCの博客"><span class="header-title-pre"><i class='fas fa-fw fa-fan fa-spin'></i></span><span id="desktop-header-typeit" class="typeit"></span></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> 所有文章 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/categories/documentation/"> 文档 </a><a class="menu-item" href="/about/"> 关于 </a><a class="menu-item" href="/friends/"> 友链 </a><a class="menu-item" href="https://github.com/ITmxs" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i> Github </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="#" onclick="return false;" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="#" onclick="return false;" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="#" onclick="return false;" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="LHCの博客"><span class="header-title-pre"><i class='fas fa-fw fa-fan fa-spin'></i></span><span id="mobile-header-typeit" class="typeit"></span></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="#" onclick="return false;" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="#" onclick="return false;" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="#" onclick="return false;" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">所有文章</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/categories/documentation/" title="">文档</a><a class="menu-item" href="/about/" title="">关于</a><a class="menu-item" href="/friends/" title="">友链</a><a class="menu-item" href="https://github.com/ITmxs" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i>Github</a><a href="#" onclick="return false;" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+            <div class="container"><script>document.getElementsByTagName("main")[0].setAttribute("pageStyle", "normal")</script><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC", "false")</script><article class="page single"><h1 class="single-title animate__animated animate__flipInX">管道符、重定向与环境变量</h1><div class="post-meta">
+            <div class="post-meta-line">
+                <span class="post-author"><i class="author fas fa-user-circle fa-fw"></i><a href="/" title="Author" rel=" author" class="author">LHC</a>
+                </span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-05-19">2021-05-19</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime="2021-05-19">2021-05-19</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 8654 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 18 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="true">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li>
+              <ul>
+                <li><a href="#31-输入输出重定向"><strong>3.1 输入输出重定向</strong></a></li>
+                <li><a href="#32-管道命令符"><strong>3.2 管道命令符</strong></a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li><a href="#tips"><strong>Tips</strong></a>
+          <ul>
+            <li>
+              <ul>
+                <li><a href="#33-命令行的通配符"><strong>3.3 命令行的通配符</strong></a></li>
+                <li><a href="#34-常用的转义字符"><strong>3.4 常用的转义字符</strong></a></li>
+                <li><a href="#35-重要的环境变量"><strong>3.5 重要的环境变量</strong></a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li><a href="#tips-1"><strong>Tips</strong></a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><div class="details admonition warning open">
+                <div class="details-summary admonition-title">
+                    <i class="icon fas fa-exclamation-triangle fa-fwwarning"></i>警告<i class="details-icon fas fa-angle-right fa-fw"></i>
+                </div>
+                <div class="details-content">
+                    <div class="admonition-content">
+                        本文最后更新于 <span class="timeago" datetime="2021-05-19T20:58:16" title="May 19, 2021">2021-05-19</span>，文中内容可能已过时。</div>
+                </div>
+            </div><h5 id="31-输入输出重定向" class="headerLink">
+    <a href="#31-%e8%be%93%e5%85%a5%e8%be%93%e5%87%ba%e9%87%8d%e5%ae%9a%e5%90%91" class="header-mark"></a><strong>3.1 输入输出重定向</strong></h5><p>既然已经在上一章学完了几乎所有基础且常用的Linux命令，那么接下来的任务就是把多个Linux命令适当地组合到一起，使其协同工作，以便我们更加高效地处理数据。要做到这一点，就必须搞明白命令的输入重定向和输出重定向的原理。</p>
+<p>简而言之，输入重定向是指把文件导入到命令中，而输出重定向则是指把原本要输出到屏幕的数据信息写入到指定文件中。在日常的学习和工作中，相较于输入重定向，我们使用输出重定向的频率更高，所以又将输出重定向分为了标准输出重定向和错误输出重定向两种不同的技术，以及清空写入与追加写入两种模式。听起来就很玄妙？<a href="https://www.linuxprobe.com/" target="_blank" rel="noopener noreffer">刘遄</a>老师接下来将慢慢道来。</p>
+<blockquote>
+<p>标准输入重定向（STDIN，文件描述符为0）：默认从键盘输入，也可从其他文件或命令中输入。</p>
+<p>标准输出重定向（STDOUT，文件描述符为1）：默认输出到屏幕。</p>
+<p>错误输出重定向（STDERR，文件描述符为2）：默认输出到屏幕。</p>
+</blockquote>
+<p>比如分别查看两个文件的属性信息，先创建出第一个文件，而第二个文件是不存在的。所以虽然针对这两个文件的操作都分别会在屏幕上输出一些信息，但这两个操作的差异其实很大：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">[root@linuxprobe ~]# touch linuxprobe
+[root@linuxprobe ~]# ls -l linuxprobe 
+-rw-r--r--. 1 root root 0 Aug 5 05:35 linuxprobe
+[root@linuxprobe ~]# ls -l xxxxxx
+ls: cannot access xxxxxx: No such file or directory
+</code></pre></td></tr></table>
+</div>
+</div><p>在上述命令中，名为linuxprobe的文件是真实存在的，输出信息是该文件的一些相关权限、所有者、所属组、文件大小及修改时间等信息，这也是该命令的标准输出信息。而名为xxxxxx的第二个文件是不存在的，因此在执行完ls命令之后显示的报错提示信息也是该命令的错误输出信息。那么，要想把原本输出到屏幕上的数据转而写入到文件当中，就要区别对待这两种输出信息。</p>
+<p>对于输入重定向来讲，用到的符号及其作用如表3-1所示。</p>
+<p>表3-1                     输入重定向中用到的符号及其作用</p>
+<table>
+<thead>
+<tr>
+<th>符号</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>命令 &lt; 文件</td>
+<td>将文件作为命令的标准输入</td>
+</tr>
+<tr>
+<td>命令 &laquo; 分界符</td>
+<td>从标准输入中读入，直到遇见分界符才停止</td>
+</tr>
+<tr>
+<td>命令 &lt; 文件1 &gt; 文件2</td>
+<td>将文件1作为命令的标准输入并将标准输出到文件2</td>
+</tr>
+</tbody>
+</table>
+<p>对于输出重定向来讲，用到的符号及其作用如表3-2所示。</p>
+<p>表3-2                     输出重定向中用到的符号及其作用</p>
+<table>
+<thead>
+<tr>
+<th>符号</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>命令 &gt; 文件</td>
+<td>将标准输出重定向到一个文件中（清空原有文件的数据）</td>
+</tr>
+<tr>
+<td>命令 2&gt; 文件</td>
+<td>将错误输出重定向到一个文件中（清空原有文件的数据）</td>
+</tr>
+<tr>
+<td>命令 &raquo; 文件</td>
+<td>将标准输出重定向到一个文件中（追加到原有内容的后面）</td>
+</tr>
+<tr>
+<td>命令 2&raquo; 文件</td>
+<td>将错误输出重定向到一个文件中（追加到原有内容的后面）</td>
+</tr>
+<tr>
+<td>命令 &raquo; 文件 2&gt;&amp;1 或 命令 &amp;&raquo; 文件</td>
+<td>将标准输出与错误输出共同写入到文件中（追加到原有内容的后面）</td>
+</tr>
+</tbody>
+</table>
+<p>对于重定向中的标准输出模式，可以省略文件描述符1不写，而错误输出模式的文件描述符2是必须要写的。先来小试牛刀，通过标准输出重定向将man bash命令原本要输出到屏幕的信息写入到文件readme.txt中，然后显示readme.txt文件中的内容。具体命令如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">[root@linuxprobe ~]# man bash &gt; readme.txt
+[root@linuxprobe ~]# cat readme.txt 
+BASH(1)                     General Commands Manual                    BASH(1)
+
+NAME
+       bash - GNU Bourne-Again SHell
+
+SYNOPSIS
+       bash [options] [command_string | file]
+
+COPYRIGHT
+       Bash is Copyright (C) 1989-2016 by the Free Software Foundation, Inc.
+
+DESCRIPTION
+       Bash  is  an  sh-compatible  command language interpreter that executes
+       commands read from the standard input or from a file.  Bash also incor‐
+       porates useful features from the Korn and C shells (ksh and csh).
+
+       Bash  is  intended  to  be a conformant implementation of the Shell and
+       Utilities portion  of  the  IEEE  POSIX  specification  (IEEE  Standard
+       1003.1).  Bash can be configured to be POSIX-conformant by default.
+
+………………省略部分输出信息………………
+</code></pre></td></tr></table>
+</div>
+</div><p>有没有感觉到很方便呢？接下来尝试输出重定向技术中的覆盖写入与追加写入这两种不同模式带来的变化。首先通过覆盖写入模式向readme.txt文件写入多行数据（该文件中已包含上一个实验的man命令信息），但每一次都会覆盖掉上一次的输出内容，所以最终文件中只有最后一次的输出结果：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">[root@linuxprobe ~]# echo &#34;Welcome to LinuxProbe.Com&#34; &gt; readme.txt
+[root@linuxprobe ~]# echo &#34;Welcome to LinuxProbe.Com&#34; &gt; readme.txt
+[root@linuxprobe ~]# echo &#34;Welcome to LinuxProbe.Com&#34; &gt; readme.txt
+[root@linuxprobe ~]# echo &#34;Welcome to LinuxProbe.Com&#34; &gt; readme.txt
+[root@linuxprobe ~]# echo &#34;Welcome to LinuxProbe.Com&#34; &gt; readme.txt
+[root@linuxprobe ~]# cat readme.txt
+Welcome to LinuxProbe.Com
+</code></pre></td></tr></table>
+</div>
+</div><p>然后再通过追加写入模式向文件再写入一次数据，在执行cat命令之后，可以看到如下所示的文件内容：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">[root@linuxprobe ~]# echo &#34;Quality linux learning materials&#34; &gt;&gt; readme.txt
+[root@linuxprobe ~]# cat readme.txt
+Welcome to LinuxProbe.Com
+Quality linux learning materials
+</code></pre></td></tr></table>
+</div>
+</div><p>虽然都是输出重定向技术，但是命令的标准输出和错误输出还是有区别的。例如查看当前目录中某个文件的信息，这里以linuxprobe文件为例，这个文件是真实存在的，因此使用标准输出即可将原本要输出到屏幕的信息写入到文件中，而错误的输出重定向则依然把信息输出到了屏幕上。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">[root@linuxprobe ~]# ls -l linuxprobe &gt; /root/stderr.txt 
+[root@linuxprobe ~]# ls -l linuxprobe 2&gt; /root/stderr.txt 
+-rw-r--r--. 1 root root 0 Mar  1 13:30 linuxprobe
+</code></pre></td></tr></table>
+</div>
+</div><p>如果想把命令的报错信息写入到文件，该怎么操作呢？当用户在执行一个自动化的Shell<a href="https://www.linuxcool.com/" target="_blank" rel="noopener noreffer">脚本</a>时，这个操作会特别有用，而且特别实用，因为它可以把整个脚本执行过程中的报错信息都记录到文件中，便于安装后的排错工作。</p>
+<p>接下来以一个不存在的文件进行实验演示：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">[root@linuxprobe ~]# ls -l xxxxxx &gt; /root/stderr.txt
+cannot access xxxxxx: No such file or directory
+[root@linuxprobe ~]# ls -l xxxxxx 2&gt; /root/stderr.txt
+[root@linuxprobe ~]# cat /root/stderr.txt 
+ls: cannot access xxxxxx: No such file or directory
+</code></pre></td></tr></table>
+</div>
+</div><p>还有一种常见情况，就是我们想不区分标准还是错误输出信息，只要命令有输出信息则全部追加写入到文件中，这种就要使用到&amp;&raquo;操作符了，全部写入到文件中：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">[root@linuxprobe ~]# ls -l linuxprobe &amp;&gt;&gt; readme.txt
+[root@linuxprobe ~]# ls -l xxxxxx &amp;&gt;&gt; readme.txt
+-rw-r--r--. 1 root root 0 Mar  1 13:30 linuxprobe
+cannot access xxxxxx: No such file or directory
+</code></pre></td></tr></table>
+</div>
+</div><p>输入重定向相对来说有些冷门，在工作中遇到的概率会小一点。输入重定向的作用是把文件直接导入到命令中。接下来使用输入重定向把readme.txt文件导入给wc -l命令，统计一下文件中的内容行数：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">[root@linuxprobe ~]# wc -l &lt; readme.txt
+2
+</code></pre></td></tr></table>
+</div>
+</div><p>大家肯定发现了这次的输出结果跟第2章节讲的时候有所不同，没有了文件名称。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">[root@linuxprobe ~]# wc -l /etc/passwd
+38 /etc/passwd
+</code></pre></td></tr></table>
+</div>
+</div><p>这是因为此前使用“wc -l /etc/passwd”是一种非常标准的“命令+参数+对象”的执行格式，而这次的“wc -l &lt; readme.txt”则是将readme.txt文件内的内容通过操作符导入到的命令中，没有被当作命令对象进行执行的过程，因此wc命令只能读到信息流的数据，没有文件名称的信息。这个小差异，同学们可以慢慢琢磨下。</p>
+<h5 id="32-管道命令符" class="headerLink">
+    <a href="#32-%e7%ae%a1%e9%81%93%e5%91%bd%e4%bb%a4%e7%ac%a6" class="header-mark"></a><strong>3.2 管道命令符</strong></h5><p>细心的读者肯定还记得在2.6节学习tr命令时曾经见到过一个名为管道符的东西。同时按下键盘上的“Shift”和“\”反斜杠键即可打出管道符，其执行格式为“命令A | 命令B”。管道命令符的作用也可以用一句话来概括“<strong>把前一个命令原本要输出到屏幕的信息当作是后一个命令的标准输入</strong>”。在2.6节讲解grep文本搜索命令时，我们通过匹配关键词/sbin/nologin找出了所有被限制登录系统的用户。在学完本节内容后，完全可以把下面这两条命令合并为一条：</p>
+<blockquote>
+<p>找出被限制登录用户的命令是：grep /sbin/nologin /etc/passwd</p>
+<p>统计文本行数的命令则是：wc -l</p>
+</blockquote>
+<p>现在要做的就是把grep搜索命令的输出值传递给wc统计命令，即把原本要输出到屏幕的用户信息列表再交给wc命令作进一步的加工，因此只需要把管道符放到两条命令之间即可，具体如下。这简直是太方便了！</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">[root@linuxprobe ~]# grep /sbin/nologin /etc/passwd | wc -l
+40
+</code></pre></td></tr></table>
+</div>
+</div><p>这个管道符就像一个法宝，可以将它套用到其他不同的命令上，比如用翻页的形式查看/etc目录中的文件列表及属性信息（这些内容默认会一股脑儿地显示到屏幕上，根本看不清楚）：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">[root@linuxprobe ~]# ls -l /etc/ | more
+total 1344
+-rw-r--r--. 1 root root 16 Jul 21 05:08 adjtime
+-rw-r--r--. 1 root root 1518 Sep 10 2018 aliases
+drwxr-xr-x. 3 root root 65 Jul 21 05:06 alsa
+drwxr-xr-x. 2 root root 4096 Jul 21 05:08 alternatives
+-rw-r--r--. 1 root root 541 Oct 2 2018 anacrontab
+-rw-r--r--. 1 root root 55 Feb 1 2019 asound.conf
+-rw-r--r--. 1 root root 1 Aug 12 2018 at.deny
+drwxr-x---. 4 root root 100 Jul 21 05:16 audit
+drwxr-xr-x. 3 root root 228 Jul 21 05:08 authselect
+drwxr-xr-x. 4 root root 71 Jul 21 05:06 avahi
+drwxr-xr-x. 2 root root 204 Jul 21 05:06 bash_completion.d
+-rw-r--r--. 1 root root 3001 Sep 10 2018 bashrc
+--More--
+</code></pre></td></tr></table>
+</div>
+</div><p>在修改用户密码时，通常都需要输入两次密码以进行确认，这在编写自动化脚本时将成为一个非常致命的缺陷。通过把管道符和passwd命令的&ndash;stdin参数相结合，可以用一条命令来完成密码重置操作：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">[root@linuxprobe ~]# echo &#34;linuxprobe&#34; | passwd --stdin root
+Changing password for user root.
+passwd: all authentication tokens updated successfully.
+</code></pre></td></tr></table>
+</div>
+</div><p>还有咱们上个章节学习ps命令的时候，输入ps aux参数后屏幕信息呼呼闪过，根本找不到有用的信息，现在也可以将ps、grep、管道符三者结合到一起使用了。搜索与bash有关的进程信息：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">[root@linuxprobe ~]# ps aux | grep bash
+root 1070 0.0 0.1 25384 2324 ? S Sep21 0:00 /bin/bash /usr/sbin/ksmtuned
+root 3899 0.0 0.2 26540 5136 pts/0 Ss 00:27 0:00 bash
+root 4002 0.0 0.0 12112 1056 pts/0 S+ 00:28 0:00 grep --color=auto bash
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        data-src="https://www.linuxprobe.com/wp-content/uploads/2020/05/%E4%BB%BB%E6%84%8F%E9%97%A8.gif"
+        data-srcset="https://www.linuxprobe.com/wp-content/uploads/2020/05/%E4%BB%BB%E6%84%8F%E9%97%A8.gif, https://www.linuxprobe.com/wp-content/uploads/2020/05/%E4%BB%BB%E6%84%8F%E9%97%A8.gif 1.5x, https://www.linuxprobe.com/wp-content/uploads/2020/05/%E4%BB%BB%E6%84%8F%E9%97%A8.gif 2x"
+        data-sizes="auto"
+        alt="https://www.linuxprobe.com/wp-content/uploads/2020/05/%E4%BB%BB%E6%84%8F%E9%97%A8.gif"
+        title="第3章 管道符、重定向与环境变量第3章 管道符、重定向与环境变量"></p>
+<p>当然，大家千万不要误以为管道命令符只能在一个命令组合中使用一次，我们完全可以这样使用：“命令A | 命令B | 命令C”。为了帮助读者进一步理解管道符的作用，刘遄老师在讲课时经常会把管道符描述成“任意门”。想必大家小时候都看过“哆啦A梦”动画片吧。哆啦A梦（也就是常称的机器猫）经常为了取悦大雄而从口袋中掏出一件件宝贝，其中好多次就用到了任意门这个道具。其实，管道符就好像是用于实现数据穿越的任意门，能够帮助提高工作效率，完成之前不敢想象的复杂工作。</p>
+<h3 id="tips" class="headerLink">
+    <a href="#tips" class="header-mark"></a><strong>Tips</strong></h3><p>曾经有位东北的同学讲了个特别贴切的例子，把管道符比喻成流水线作业，跟吃了顿烧烤是一个道理，第一个人负责切肉，第二个人负责串肉，第三个人负责烧烤，最后的处理结果交付给用户~</p>
+<p>如果读者是一名Linux新手，可能会觉得上面的命令组合已经十分复杂了，但是有过运维经验的读者又会感觉如隔靴挠痒般不过瘾，他们希望能将这样方便的命令写得更高级一些，功能更强大一些,为了大家对我们这本书的捧场，当然要义不容辞地把技术拱手奉上。如果需要将管道符处理后的结果即输出到屏幕，又同时写入到文件中，则可以与tee命令结合使用。</p>
+<p>显示系统中所有与bash相关的进程信息，结果同时输出到屏幕和文件：</p>
+<p><img
+        class="lazyload"
+        data-src="https://www.linuxprobe.com/wp-content/uploads/2020/05/netstat.png"
+        data-srcset="https://www.linuxprobe.com/wp-content/uploads/2020/05/netstat.png, https://www.linuxprobe.com/wp-content/uploads/2020/05/netstat.png 1.5x, https://www.linuxprobe.com/wp-content/uploads/2020/05/netstat.png 2x"
+        data-sizes="auto"
+        alt="https://www.linuxprobe.com/wp-content/uploads/2020/05/netstat.png"
+        title="第3章 管道符、重定向与环境变量第3章 管道符、重定向与环境变量"></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">[root@linuxprobe ~]# ps aux | grep bash | tee result.txt
+root 1070 0.0 0.1 25384 2324 ? S Sep21 0:00 /bin/bash /usr/sbin/ksmtuned
+root 3899 0.0 0.2 26540 5136 pts/0 Ss 00:27 0:00 bash
+root 4320 0.0 0.0 12112 1112 pts/0 S+ 00:51 0:00 grep --color=auto bash
+[root@linuxprobe ~]# cat result.txt
+root 1070 0.0 0.1 25384 2324 ? S Sep21 0:00 /bin/bash /usr/sbin/ksmtuned
+root 3899 0.0 0.2 26540 5136 pts/0 Ss 00:27 0:00 bash
+root 4320 0.0 0.0 12112 1112 pts/0 S+ 00:51 0:00 grep --color=auto bash
+</code></pre></td></tr></table>
+</div>
+</div><h5 id="33-命令行的通配符" class="headerLink">
+    <a href="#33-%e5%91%bd%e4%bb%a4%e8%a1%8c%e7%9a%84%e9%80%9a%e9%85%8d%e7%ac%a6" class="header-mark"></a><strong>3.3 命令行的通配符</strong></h5><p>大家可能都遇到过提笔忘字的尴尬，作为Linux运维人员，有时候也会遇到明明一个文件的名称就在嘴边但就是想不起来的情况。如果就记得一个文件的开头几个字母，想遍历查找出所有以这个关键词开头的文件，该怎么操作呢？又假设想要批量查看所有硬盘文件的相关权限属性，一种方式是这样的：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">[root@linuxprobe ~]# ls -l /dev/sda
+brw-rw----. 1 root disk 8, 0 May 4 15:55 /dev/sda
+[root@linuxprobe ~]# ls -l /dev/sda1
+brw-rw----. 1 root disk 8, 1 May 4 15:55 /dev/sda1
+[root@linuxprobe ~]# ls -l /dev/sda2
+brw-rw----. 1 root disk 8, 2 May 4 15:55 /dev/sda2
+[root@linuxprobe ~]# ls -l /dev/sda3
+ls: cannot access &#39;/dev/sda3&#39;: No such file or directory
+</code></pre></td></tr></table>
+</div>
+</div><p>幸亏我的硬盘文件和分区只有3个，要是有几百个，估计需要花费一天的时间来忙这个事情了，所以这种方式的效率确实很低。</p>
+<p>虽然在第6章才会讲解Linux系统的存储结构和FHS，但现在应该能看出一些简单规律了。比如，这些硬盘设备文件都是以sda开头并且存放到了/dev目录中，这样一来，即使不知道硬盘的分区编号和具体分区的个数，也可以使用通配符来搞定。</p>
+<p>顾名思义，通配符就是通用的匹配信息的符号，比如星号（*）代表匹配零个或多个字符，问号（?）代表匹配单个字符，中括号内加上数字[0-9]代表匹配0～9之间的单个数字的字符，而中括号内加上字母[abc]则是代表匹配a、b、c三个字符中的任意一个字符。Linux系统中的通配符及含义如表3-3所示：</p>
+<p>表3-3                    Linux系统中的通配符及含义</p>
+<table>
+<thead>
+<tr>
+<th>通配符</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>*</td>
+<td>任意字符</td>
+</tr>
+<tr>
+<td>?</td>
+<td>单个任意字符</td>
+</tr>
+<tr>
+<td>[a-z]</td>
+<td>单个小写字母</td>
+</tr>
+<tr>
+<td>[A-Z]</td>
+<td>单个大写字母</td>
+</tr>
+<tr>
+<td>[a-Z]</td>
+<td>单个字母</td>
+</tr>
+<tr>
+<td>[0-9]</td>
+<td>单个数字</td>
+</tr>
+<tr>
+<td>[:alpha:]</td>
+<td>任意字母</td>
+</tr>
+<tr>
+<td>[:upper:]</td>
+<td>任意大写字母</td>
+</tr>
+<tr>
+<td>[:lower:]</td>
+<td>任意小写字母</td>
+</tr>
+<tr>
+<td>[:digit:]</td>
+<td>所有数字</td>
+</tr>
+<tr>
+<td>[:alnum:]</td>
+<td>任意字母加数字</td>
+</tr>
+<tr>
+<td>[:punct:]</td>
+<td>标点符号</td>
+</tr>
+</tbody>
+</table>
+<p>俗话讲“百闻不如一见，看书不如实验”，下面我们就来匹配所有在/dev目录中且以sda开头的文件：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">[root@linuxprobe ~]# ls -l /dev/sda*
+brw-rw----. 1 root disk 8, 0 May 4 15:55 /dev/sda
+brw-rw----. 1 root disk 8, 1 May 4 15:55 /dev/sda1
+brw-rw----. 1 root disk 8, 2 May 4 15:55 /dev/sda2
+</code></pre></td></tr></table>
+</div>
+</div><p>如果只想查看文件名为sda开头，但是后面还紧跟其他某一个字符的文件的相关信息，这时就需要用到问号来进行通配了：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">[root@linuxprobe ~]# ls -l /dev/sda?
+brw-rw----. 1 root disk 8, 1 May 4 15:55 /dev/sda1
+brw-rw----. 1 root disk 8, 2 May 4 15:55 /dev/sda2
+</code></pre></td></tr></table>
+</div>
+</div><p>除了使用[0-9]来匹配0~9之间的单个数字，也可以用[135]这样的方式仅匹配这三个指定数字中的一个，若没有匹配到数字1或2或3则不会显示出来：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">[root@linuxprobe ~]# ls -l /dev/sda[0-9]
+brw-rw----. 1 root disk 8, 1 May 4 15:55 /dev/sda1
+brw-rw----. 1 root disk 8, 2 May 4 15:55 /dev/sda2
+[root@linuxprobe ~]# ls -l /dev/sda[135]
+brw-rw----. 1 root disk 8, 1 May 4 15:55 /dev/sda1
+</code></pre></td></tr></table>
+</div>
+</div><p>通配符不一定非要放到最后面，也可以搜索下/etc/目录中所有以.conf结尾的配置文件有哪些：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">[root@linuxprobe ~]# ls -l /etc/*.conf
+-rw-r--r--. 1 root root 55 Feb 1 2019 /etc/asound.conf
+-rw-r--r--. 1 root root 25696 Dec 12 2018 /etc/brltty.conf
+-rw-r--r--. 1 root root 1083 Apr 4 2018 /etc/chrony.conf
+-rw-r--r--. 1 root root 1174 Aug 12 2018 /etc/dleyna-server-service.conf
+-rw-r--r--. 1 root dnsmasq 26843 Aug 12 2018 /etc/dnsmasq.conf
+-rw-r--r--. 1 root root 117 Jan 16 2019 /etc/dracut.conf
+-rw-r--r--. 1 root root 20 Aug 12 2018 /etc/fprintd.conf
+-rw-r--r--. 1 root root 38 Nov 16 2018 /etc/fuse.conf
+………………省略部分输出信息………………
+</code></pre></td></tr></table>
+</div>
+</div><p>通配符不仅被用于搜索文件或代替被通配的字符，还可以与创建文件的命令相结合，一口气创建出好多个文件。唯一区别是要用到大括号，并且字段之间用逗号间隔：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">[root@linuxprobe ~]# touch {AA,BB,CC}.conf
+[root@linuxprobe ~]# ls -l *.conf
+-rw-r--r--. 1 root root 0 Sep 22 01:54 AA.conf
+-rw-r--r--. 1 root root 0 Sep 22 01:54 BB.conf
+-rw-r--r--. 1 root root 0 Sep 22 01:54 CC.conf
+</code></pre></td></tr></table>
+</div>
+</div><p>再或者输出一些指定的信息，玩法特别多，接下来大家就自己开发吧~：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">[root@linuxprobe ~]# echo file{1,2,3,4,5}
+file1 file2 file3 file4 file5
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>出现问题?大胆提问!</strong></p>
+<blockquote>
+<p>因读者们硬件不同或操作错误都可能导致实验配置出错，请耐心再仔细看看操作步骤吧，不要气馁~</p>
+<p>Linux技术交流学习请加读者群（<strong>推荐</strong>）：https://www.linuxprobe.com/club</p>
+<p>*本群特色：确保每一位群友都是《Linux就该这么学》的读者，答疑更有针对性，不定期领取定制礼品。</p>
+</blockquote>
+<h5 id="34-常用的转义字符" class="headerLink">
+    <a href="#34-%e5%b8%b8%e7%94%a8%e7%9a%84%e8%bd%ac%e4%b9%89%e5%ad%97%e7%ac%a6" class="header-mark"></a><strong>3.4 常用的转义字符</strong></h5><p>为了能够更好地理解用户的表达，Shell解释器还提供了特别丰富的转义字符来处理输入的特殊数据。刘遄老师以近十年的工作和培训为基础，愣是用了两周时间从数十个转义字符中提炼出了4个最常用的转义字符！这件事情也让我深刻反省了很长时间。原本认为图书写的越厚，作者越是大牛，现在发现这种观念完全是错误的，希望读者在读完本书后能体会到刘遄老师的用心付出。</p>
+<p>4个最常用的转义字符如下所示。</p>
+<blockquote>
+<p>反斜杠（\）：使反斜杠后面的一个变量变为单纯的字符。</p>
+<p>单引号（''）：转义其中所有的变量为单纯的字符串。</p>
+<p>双引号（&quot;&quot;）：保留其中的变量属性，不进行转义处理。</p>
+<p>反引号（``）：把其中的命令执行后返回结果。</p>
+</blockquote>
+<p>先定义一个名为PRICE的变量并赋值为5，然后输出以双引号括起来的字符串与变量信息：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">[root@linuxprobe ~]# PRICE=5
+[root@linuxprobe ~]# echo &#34;Price is $PRICE&#34;
+Price is 5
+</code></pre></td></tr></table>
+</div>
+</div><p>接下来，我们希望能够输出“Price is $5”，即价格是5美元的字符串内容，但碰巧美元符号与变量提取符号合并后的$$作用是显示当前程序的进程ID号码，于是命令执行后输出的内容并不是我们所预期的：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">[root@linuxprobe ~]# echo &#34;Price is $$PRICE&#34; 
+Price is 3767PRICE
+</code></pre></td></tr></table>
+</div>
+</div><p>要想让第一个“$”乖乖地作为美元符号，那么就需要使用反斜杠（\）来进行转义，将这个命令提取符转义成单纯的文本，去除其特殊功能：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">[root@linuxprobe ~]# echo &#34;Price is \$$PRICE&#34;
+Price is $5
+</code></pre></td></tr></table>
+</div>
+</div><p>而如果只需要某个命令的输出值时，可以像<code>命令</code>这样，将命令用反引号括起来，达到预期的效果。例如，将反引号与uname -a命令结合，然后使用echo命令来查看本机的Linux版本和内核信息：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">[root@linuxprobe ~]# echo `uname -a`
+Linux linuxprobe.com 4.18.0-80.el8.x86_64 #1 SMP Wed Mar 13 12:02:46 UTC 2019 x86_64 x86_64 x86_64 GNU/Linux
+</code></pre></td></tr></table>
+</div>
+</div><p>反斜杠和反引号的功能比较有特点，同学们一般不会犯错，但对于什么时候使用双引号却容易混淆，因为好像大多数情况下加不加效果都一样：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">[root@linuxprobe ~]# echo AA BB CC
+AA BB CC
+[root@linuxprobe ~]# echo &#34;AA BB CC&#34;
+AA BB CC
+</code></pre></td></tr></table>
+</div>
+</div><p>区别在于用户无法得知第一种执行方式中到底有几个参数，是的，不能确定！因为有可能把“AA BB CC”当作了一个参数整体直接输出到了屏幕，也有可能是分别将AA、BB和CC输出到了屏幕，就算摸清了echo命令处理参数的机制，其他命令依然是这种情况。因此给大家总结一个简单小技巧，虽然可能不够严谨，但绝对简单，就是参数中如果出现了空格，那么就加双引号，如果参数中没有空格，那就不用加~</p>
+<h5 id="35-重要的环境变量" class="headerLink">
+    <a href="#35-%e9%87%8d%e8%a6%81%e7%9a%84%e7%8e%af%e5%a2%83%e5%8f%98%e9%87%8f" class="header-mark"></a><strong>3.5 重要的环境变量</strong></h5><p>变量是计算机系统用于保存可变值的数据类型。在Linux系统中，变量名称一般都是大写的，命令则都是小写的，这是一种约定俗成的规范。Linux系统中的环境变量是用来定义系统运行环境的一些参数，比如每个用户不同的家目录、邮件存放位置等，可以直接通过变量名称来提取到对应的变量值。</p>
+<p>细心的读者应该发现了，本节和上一节的标题名都分别加了形容词—重要的、常见的。原因其实不言而喻—要想让Linux系统能够正常运行并且为用户提供服务，需要数百个环境变量来协同工作，我们没有必要逐一查看、学习每一个变量，而是应该在有限的篇幅中精讲最重要的内容。</p>
+<p>为了更好地帮助大家理解变量的作用，给大家举个例子。前文中曾经讲到，在Linux系统中一切都是文件，Linux命令也不例外。那么，在用户执行了一条命令之后，Linux系统中到底发生了什么事情呢？简单来说，命令在Linux中的执行分为四个步骤。</p>
+<p><strong>第1步</strong>：判断用户是否以绝对路径或相对路径的方式输入命令（如/bin/ls），如果是的话则直接执行。</p>
+<p><strong>第2步</strong>：Linux系统检查用户输入的命令是否为“别名命令”，即用一个自定义的命令名称来替换原本的命令名称。</p>
+<p>之前在使用rm命令删除文件时，Linux系统都会要求用户再确认是否执行删除操作，其实这就是Linux系统为了防止用户误删除文件而特意设置的rm别名命令。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">[root@linuxprobe ~]# ls
+anaconda-ks.cfg  Documents  initial-setup-ks.cfg  Pictures  Templates
+Desktop          Downloads  Music                 Public    Videos
+[root@linuxprobe ~]# rm anaconda-ks.cfg 
+rm: remove regular file &#39;anaconda-ks.cfg&#39;? y
+</code></pre></td></tr></table>
+</div>
+</div><p>也可以用alias命令来创建一个属于自己的命令别名，语法格式为“alias 别名=命令”，若要取消一个命令别名，则是用unalias命令，语法格式为“unalias 别名”。</p>
+<p>将当前rm命令所被设置的别名取消掉，再删除文件试试：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">[root@linuxprobe ~]# unalias rm
+[root@linuxprobe ~]# rm initial-setup-ks.cfg 
+[root@linuxprobe ~]#
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>第3步</strong>：Bash解释器判断用户输入的是内部命令还是外部命令。内部命令是解释器内部的指令，会被直接执行；而用户在绝大部分时间输入的是外部命令，这些命令交由步骤4继续处理。可以使用“type 命令名称”来判断用户输入的命令是内部命令还是外部命令：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">[root@linuxprobe ~]# type echo
+echo is a shell builtin
+[root@linuxprobe ~]# type uptime
+uptime is /usr/bin/uptime
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>第4步</strong>：系统在多个路径中查找用户输入的命令文件，而定义这些路径的变量叫作PATH，可以简单地把它理解成是“解释器的小助手”，作用是告诉Bash解释器待执行的命令可能存放的位置，然后Bash解释器就会乖乖地在这些位置中逐个查找。PATH是由多个路径值组成的变量，每个路径值之间用冒号间隔，对这些路径的增加和删除操作将影响到Bash解释器对Linux命令的查找。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">[root@linuxprobe ~]# echo $PATH
+/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/root/bin
+[root@linuxprobe ~]# PATH=$PATH:/root/bin
+[root@linuxprobe ~]# echo $PATH
+/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/root/bin:/root/bin
+</code></pre></td></tr></table>
+</div>
+</div><p>这里有比较经典的问题：“为什么不能将当前目录（.）添加到PATH中呢? ” 原因是，尽管可以将当前目录（.）添加到PATH变量中，从而在某些情况下可以让用户免去输入命令所在路径的麻烦。但是，如果黑客在比较常用的公共目录/tmp中存放了一个与ls或cd命令同名的木马文件，而用户又恰巧在公共目录中执行了这些命令，那么就极有可能中招了。</p>
+<p>所以，作为一名态度谨慎、有经验的运维人员，在接手了一台Linux系统后一定会在执行命令前先检查PATH变量中是否有可疑的目录，另外读者从前面的PATH变量示例中是否也感觉到环境变量特别有用呢。我们可以使用env命令来查看到Linux系统中所有的环境变量，而刘遄老师为您精挑细选出了最重要的10个环境变量，如表3-4所示。</p>
+<p>表3-4                    Linux系统中最重要的10个环境变量</p>
+<table>
+<thead>
+<tr>
+<th>变量名称</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HOME</td>
+<td>用户的主目录（即家目录）</td>
+</tr>
+<tr>
+<td>SHELL</td>
+<td>用户在使用的Shell解释器名称</td>
+</tr>
+<tr>
+<td>HISTSIZE</td>
+<td>输出的历史命令记录条数</td>
+</tr>
+<tr>
+<td>HISTFILESIZE</td>
+<td>保存的历史命令记录条数</td>
+</tr>
+<tr>
+<td>MAIL</td>
+<td>邮件保存路径</td>
+</tr>
+<tr>
+<td>LANG</td>
+<td>系统语言、语系名称</td>
+</tr>
+<tr>
+<td>RANDOM</td>
+<td>生成一个随机数字</td>
+</tr>
+<tr>
+<td>PS1</td>
+<td>Bash解释器的提示符</td>
+</tr>
+<tr>
+<td>PATH</td>
+<td>定义解释器搜索用户执行命令的路径</td>
+</tr>
+<tr>
+<td>EDITOR</td>
+<td>用户默认的文本编辑器</td>
+</tr>
+</tbody>
+</table>
+<p>Linux作为一个多用户多任务的操作系统，能够为每个用户提供独立的、合适的工作运行环境，因此，一个相同的变量会因为用户身份的不同而具有不同的值。例如，使用下述命令来查看HOME变量在不同用户身份下都有哪些值（su是用于切换用户身份的命令，将在第5章跟大家见面）：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">[root@linuxprobe ~]# echo $HOME
+/root
+[root@linuxprobe ~]# su - linuxprobe
+[linuxprobe@linuxprobe ~]$ echo $HOME
+/home/linuxprobe
+</code></pre></td></tr></table>
+</div>
+</div><p>其实变量是由固定的变量名与用户或系统设置的变量值两部分组成的，完全可以自行创建变量，来满足工作需求。例如设置一个名称为WORKDIR的变量，方便用户更轻松地进入一个层次较深的目录：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">[root@linuxprobe ~]# mkdir /home/workdir
+[root@linuxprobe ~]# WORKDIR=/home/workdir
+[root@linuxprobe ~]# cd $WORKDIR 
+[root@linuxprobe workdir]# pwd
+/home/workdir
+</code></pre></td></tr></table>
+</div>
+</div><p>但是，这样的变量不具有全局性，作用范围也有限，默认情况下不能被其他用户使用：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">[root@linuxprobe workdir]# su linuxprobe
+[linuxprobe@linuxprobe ~]$ cd $WORKDIR
+[linuxprobe@linuxprobe ~]$ echo $WORKDIR
+[linuxprobe@linuxprobe ~]$ exit
+</code></pre></td></tr></table>
+</div>
+</div><p>如果工作需要，可以使用export命令将其提升为全局变量，这样其他用户也就可以使用它了：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">[root@linuxprobe ~]# export WORKDIR
+[root@linuxprobe ~]# su linuxprobe
+[linuxprobe@linuxprobe ~]$ cd $WORKDIR
+[linuxprobe@linuxprobe workdir]$ pwd
+/home/workdir
+</code></pre></td></tr></table>
+</div>
+</div><p>后续要是不用这个变量了，那么就顺手执行下unset命令取消掉它吧：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">[root@linuxprobe ~]# unset WORKDIR
+[root@linuxprobe ~]#
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="tips-1" class="headerLink">
+    <a href="#tips-1" class="header-mark"></a><strong>Tips</strong></h3><p>直接在终端设置的变量能够立即生效，但重启服务器后就会消失掉，因此我们需要将变量和变量值写入到.bashrc或者.bash_profile文件中以确保永久能使用它们。什么？不知道该怎么编辑文件吗？快来看第四章节吧~~</p>
+<p><strong>出现问题?大胆提问!</strong></p>
+<blockquote>
+<p>因读者们硬件不同或操作错误都可能导致实验配置出错，请耐心再仔细看看操作步骤吧，不要气馁~</p>
+<p>Linux技术交流学习请加读者群（<strong>推荐</strong>）：https://www.linuxprobe.com/club</p>
+<p>*本群特色：确保每一位群友都是《Linux就该这么学》的读者，答疑更有针对性，不定期领取定制礼品。</p>
+</blockquote>
+<p><strong>本章节的复习作业(答案就在问题的下一行哦，用鼠标选中即可看到的~)</strong></p>
+<p>1．把ls命令的正常输出信息追加写入到error.txt文件中的命令是什么？</p>
+<p>**答：**ls &raquo; error.txt，注意区分&gt;和&raquo;的不同。</p>
+<p>2．请简单概述管道符的作用。</p>
+<p>**答：**把左面（前面）命令的输出值作为右面（后面）命令的输入值以便进一步处理信息。</p>
+<p>3．Bash解释器的通配符中，星号（*）代表几个字符？</p>
+<p>**答：**零个或多个均可。</p>
+<p>4．PATH变量的作用是什么？</p>
+<p>**答：**设定解释器搜索所执行命令的路径，找到其所在位置。</p>
+<p>5．一般情况下，对参数添加双引号有什么好处？</p>
+<p>**答：**通常用于界定参数的个数，避免程序或命令执行时产生歧义，因此参数中若有空格则建议添加上双引号。</p>
+<p>6．使用什么命令可以把名为LINUX的一般变量转换成全局变量？</p>
+<p>**答：**export LINUX。</p>
+</div>
+
+        <div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2021-05-19</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span><a class="link-to-mardown" href=/%E7%AE%A1%E9%81%93%E7%AC%A6%E9%87%8D%E5%AE%9A%E5%90%91%E4%B8%8E%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/index.md target="_blank" rel="noopener noreferrer">阅读原始文档</a>
+                    </span></div>
+            <div class="post-info-share">
+                <span><a href="#" onclick="return false;" title="分享到 Twitter" data-sharer="twitter" data-url="https://lihc520.github.io/%E7%AE%A1%E9%81%93%E7%AC%A6%E9%87%8D%E5%AE%9A%E5%90%91%E4%B8%8E%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/" data-title="管道符、重定向与环境变量"><i class="fab fa-twitter fa-fw"></i></a><a href="#" onclick="return false;" title="分享到 Facebook" data-sharer="facebook" data-url="https://lihc520.github.io/%E7%AE%A1%E9%81%93%E7%AC%A6%E9%87%8D%E5%AE%9A%E5%90%91%E4%B8%8E%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/"><i class="fab fa-facebook-square fa-fw"></i></a><a href="#" onclick="return false;" title="分享到 WhatsApp" data-sharer="whatsapp" data-url="https://lihc520.github.io/%E7%AE%A1%E9%81%93%E7%AC%A6%E9%87%8D%E5%AE%9A%E5%90%91%E4%B8%8E%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/" data-title="管道符、重定向与环境变量" data-web><i class="fab fa-whatsapp fa-fw"></i></a><a href="#" onclick="return false;" title="分享到 Line" data-sharer="line" data-url="https://lihc520.github.io/%E7%AE%A1%E9%81%93%E7%AC%A6%E9%87%8D%E5%AE%9A%E5%90%91%E4%B8%8E%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/" data-title="管道符、重定向与环境变量"><i data-svg-src="/lib/simple-icons/icons/line.min.svg"></i></a><a href="#" onclick="return false;" title="分享到 微博" data-sharer="weibo" data-url="https://lihc520.github.io/%E7%AE%A1%E9%81%93%E7%AC%A6%E9%87%8D%E5%AE%9A%E5%90%91%E4%B8%8E%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/" data-title="管道符、重定向与环境变量"><i class="fab fa-weibo fa-fw"></i></a><a href="#" onclick="return false;" title="分享到 Myspace" data-sharer="myspace" data-url="https://lihc520.github.io/%E7%AE%A1%E9%81%93%E7%AC%A6%E9%87%8D%E5%AE%9A%E5%90%91%E4%B8%8E%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/" data-title="管道符、重定向与环境变量" data-description=""><i data-svg-src="/lib/simple-icons/icons/myspace.min.svg"></i></a><a href="#" onclick="return false;" title="分享到 Blogger" data-sharer="blogger" data-url="https://lihc520.github.io/%E7%AE%A1%E9%81%93%E7%AC%A6%E9%87%8D%E5%AE%9A%E5%90%91%E4%B8%8E%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/" data-title="管道符、重定向与环境变量" data-description=""><i class="fab fa-blogger fa-fw"></i></a><a href="#" onclick="return false;" title="分享到 Evernote" data-sharer="evernote" data-url="https://lihc520.github.io/%E7%AE%A1%E9%81%93%E7%AC%A6%E9%87%8D%E5%AE%9A%E5%90%91%E4%B8%8E%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/" data-title="管道符、重定向与环境变量"><i class="fab fa-evernote fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/vim/" class="prev" rel="prev" title="vim"><i class="fas fa-angle-left fa-fw"></i>vim</a>
+            <a href="/kubenetes%E4%BD%BF%E7%94%A8hlem%E5%AE%89%E8%A3%85nfs%E4%B8%BA%E9%BB%98%E8%AE%A4%E5%AD%98%E5%82%A8/" class="next" rel="next" title="Kubenetes使用Hlem安装nfs为默认存储">Kubenetes使用Hlem安装nfs为默认存储<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id="comments"><div id="gitalk" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://github.com/gitalk/gitalk"></a>Gitalk</a>.
+            </noscript></div></article></div>
+        </main><footer class="footer">
+        <div class="footer-container">
+          <div class="footer-line">
+            <span id="run-time"></span>
+          </div><div class="footer-line">
+                    由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.85.0">Hugo</a> 强力驱动&nbsp;|&nbsp;主题 - <a href="https://github.com/HEIGE-PCloud/DoIt" target="_blank" rel="noopener noreffer" title="DoIt 0.2.13"><i class="far fa-edit fa-fw"></i> DoIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2021 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank" rel="noopener noreferrer">LHC</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+            <div class="footer-line"></div>
+            <div class="footer-line">
+            </div>
+        </div></footer></div>
+
+    <div id="fixed-buttons"><a href="#back-to-top" id="back-to-top-button" class="fixed-button" title="回到顶部">
+            <i class="fas fa-arrow-up fa-fw"></i>
+        </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+            <i class="fas fa-comment fa-fw"></i>
+        </a>
+    </div><div id="cookieconsent-container"></div><div class="assets"><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/tablesort/tablesort.min.js"></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script type="text/javascript" src="/lib/topbar/topbar.min.js"></script><script type="text/javascript" src="/lib/pjax/pjax.min.js"></script><script type="text/javascript" src="/js/theme.min.js" defer></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery@2.1.3/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery-backstretch@2.1.18/jquery.backstretch.min.js"></script>
+
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery@2.1.3/dist/jquery.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/gh/ITJoker233/ITJoker233.github.io@latest/CDN/js/love.min.js"></script>
+
+    <script type="text/javascript" src="https://demo.hellozwh.com/source/canvas-nest.min.js"></script><script type="text/javascript" src="/js/custom.js"></script></div>
+
+<div class="pjax-assets"><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{"gitalk":{"admin":["lihc520"],"clientID":"89eb90d06a3ab923d55d","clientSecret":"4c0ce81194f76e5edc5acae840badd5a0e6d6053","id":"2021-05-19T20:58:16Z","owner":"lihc520","repo":"Gridea-blog-comment","title":"管道符、重定向与环境变量"}},"cookieconsent":{"content":{"dismiss":"同意","link":"了解更多","message":"本网站使用 Cookies 来改善您的浏览体验."},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"data":{"desktop-header-typeit":"LHC","mobile-header-typeit":"LHC"},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"PASDMWALPK","algoliaIndex":"index.zh-cn","algoliaSearchKey":"b42948e51daaa93df92381c8e2ac0f93","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"},"sharerjs":true,"table":{"sort":true},"typeit":{"cursorChar":"|","cursorSpeed":1000,"data":{"desktop-header-typeit":["desktop-header-typeit"],"mobile-header-typeit":["mobile-header-typeit"]},"duration":-1,"speed":100}};</script><script type="text/javascript" src="/lib/gitalk/gitalk.min.js"></script><script type="text/javascript" src="/js/gitalk.min.js" defer></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/typeit/typeit.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js" defer></script><script type="text/javascript" src="/lib/katex/auto-render.min.js" defer></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js" defer></script><script type="text/javascript" src="/lib/katex/mhchem.min.js" defer></script><script type="text/javascript" src="/js/katex.min.js" defer></script><script type="text/javascript" src="/js/cookieconsent.min.js" defer></script><link rel="stylesheet" href="/lib/gitalk/gitalk.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/katex/copy-tex.min.css">
+        <noscript><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"></noscript></div>
+</body>
+
+</html>

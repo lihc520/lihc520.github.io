@@ -1,0 +1,80 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>LHCの博客</title>
+        <link>https://lihc520.github.io/</link>
+        <description>LHC记录生活</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>807216431@qq.com (LHC)</managingEditor>
+            <webMaster>807216431@qq.com (LHC)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Fri, 08 Jul 2022 09:58:07 &#43;0800</lastBuildDate>
+            <atom:link href="https://lihc520.github.io/index.xml" rel="self" type="application/rss+xml" />
+        <item>
+    <title>MySql:master:slave:slave</title>
+    <link>https://lihc520.github.io/mysql-master-slave-slave/</link>
+    <pubDate>Tue, 02 Nov 2021 17:00:24 &#43;0000</pubDate><author>
+        <name>LHC</name>
+    </author><guid>https://lihc520.github.io/mysql-master-slave-slave/</guid>
+    <description><![CDATA[Hosts CPU MEM HD OS 192.168.1.102 db01 8 16G 100G Ubuntu20.04 192.168.1.105 db02 8 16G 100G Ubuntu20.04 192.168.1.108 db03 8 16G 100G Ubuntu20.04 安装前修改两台服务器的hosts 1 2 3 4 5 # 三臺台服务器都要操作 sudo vim /etc/hosts 192.168.1.102 db01 192.168.1.105 db02 192.168.1.108 db03 創建MySQ]]></description>
+</item><item>
+    <title>logstash&#43;filebeat&#43;redis</title>
+    <link>https://lihc520.github.io/logstash-filebeat-redis/</link>
+    <pubDate>Thu, 01 Jul 2021 11:39:28 &#43;0000</pubDate><author>
+        <name>LHC</name>
+    </author><guid>https://lihc520.github.io/logstash-filebeat-redis/</guid>
+    <description><![CDATA[ELK客户端部署目前的架构是elasticsearch+logstash+filebeat+kibana+redis 通过filebeat收集]]></description>
+</item><item>
+    <title>centos7搭建vsftpd</title>
+    <link>https://lihc520.github.io/centos7%E6%90%AD%E5%BB%BAvsftpd/</link>
+    <pubDate>Fri, 25 Jun 2021 15:14:49 &#43;0000</pubDate><author>
+        <name>LHC</name>
+    </author><guid>https://lihc520.github.io/centos7%E6%90%AD%E5%BB%BAvsftpd/</guid>
+    <description><![CDATA[centos7搭建 Vsftpd 服务。安装服务端程序1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 [root@localhost ~]# yum install vsftpd Loaded plugins: langpacks, product-id, subscription-manager ………………省略部分输出信息……………… ================================================================================ Installing:]]></description>
+</item><item>
+    <title>k8s部署TIDB</title>
+    <link>https://lihc520.github.io/k8s%E9%83%A8%E7%BD%B2tidb/</link>
+    <pubDate>Fri, 04 Jun 2021 14:26:02 &#43;0000</pubDate><author>
+        <name>LHC</name>
+    </author><guid>https://lihc520.github.io/k8s%E9%83%A8%E7%BD%B2tidb/</guid>
+    <description><![CDATA[k8s部署TIDB服务器建议配置环境 组件 CPU 内存 本地存储 网络 IP Master1 8 核 16 GB 无特殊要求 千兆网卡 10.168.2.153 Master2 8 核 16 GB 无特殊要求 千兆网卡 10.168.3.60 Master3 8 核 16 GB 无特殊要求]]></description>
+</item><item>
+    <title>NTP服务器与客户端时间同步</title>
+    <link>https://lihc520.github.io/ntp%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8E%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%90%8C%E6%AD%A5/</link>
+    <pubDate>Thu, 03 Jun 2021 10:22:17 &#43;0000</pubDate><author>
+        <name>LHC</name>
+    </author><guid>https://lihc520.github.io/ntp%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8E%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%90%8C%E6%AD%A5/</guid>
+    <description><![CDATA[操作场景ntpd（Network Time Protocol daemon）是 Linux 操作系统的一个守护进程，用于校正本地系统与时钟源服务器之前的时间，完整的实现了 NTP 协议。]]></description>
+</item><item>
+    <title>K8s部署Nextcloud</title>
+    <link>https://lihc520.github.io/k8s%E9%83%A8%E7%BD%B2nextcloud/</link>
+    <pubDate>Thu, 03 Jun 2021 10:09:04 &#43;0000</pubDate><author>
+        <name>LHC</name>
+    </author><guid>https://lihc520.github.io/k8s%E9%83%A8%E7%BD%B2nextcloud/</guid>
+    <description><![CDATA[部署 NFS 服务在NFS服务器上安装 NFS 与 rpcbind 服务1 2 3 4 5 6 7 8 9 10 # 创建 NFS 存储目录 mkdir -p /data/NFS # 安装nfs服务 yum -y install nfs-utils rpcbind # 修改配置文件 echo &#34;/data/NFS *(rw,sync,no_root_squash,no_subtree_check)&#34; &gt; /etc/exports # 启动服]]></description>
+</item><item>
+    <title>Kubenetes使用Hlem安装nfs为默认存储</title>
+    <link>https://lihc520.github.io/kubenetes%E4%BD%BF%E7%94%A8hlem%E5%AE%89%E8%A3%85nfs%E4%B8%BA%E9%BB%98%E8%AE%A4%E5%AD%98%E5%82%A8/</link>
+    <pubDate>Thu, 03 Jun 2021 08:42:16 &#43;0000</pubDate><author>
+        <name>LHC</name>
+    </author><guid>https://lihc520.github.io/kubenetes%E4%BD%BF%E7%94%A8hlem%E5%AE%89%E8%A3%85nfs%E4%B8%BA%E9%BB%98%E8%AE%A4%E5%AD%98%E5%82%A8/</guid>
+    <description><![CDATA[1、部署 Helm 客户端Helm客户端下载地址：https://github.com/helm/helm/releases 解压移动到/usr/bin]]></description>
+</item><item>
+    <title>管道符、重定向与环境变量</title>
+    <link>https://lihc520.github.io/%E7%AE%A1%E9%81%93%E7%AC%A6%E9%87%8D%E5%AE%9A%E5%90%91%E4%B8%8E%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/</link>
+    <pubDate>Wed, 19 May 2021 20:58:16 &#43;0000</pubDate><author>
+        <name>LHC</name>
+    </author><guid>https://lihc520.github.io/%E7%AE%A1%E9%81%93%E7%AC%A6%E9%87%8D%E5%AE%9A%E5%90%91%E4%B8%8E%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/</guid>
+    <description><![CDATA[3.1 输入输出重定向既然已经在上一章学完了几乎所有基础且常用的Linux命令，那么接下来的任务就是把多个Linux命令适当地组合到一起，使其协同]]></description>
+</item><item>
+    <title>vim</title>
+    <link>https://lihc520.github.io/vim/</link>
+    <pubDate>Wed, 19 May 2021 18:34:28 &#43;0000</pubDate><author>
+        <name>LHC</name>
+    </author><guid>https://lihc520.github.io/vim/</guid>
+    <description><![CDATA[4.1 Vim文本编辑器Vim的发布最早可以追溯到1991年，英文全称为：“Vi IMproved”，也就是对vi编辑器的提升版本，其中最大的改进当]]></description>
+</item><item>
+    <title>友链</title>
+    <link>https://lihc520.github.io/my-first-blog/</link>
+    <pubDate>Wed, 19 May 2021 18:14:38 &#43;0000</pubDate><author>
+        <name>LHC</name>
+    </author><guid>https://lihc520.github.io/my-first-blog/</guid>
+    <description><![CDATA[Dillon]]></description>
+</item></channel>
+</rss>

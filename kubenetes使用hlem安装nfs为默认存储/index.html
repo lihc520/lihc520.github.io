@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noodp" />
+    <title class="pjax-title">Kubenetes使用Hlem安装nfs为默认存储 - LHCの博客</title><meta name="Description" content="LHC记录生活"><meta property="og:title" content="Kubenetes使用Hlem安装nfs为默认存储" />
+<meta property="og:description" content="1、部署 Helm 客户端Helm客户端下载地址：https://github.com/helm/helm/releases 解压移动到/usr/bin" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://lihc520.github.io/kubenetes%E4%BD%BF%E7%94%A8hlem%E5%AE%89%E8%A3%85nfs%E4%B8%BA%E9%BB%98%E8%AE%A4%E5%AD%98%E5%82%A8/" /><meta property="og:image" content="https://lihc520.github.io/logo.png"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-06-03T08:42:16+00:00" />
+<meta property="article:modified_time" content="2021-06-03T08:42:16+00:00" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://lihc520.github.io/logo.png"/>
+
+<meta name="twitter:title" content="Kubenetes使用Hlem安装nfs为默认存储"/>
+<meta name="twitter:description" content="1、部署 Helm 客户端Helm客户端下载地址：https://github.com/helm/helm/releases 解压移动到/usr/bin"/>
+<meta name="application-name" content="DoIt">
+<meta name="apple-mobile-web-app-title" content="DoIt">
+
+<meta name="theme-color" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" href="https://lihc520.github.io/kubenetes%E4%BD%BF%E7%94%A8hlem%E5%AE%89%E8%A3%85nfs%E4%B8%BA%E9%BB%98%E8%AE%A4%E5%AD%98%E5%82%A8/" /><link rel="prev" href="https://lihc520.github.io/%E7%AE%A1%E9%81%93%E7%AC%A6%E9%87%8D%E5%AE%9A%E5%90%91%E4%B8%8E%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/" /><link rel="next" href="https://lihc520.github.io/k8s%E9%83%A8%E7%BD%B2nextcloud/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/fontawesome-free/all.min.css">
+        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/animate/animate.min.css">
+        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Kubenetes使用Hlem安装nfs为默认存储",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/lihc520.github.io\/kubenetes%E4%BD%BF%E7%94%A8hlem%E5%AE%89%E8%A3%85nfs%E4%B8%BA%E9%BB%98%E8%AE%A4%E5%AD%98%E5%82%A8\/"
+        },"genre": "posts","wordcount":  1076 ,
+        "url": "https:\/\/lihc520.github.io\/kubenetes%E4%BD%BF%E7%94%A8hlem%E5%AE%89%E8%A3%85nfs%E4%B8%BA%E9%BB%98%E8%AE%A4%E5%AD%98%E5%82%A8\/","datePublished": "2021-06-03T08:42:16+00:00","dateModified": "2021-06-03T08:42:16+00:00","license": "This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "LHC"
+            },"description": ""
+    }
+    </script></head>
+
+<body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">
+        function setTheme(theme) {document.body.setAttribute('theme', theme); document.documentElement.style.setProperty('color-scheme', theme === 'light' ? 'light' : 'dark');}
+        function saveTheme(theme) {window.localStorage && localStorage.setItem('theme', theme);}
+        function getMeta(metaName) {const metas = document.getElementsByTagName('meta'); for (let i = 0; i < metas.length; i++) if (metas[i].getAttribute('name') === metaName) return metas[i]; return '';}
+        if (window.localStorage && localStorage.getItem('theme')) {let theme = localStorage.getItem('theme');theme === 'light' || theme === 'dark' || theme === 'black' ? setTheme(theme) : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? setTheme('dark') : setTheme('light')); } else { if ('auto' === 'light' || 'auto' === 'dark' || 'auto' === 'black') setTheme('auto'), saveTheme('auto'); else saveTheme('auto'), window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? setTheme('dark') : setTheme('light');}
+        let metaColors = {'light': '#f8f8f8','dark': '#252627','black': '#000000'}
+        getMeta('theme-color').content = metaColors[document.body.getAttribute('theme')];
+    </script>
+    <div id="back-to-top"></div>
+    <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="LHCの博客"><span class="header-title-pre"><i class='fas fa-fw fa-fan fa-spin'></i></span><span id="desktop-header-typeit" class="typeit"></span></a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> 所有文章 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/categories/documentation/"> 文档 </a><a class="menu-item" href="/about/"> 关于 </a><a class="menu-item" href="/friends/"> 友链 </a><a class="menu-item" href="https://github.com/ITmxs" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i> Github </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="#" onclick="return false;" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="#" onclick="return false;" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="#" onclick="return false;" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="LHCの博客"><span class="header-title-pre"><i class='fas fa-fw fa-fan fa-spin'></i></span><span id="mobile-header-typeit" class="typeit"></span></a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="#" onclick="return false;" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="#" onclick="return false;" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="#" onclick="return false;" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">所有文章</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/categories/documentation/" title="">文档</a><a class="menu-item" href="/about/" title="">关于</a><a class="menu-item" href="/friends/" title="">友链</a><a class="menu-item" href="https://github.com/ITmxs" title="GitHub" rel="noopener noreffer" target="_blank"><i class='fab fa-github fa-fw'></i>Github</a><a href="#" onclick="return false;" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+            <div class="container"><script>document.getElementsByTagName("main")[0].setAttribute("pageStyle", "normal")</script><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC", "false")</script><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Kubenetes使用Hlem安装nfs为默认存储</h1><div class="post-meta">
+            <div class="post-meta-line">
+                <span class="post-author"><i class="author fas fa-user-circle fa-fw"></i><a href="/" title="Author" rel=" author" class="author">LHC</a>
+                </span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-06-03">2021-06-03</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime="2021-06-03">2021-06-03</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1076 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 3 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="true">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#1部署-helm-客户端">1、部署 Helm 客户端</a></li>
+        <li><a href="#2命令补全">2、命令补全</a></li>
+        <li><a href="#3helm常用命令">3、Helm常用命令</a></li>
+        <li><a href="#4配置国内chart仓库">4、配置国内Chart仓库</a></li>
+        <li><a href="#5部署-nfs-服务">5、部署 NFS 服务</a>
+          <ul>
+            <li><a href="#51-安装-nfs-与-rpcbind-服务">5.1、 安装 NFS 与 rpcbind 服务</a></li>
+            <li><a href="#52集群节点安装-nfs">5.2、集群节点安装 nfs</a></li>
+            <li><a href="#53-使用-helm-安装-nfs-client-provisioner为默认存储">5.3、 使用 helm 安装 nfs-client-provisioner为默认存储</a></li>
+            <li><a href="#heading"></a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><div class="details admonition warning open">
+                <div class="details-summary admonition-title">
+                    <i class="icon fas fa-exclamation-triangle fa-fwwarning"></i>警告<i class="details-icon fas fa-angle-right fa-fw"></i>
+                </div>
+                <div class="details-content">
+                    <div class="admonition-content">
+                        本文最后更新于 <span class="timeago" datetime="2021-06-03T08:42:16" title="June 3, 2021">2021-06-03</span>，文中内容可能已过时。</div>
+                </div>
+            </div><h3 id="1部署-helm-客户端" class="headerLink">
+    <a href="#1%e9%83%a8%e7%bd%b2-helm-%e5%ae%a2%e6%88%b7%e7%ab%af" class="header-mark"></a>1、部署 Helm 客户端</h3><p>Helm客户端下载地址：https://github.com/helm/helm/releases</p>
+<p>解压移动到/usr/bin/目录即可。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">wget https://get.helm.sh/helm-v3.3.1-linux-amd64.tar.gz
+tar zxvf helm-v3.3.1-linux-amd64.tar.gz
+mv linux-amd64/helm /usr/bin/
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="2命令补全" class="headerLink">
+    <a href="#2%e5%91%bd%e4%bb%a4%e8%a1%a5%e5%85%a8" class="header-mark"></a>2、命令补全</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 安装epel源</span>
+yum -y install epel-release
+yum -y install bash-completion
+helm completion bash &gt; /etc/bash_completion.d/helm
+
+<span class="c1"># Alpine 系统</span>
+
+<span class="c1"># bash 文档 可以不按照</span>
+apk add bash-doc
+<span class="c1"># bash 自动命令补全</span>
+apk add bash-completion
+helm completion bash &gt; /usr/share/bash-completion/helm
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="3helm常用命令" class="headerLink">
+    <a href="#3helm%e5%b8%b8%e7%94%a8%e5%91%bd%e4%bb%a4" class="header-mark"></a>3、Helm常用命令</h3><table>
+<thead>
+<tr>
+<th><strong>命令</strong></th>
+<th><strong>描述</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>create</td>
+<td>创建一个chart并指定名字</td>
+</tr>
+<tr>
+<td>dependency</td>
+<td>管理chart依赖</td>
+</tr>
+<tr>
+<td>get</td>
+<td>下载一个release。可用子命令：all、hooks、manifest、notes、values</td>
+</tr>
+<tr>
+<td>history</td>
+<td>获取release历史</td>
+</tr>
+<tr>
+<td>install</td>
+<td>安装一个chart</td>
+</tr>
+<tr>
+<td>list</td>
+<td>列出release</td>
+</tr>
+<tr>
+<td>package</td>
+<td>将chart目录打包到chart存档文件中</td>
+</tr>
+<tr>
+<td>pull</td>
+<td>从远程仓库中下载chart并解压到本地 # helm pull stable/mysql –untar</td>
+</tr>
+<tr>
+<td>repo</td>
+<td>添加，列出，移除，更新和索引chart仓库。可用子命令：add、index、list、remove、update</td>
+</tr>
+<tr>
+<td>rollback</td>
+<td>从之前版本回滚</td>
+</tr>
+<tr>
+<td>search</td>
+<td>根据关键字搜索chart。可用子命令：hub、repo</td>
+</tr>
+<tr>
+<td>show</td>
+<td>查看chart详细信息。可用子命令：all、chart、readme、values</td>
+</tr>
+<tr>
+<td>status</td>
+<td>显示已命名版本的状态</td>
+</tr>
+<tr>
+<td>template</td>
+<td>本地呈现模板</td>
+</tr>
+<tr>
+<td>uninstall</td>
+<td>卸载一个release</td>
+</tr>
+<tr>
+<td>upgrade</td>
+<td>更新一个release</td>
+</tr>
+<tr>
+<td>version</td>
+<td>查看helm客户端版本</td>
+</tr>
+</tbody>
+</table>
+<h3 id="4配置国内chart仓库" class="headerLink">
+    <a href="#4%e9%85%8d%e7%bd%ae%e5%9b%bd%e5%86%85chart%e4%bb%93%e5%ba%93" class="header-mark"></a>4、配置国内Chart仓库</h3><ul>
+<li>微软仓库（http://mirror.azure.cn/kubernetes/charts/）这个仓库强烈推荐，基本上官网有的chart这里都有。</li>
+<li>阿里云仓库（https://kubernetes.oss-cn-hangzhou.aliyuncs.com/charts ）</li>
+<li>官方仓库（https://hub.kubeapps.com/charts/incubator）官方chart仓库，国内使用有点慢。</li>
+</ul>
+<p>添加存储库：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">helm repo add stable http://mirror.azure.cn/kubernetes/charts
+helm repo add aliyun https://kubernetes.oss-cn-hangzhou.aliyuncs.com/charts 
+helm repo update
+</code></pre></td></tr></table>
+</div>
+</div><p>查看配置的存储库：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">helm repo list
+helm search repo stable
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="5部署-nfs-服务" class="headerLink">
+    <a href="#5%e9%83%a8%e7%bd%b2-nfs-%e6%9c%8d%e5%8a%a1" class="header-mark"></a>5、部署 NFS 服务</h3><h4 id="51-安装-nfs-与-rpcbind-服务" class="headerLink">
+    <a href="#51-%e5%ae%89%e8%a3%85-nfs-%e4%b8%8e-rpcbind-%e6%9c%8d%e5%8a%a1" class="header-mark"></a>5.1、 安装 NFS 与 rpcbind 服务</h4><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="c1">#   创建 NFS 存储目录</span>
+mkdir -p /data/k8s
+<span class="c1">#   安装nfs服务</span>
+yum -y install nfs-utils rpcbind
+<span class="c1">#   修改配置文件</span>
+<span class="nb">echo</span> <span class="s2">&#34;/data/NFS *(rw,sync,no_root_squash,no_subtree_check)&#34;</span> &gt; /etc/exports
+<span class="c1">#   启动服务</span>
+systemctl start nfs <span class="o">&amp;&amp;</span> systemctl start rpcbind
+<span class="c1">#   设置开机启动</span>
+systemctl <span class="nb">enable</span> nfs-server <span class="o">&amp;&amp;</span> systemctl <span class="nb">enable</span> rpcbind
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="52集群节点安装-nfs" class="headerLink">
+    <a href="#52%e9%9b%86%e7%be%a4%e8%8a%82%e7%82%b9%e5%ae%89%e8%a3%85-nfs" class="header-mark"></a>5.2、集群节点安装 nfs</h4><p>重点全部节点都需要安装 nfs-utils 安装了即可不需要配置，否则节点无法挂载 pv</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">#   安装nfs服务
+yum -y install nfs-utils
+
+#		在节点上测试nfs服务器上的可挂载目录
+showmount -e 10.168.3.158 ##nfs服务器地址
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="53-使用-helm-安装-nfs-client-provisioner为默认存储" class="headerLink">
+    <a href="#53-%e4%bd%bf%e7%94%a8-helm-%e5%ae%89%e8%a3%85-nfs-client-provisioner%e4%b8%ba%e9%bb%98%e8%ae%a4%e5%ad%98%e5%82%a8" class="header-mark"></a>5.3、 使用 helm 安装 nfs-client-provisioner为默认存储</h4><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash">helm install nfs-client-provisioner <span class="se">\	</span>			
+  --set storageClass.name<span class="o">=</span>nfs-client <span class="se">\	</span>		<span class="c1">## 存储类名</span>
+  --set storageClass.defaultClass<span class="o">=</span><span class="nb">true</span> <span class="se">\	</span>	<span class="c1">## 指定为默认存储		</span>
+  --set nfs.server<span class="o">=</span>10.168.3.158 <span class="se">\	</span>					<span class="c1">## nfs服务器地址	</span>
+  --set nfs.path<span class="o">=</span>/data/k8s <span class="se">\	</span>							<span class="c1">## 挂载路径</span>
+  stable/nfs-client-provisioner
+  
+<span class="c1">## 部署后查看存储状况</span>
+<span class="o">[</span>root@master3 /<span class="o">]</span><span class="c1"># kubectl get sc</span>
+NAME                   PROVISIONER                            RECLAIMPOLICY   VOLUMEBINDINGMODE   ALLOWVOLUMEEXPANSION   AGE
+nfs-client <span class="o">(</span>default<span class="o">)</span>   cluster.local/nfs-client-provisioner   Delete          Immediate           <span class="nb">true</span>                   17h
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="heading" class="headerLink">
+    <a href="#heading" class="header-mark"></a></h4></div>
+
+        <div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2021-06-03</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span><a class="link-to-mardown" href=/kubenetes%E4%BD%BF%E7%94%A8hlem%E5%AE%89%E8%A3%85nfs%E4%B8%BA%E9%BB%98%E8%AE%A4%E5%AD%98%E5%82%A8/index.md target="_blank" rel="noopener noreferrer">阅读原始文档</a>
+                    </span></div>
+            <div class="post-info-share">
+                <span><a href="#" onclick="return false;" title="分享到 Twitter" data-sharer="twitter" data-url="https://lihc520.github.io/kubenetes%E4%BD%BF%E7%94%A8hlem%E5%AE%89%E8%A3%85nfs%E4%B8%BA%E9%BB%98%E8%AE%A4%E5%AD%98%E5%82%A8/" data-title="Kubenetes使用Hlem安装nfs为默认存储"><i class="fab fa-twitter fa-fw"></i></a><a href="#" onclick="return false;" title="分享到 Facebook" data-sharer="facebook" data-url="https://lihc520.github.io/kubenetes%E4%BD%BF%E7%94%A8hlem%E5%AE%89%E8%A3%85nfs%E4%B8%BA%E9%BB%98%E8%AE%A4%E5%AD%98%E5%82%A8/"><i class="fab fa-facebook-square fa-fw"></i></a><a href="#" onclick="return false;" title="分享到 WhatsApp" data-sharer="whatsapp" data-url="https://lihc520.github.io/kubenetes%E4%BD%BF%E7%94%A8hlem%E5%AE%89%E8%A3%85nfs%E4%B8%BA%E9%BB%98%E8%AE%A4%E5%AD%98%E5%82%A8/" data-title="Kubenetes使用Hlem安装nfs为默认存储" data-web><i class="fab fa-whatsapp fa-fw"></i></a><a href="#" onclick="return false;" title="分享到 Line" data-sharer="line" data-url="https://lihc520.github.io/kubenetes%E4%BD%BF%E7%94%A8hlem%E5%AE%89%E8%A3%85nfs%E4%B8%BA%E9%BB%98%E8%AE%A4%E5%AD%98%E5%82%A8/" data-title="Kubenetes使用Hlem安装nfs为默认存储"><i data-svg-src="/lib/simple-icons/icons/line.min.svg"></i></a><a href="#" onclick="return false;" title="分享到 微博" data-sharer="weibo" data-url="https://lihc520.github.io/kubenetes%E4%BD%BF%E7%94%A8hlem%E5%AE%89%E8%A3%85nfs%E4%B8%BA%E9%BB%98%E8%AE%A4%E5%AD%98%E5%82%A8/" data-title="Kubenetes使用Hlem安装nfs为默认存储"><i class="fab fa-weibo fa-fw"></i></a><a href="#" onclick="return false;" title="分享到 Myspace" data-sharer="myspace" data-url="https://lihc520.github.io/kubenetes%E4%BD%BF%E7%94%A8hlem%E5%AE%89%E8%A3%85nfs%E4%B8%BA%E9%BB%98%E8%AE%A4%E5%AD%98%E5%82%A8/" data-title="Kubenetes使用Hlem安装nfs为默认存储" data-description=""><i data-svg-src="/lib/simple-icons/icons/myspace.min.svg"></i></a><a href="#" onclick="return false;" title="分享到 Blogger" data-sharer="blogger" data-url="https://lihc520.github.io/kubenetes%E4%BD%BF%E7%94%A8hlem%E5%AE%89%E8%A3%85nfs%E4%B8%BA%E9%BB%98%E8%AE%A4%E5%AD%98%E5%82%A8/" data-title="Kubenetes使用Hlem安装nfs为默认存储" data-description=""><i class="fab fa-blogger fa-fw"></i></a><a href="#" onclick="return false;" title="分享到 Evernote" data-sharer="evernote" data-url="https://lihc520.github.io/kubenetes%E4%BD%BF%E7%94%A8hlem%E5%AE%89%E8%A3%85nfs%E4%B8%BA%E9%BB%98%E8%AE%A4%E5%AD%98%E5%82%A8/" data-title="Kubenetes使用Hlem安装nfs为默认存储"><i class="fab fa-evernote fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/%E7%AE%A1%E9%81%93%E7%AC%A6%E9%87%8D%E5%AE%9A%E5%90%91%E4%B8%8E%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/" class="prev" rel="prev" title="管道符、重定向与环境变量"><i class="fas fa-angle-left fa-fw"></i>管道符、重定向与环境变量</a>
+            <a href="/k8s%E9%83%A8%E7%BD%B2nextcloud/" class="next" rel="next" title="K8s部署Nextcloud">K8s部署Nextcloud<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id="comments"><div id="gitalk" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://github.com/gitalk/gitalk"></a>Gitalk</a>.
+            </noscript></div></article></div>
+        </main><footer class="footer">
+        <div class="footer-container">
+          <div class="footer-line">
+            <span id="run-time"></span>
+          </div><div class="footer-line">
+                    由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.85.0">Hugo</a> 强力驱动&nbsp;|&nbsp;主题 - <a href="https://github.com/HEIGE-PCloud/DoIt" target="_blank" rel="noopener noreffer" title="DoIt 0.2.13"><i class="far fa-edit fa-fw"></i> DoIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2021 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank" rel="noopener noreferrer">LHC</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+            <div class="footer-line"></div>
+            <div class="footer-line">
+            </div>
+        </div></footer></div>
+
+    <div id="fixed-buttons"><a href="#back-to-top" id="back-to-top-button" class="fixed-button" title="回到顶部">
+            <i class="fas fa-arrow-up fa-fw"></i>
+        </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+            <i class="fas fa-comment fa-fw"></i>
+        </a>
+    </div><div id="cookieconsent-container"></div><div class="assets"><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/tablesort/tablesort.min.js"></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script type="text/javascript" src="/lib/topbar/topbar.min.js"></script><script type="text/javascript" src="/lib/pjax/pjax.min.js"></script><script type="text/javascript" src="/js/theme.min.js" defer></script><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery@2.1.3/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery-backstretch@2.1.18/jquery.backstretch.min.js"></script>
+
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery@2.1.3/dist/jquery.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/gh/ITJoker233/ITJoker233.github.io@latest/CDN/js/love.min.js"></script>
+
+    <script type="text/javascript" src="https://demo.hellozwh.com/source/canvas-nest.min.js"></script><script type="text/javascript" src="/js/custom.js"></script></div>
+
+<div class="pjax-assets"><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{"gitalk":{"admin":["lihc520"],"clientID":"89eb90d06a3ab923d55d","clientSecret":"4c0ce81194f76e5edc5acae840badd5a0e6d6053","id":"2021-06-03T08:42:16Z","owner":"lihc520","repo":"Gridea-blog-comment","title":"Kubenetes使用Hlem安装nfs为默认存储"}},"cookieconsent":{"content":{"dismiss":"同意","link":"了解更多","message":"本网站使用 Cookies 来改善您的浏览体验."},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"data":{"desktop-header-typeit":"LHC","mobile-header-typeit":"LHC"},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"PASDMWALPK","algoliaIndex":"index.zh-cn","algoliaSearchKey":"b42948e51daaa93df92381c8e2ac0f93","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"},"sharerjs":true,"table":{"sort":true},"typeit":{"cursorChar":"|","cursorSpeed":1000,"data":{"desktop-header-typeit":["desktop-header-typeit"],"mobile-header-typeit":["mobile-header-typeit"]},"duration":-1,"speed":100}};</script><script type="text/javascript" src="/lib/gitalk/gitalk.min.js"></script><script type="text/javascript" src="/js/gitalk.min.js" defer></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/typeit/typeit.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js" defer></script><script type="text/javascript" src="/lib/katex/auto-render.min.js" defer></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js" defer></script><script type="text/javascript" src="/lib/katex/mhchem.min.js" defer></script><script type="text/javascript" src="/js/katex.min.js" defer></script><script type="text/javascript" src="/js/cookieconsent.min.js" defer></script><link rel="stylesheet" href="/lib/gitalk/gitalk.min.css"><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/katex/copy-tex.min.css">
+        <noscript><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"></noscript></div>
+</body>
+
+</html>
