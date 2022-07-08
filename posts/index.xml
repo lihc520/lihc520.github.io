@@ -4,7 +4,14 @@
         <link>https://lihc520.github.io/posts/</link>
         <description>所有文章 | LHCの博客</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>807216431@qq.com (LHC)</managingEditor>
-            <webMaster>807216431@qq.com (LHC)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Tue, 02 Nov 2021 17:00:24 &#43;0000</lastBuildDate><atom:link href="https://lihc520.github.io/posts/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>807216431@qq.com (LHC)</webMaster><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Fri, 08 Jul 2022 11:14:44 &#43;0800</lastBuildDate><atom:link href="https://lihc520.github.io/posts/" rel="self" type="application/rss+xml" /><item>
+    <title>Nginx访问中文乱码</title>
+    <link>https://lihc520.github.io/nginx%E8%AE%BF%E9%97%AE%E4%B8%AD%E6%96%87%E4%B9%B1%E7%A0%81/</link>
+    <pubDate>Fri, 08 Jul 2022 11:14:44 &#43;0800</pubDate><author>
+        <name>LHC</name>
+    </author><guid>https://lihc520.github.io/nginx%E8%AE%BF%E9%97%AE%E4%B8%AD%E6%96%87%E4%B9%B1%E7%A0%81/</guid>
+    <description><![CDATA[1 2 3 4 5 6 7 8 9 10 11 12 13 upstream you.domainName.com { server 127.0.0.1:8080; } server { listen 80; server_name you.domainName.com; charset utf-8; ##添加这段 location /examples { return 403; } } 修改后，重启Nginx服务。]]></description>
+</item><item>
     <title>MySql:master:slave:slave</title>
     <link>https://lihc520.github.io/mysql-master-slave-slave/</link>
     <pubDate>Tue, 02 Nov 2021 17:00:24 &#43;0000</pubDate><author>
@@ -67,12 +74,5 @@
         <name>LHC</name>
     </author><guid>https://lihc520.github.io/vim/</guid>
     <description><![CDATA[4.1 Vim文本编辑器Vim的发布最早可以追溯到1991年，英文全称为：“Vi IMproved”，也就是对vi编辑器的提升版本，其中最大的改进当]]></description>
-</item><item>
-    <title>友链</title>
-    <link>https://lihc520.github.io/my-first-blog/</link>
-    <pubDate>Wed, 19 May 2021 18:14:38 &#43;0000</pubDate><author>
-        <name>LHC</name>
-    </author><guid>https://lihc520.github.io/my-first-blog/</guid>
-    <description><![CDATA[Dillon]]></description>
 </item></channel>
 </rss>
