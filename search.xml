@@ -4,6 +4,38 @@
   
     
     <entry>
+      <title>openssl 检测证书</title>
+      <link href="/posts/6c6c982b.html"/>
+      <url>/posts/6c6c982b.html</url>
+      
+        <content type="html"><![CDATA[<p><code>openssl s_client -connect 127.0.0.1:443 &lt;/dev/null | sed -ne &#39;/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p&#39; &gt; /tmp/cert.crt &amp;&amp; openssl x509 -noout -text -in /tmp/cert.crt &amp;&amp; rm /tmp/cert.crt</code></p>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>centos7 更新內核</title>
+      <link href="/posts/9d1fb396.html"/>
+      <url>/posts/9d1fb396.html</url>
+      
+        <content type="html"><![CDATA[<p>#升级内核<br>rpm –import <a href="https://www.elrepo.org/RPM-GPG-KEY-elrepo.org">https://www.elrepo.org/RPM-GPG-KEY-elrepo.org</a><br>#Centos7启用该源仓库<br>rpm -Uvh <a href="http://www.elrepo.org/elrepo-release-7.0-2.el7.elrepo.noarch.rpm">http://www.elrepo.org/elrepo-release-7.0-2.el7.elrepo.noarch.rpm</a><br>#查看有哪些内核版本可供安装<br>yum –disablerepo&#x3D;”*” –enablerepo&#x3D;”elrepo-kernel” list available<br>#安装的长期稳定版本lt(推荐，！！！不要安装不稳定版本)<br>yum –enablerepo&#x3D;elrepo-kernel install kernel-lt -y<br>#解决无法启动问题<br>#vi &#x2F;etc&#x2F;default&#x2F;grub<br>#GRUB_CMDLINE_LINUX&#x3D;”crashkernel&#x3D;auto spectre_v2&#x3D;retpoline rd.lvm.lv&#x3D;centos&#x2F;root rd.lvm.lv&#x3D;centos&#x2F;swap rhgb quiet mgag200.modeset&#x3D;0”<br>sed -i ‘s#GRUB_CMDLINE_LINUX&#x3D;”crashkernel&#x3D;auto spectre_v2&#x3D;retpoline rhgb quiet”#GRUB_CMDLINE_LINUX&#x3D;”crashkernel&#x3D;auto spectre_v2&#x3D;retpoline rd.lvm.lv&#x3D;centos&#x2F;root rd.lvm.lv&#x3D;centos&#x2F;swap rhgb quiet mgag200.modeset&#x3D;0”#g’  &#x2F;etc&#x2F;default&#x2F;grub<br>#退出重新生成grub<br>grub2-mkconfig -o &#x2F;boot&#x2F;efi&#x2F;EFI&#x2F;centos&#x2F;grub.cfg<br>#查看启动顺序<br>awk -F&#39; ‘$1&#x3D;&#x3D;”menuentry “ {print i++ “ : “ $2}’ &#x2F;boot&#x2F;efi&#x2F;EFI&#x2F;centos&#x2F;grub.cfg<br>#调整默认启动内核<br>grub2-set-default “CentOS Linux (5.4.113-1.el7.elrepo.x86_64) 7 (Core)”<br>#查看当前默认启动内核<br>grub2-editenv list<br>#重启<br>#reboot<br>检查当前启动的内核版本：<br>uname -rs</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> linux </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>ubuntu22编译安装php7</title>
       <link href="/posts/33744e0d.html"/>
       <url>/posts/33744e0d.html</url>
